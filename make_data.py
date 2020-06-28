@@ -167,6 +167,164 @@ class MakeData:
         return all_col
 
 
+    def make_stan_survey_info1(self):
+        """"
+        """
+        ctif_id = ''  # 客户号
+        ctnm = ''  # 客户名称
+        info_a_bool = ''  # 是否遵守反洗钱或反恐融资法
+        laws_name = ''  # 法律法规名称
+        info_a_bool2 = ''  # 是否有反洗钱或反恐融资的程序或制度
+        info_a_bool3 = ''  # 监管机构认为该制度是否得当
+        supervisor_name = ''  # 监管人员姓名
+        inspection_time = ''  # 检查时间
+        info_a_explain = ''  # 制度不完善地方
+        info_a_explain2 = ''  # 完善时间及方式
+        info_b_bool = ''  # 是否有反洗钱专职人员
+        info_b_bool2 = ''  # 是否有完整的风险评估程序
+        info_b_bool3 = ''  # 是否有反洗钱相关的员工培训
+        info_b_explain = ''  # 员工培训制度
+        info_c_bool = ''  # 是否被禁止在注册地进行银行业务
+        info_c_explain = ''  # 原因
+        info_d_bool = ''  # 是否在任何国家、地区都没有实体存在的机构
+        info_d_bool2 = ''  # 是否禁止与没有任何实体存在的机构建立关系
+        info_d_explain = ''  # 原因
+        payment_card_org = ''  # 监管支付卡活动的机构
+        compliance_org = ''  # 监管合规的机构
+        chartered_institution = ''  # 特许机构
+        info_e_bool = ''  # 是否将任何反洗钱或制裁责任外包
+        info_e_bool2 = ''  # 是否对第三方进行监督
+        info_e_bool3 = ''  # 监督是否在程序中留痕
+        supervision_trace_doc = ''  # 相关监督留痕文件
+        info_f_bool = ''  # 是否将万事达相关业务进行名单预警
+        list_type = ''  # 名单种类
+        other_list_type = ''  # 其他名单种类
+        info_f_explain = ''  # 原因
+        info_g_bool = ''  # 是否存在影响申请的诉讼或其他
+        info_g_explain = ''  # 原因
+        info_h_bool = ''  # 是否参与允许转账的业务
+        info_h_explain = ''  # 项目细节描述
+        data_crdt = ''  # 数据创建时间
+        data_cruser = ''  # 数据创建人id
+        data_updt = ''  # 数据更新时间
+        data_upuser = ''  # 数据更新人id
+
+        all_col = [ctif_id, ctnm, info_a_bool, laws_name, info_a_bool2, info_a_bool3, supervisor_name, inspection_time, info_a_explain, info_a_explain2, info_b_bool, info_b_bool2, info_b_bool3, info_b_explain, info_c_bool, info_c_explain, info_d_bool, info_d_bool2, info_d_explain, payment_card_org , compliance_org, chartered_institution, info_e_bool, info_e_bool2, info_e_bool3, supervision_trace_doc, info_f_bool, list_type, other_list_type, info_f_explain, info_g_bool, info_g_explain, info_h_bool, info_h_explain, data_crdt, data_cruser, data_updt, data_upuser]
+        return all_col
+
+
+    def make_stan_survey_info2(self):
+        """"
+        """
+        ctif_id = ''  # 客户号
+        ctnm = ''  # 客户名称
+        info2_a_bool = ''  # 监管部门是否可以随时对申请人的档案进行审查或者深入调查
+        info2_a_explain = ''  # 最近五项检查的日期及结果
+        info2_b_bool = ''  # 政府当局能否对申请人处以罚款、暂停或接管其业务以确保其遵守适用的审慎标准
+        info2_b_explain = ''  # 原因
+        agents_num = ''  # 分销渠道及代理商的数目
+        aml_role_explain = ''  # 反洗钱官或反洗钱合规部角色描述
+        compliance_name = ''  # 合规部负责人姓名
+        aml_workers = ''  # 反洗钱工作人数
+        aml_position = ''  # 反洗钱员工职位
+        info2_c_bool = ''  # 是否有内部审计职能或其他独立第三方定期评估其“反洗钱”政策和程序
+        info2_c_bool2 = ''  # 是否发现任何与“反洗钱”相关的缺陷
+        info2_c_explain = ''  # 请说明已发现的不足之处和解决问题的补救计划
+        info2_d_bool = ''  # 是否对其客户进行监督
+        info2_d_explain = ''  # 描述监督程序
+        info2_e_bool = ''  # 是否有对其客户信息进行尽职调查的程序
+        info2_f_bool = ''  # 申请人是否对政治敏感人士有足够的认识和了解
+        info2_g_bool = ''  # 万事达相关业务是否存在客户信息不完全或受益人信息不完整
+        info2_g_explain = ''  # 原因
+        info2_h_bool = ''  # 是否进行交易监测
+        info2_h_explain = ''  # 确认可疑后的行为
+        info2_i_bool = ''  # 是否可以上报可疑
+        info2_i_explain = ''  # 上报机构
+        data_crdt = ''  # 数据创建时间
+        data_cruser = ''  # 数据创建人id
+        data_updt = ''  # 数据更新时间
+        data_upuser = ''  # 数据更新人id
+
+        all_col = [ctif_id, ctnm, info2_a_bool, info2_a_explain, info2_b_bool, info2_b_explain, agents_num, aml_role_explain, compliance_name, aml_workers, aml_position, info2_c_bool, info2_c_bool2, info2_c_explain, info2_d_bool, info2_d_explain, info2_e_bool, info2_f_bool, info2_g_bool, info2_g_explain, info2_h_bool, info2_h_explain, info2_i_bool, info2_i_explain, data_crdt, data_cruser, data_updt, data_upuser]
+        return all_col
+
+
+    def make_stan_survey_info3(self):
+        """"
+        """
+        ctif_id = ''  # 客户号
+        ctnm = ''  # 客户名称
+        fi_mcard_principal = ''  # 万事达卡-总部合作
+        fi_mcard_affillate = ''  # 万事达卡-分支机构合作
+        fi_mcard_association = ''  # 万事达卡-代理机构合作
+        fi_mcard_issuing = ''  # 万事达卡-发卡
+        fi_mcard_acquiring_merchants = ''  # 万事达卡-商户收单
+        fi_mcard_acquiring_atm = ''  # 万事达卡-ATM收单
+        fi_mcard_acquiring_mcd = ''  # 万事达卡-手动付款收单
+        fi_mcard_optrpt_msd = ''  # 万事达卡-国内发送
+        fi_mcard_optrpt_ms = ''  # 万事达卡-moneysend
+        fi_mcard_optrpt_mscb = ''  # 万事达卡-跨境发送
+        fi_mcard_optrpt_mpqr = ''  # 万事达卡-masterpass QR
+        fi_mstro_principal = ''  # 万事顺卡-总部合作
+        fi_mstro_affillate = ''  # 万事顺卡-分支机构合作
+        fi_mstro_issuing = ''  # 万事顺卡-发卡
+        fi_mstro_acquiring_merchants = ''  # 万事顺卡-商户收单
+        fi_mstro_acquiring_atm = ''  # 万事顺卡-ATM收单
+        fi_mstro_optrpt_msd = ''  # 万事顺卡-国内发送
+        fi_mstro_optrpt_ms = ''  # 万事顺卡-moneysend
+        fi_mstro_optrpt_mscb = ''  # 万事顺卡-跨境发送
+        fi_mstro_optrpt_mpqr = ''  # 万事顺卡-masterpass QR
+        fi_cirrus_principal = ''  # 顺风卡-总部合作
+        fi_cirrus_affillate = ''  # 顺风卡-分支机构合作
+        fi_cirrus_issuing_atm = ''  # 顺风卡-发卡
+        fi_cirrus_acquiring_atm = ''  # 顺风卡-ATM收单
+        fi_cirrus_optp2p_ms = ''  # 顺风卡-moneysend
+        fi_cirrus_optp2p_mscb = ''  # 顺风卡-跨境发送
+        fi_cirrus_optp2p_mpqr = ''  # 顺风卡-masterpass QR
+        cgi_mcard_principal = ''  # cgi-万事达卡-总部合作
+        cgi_mcard_affillate = ''  # cgi-万事达卡-分支机构合作
+        cgi_mcard_issuing_credit = ''  # cgi-万事达卡-发卡-信用卡
+        cgi_mcard_issuing_debit = ''  # cgi-万事达卡-发卡-借记卡
+        cgi_mcard_issuing_prepaid = ''  # cgi-万事达卡-发卡-预付卡
+        cgi_mcard_acquiring_atm = ''  # cgi-万事达卡-ATM收单
+        cgi_mcard_acquiring_mcd = ''  # cgi-万事达卡-手动付款收单
+        cgi_mcard_acquiring_merchants = ''  # cgi-万事达卡-商户收单
+        cgi_mcard_acquiring_poi = ''  # cgi-万事达卡-POI收单
+        cgi_mcard_optrpt_msd = ''  # cgi-万事达卡-国内发送
+        cgi_mcard_optrpt_ms = ''  # cgi-万事达卡-moneysend
+        cgi_mcard_optrpt_mscb = ''  # cgi-万事达卡-跨境发送
+        cgi_mcard_optrpt_mpqr = ''  # cgi-万事达卡-masterpass QR
+        cgi_mstro_principal = ''  # cgi-万事顺卡-总部合作
+        cgi_mstro_affillate = ''  # cgi-万事顺卡-分支机构合作
+        cgi_mstro_issuing_debit = ''  # cgi-万事顺卡-发卡-借记卡
+        cgi_mstro_issuing_prepaid = ''  # cgi-万事顺卡-发卡-预付卡
+        cgi_mstro_acquiring_atm = ''  # cgi-万事顺卡-ATM收单
+        cgi_mstro_acquiring_merchants = ''  # cgi-万事顺卡-商户收单
+        cgi_mstro_acquiring_poi = ''  # cgi-万事顺卡-POI收单
+        cgi_mstro_optrpt_msd = ''  # cgi-万事顺卡-国内发送
+        cgi_mstro_optrpt_ms = ''  # cgi-万事顺卡-moneysend
+        cgi_mstro_optrpt_mscb = ''  # cgi-万事顺卡-跨境发送
+        cgi_mstro_optrpt_mpqr = ''  # cgi-万事顺卡-masterpass QR
+        cgi_cirrus_principal = ''  # cgi-顺风卡-总部合作
+        cgi_cirrus_affillate = ''  # cgi-顺风卡-分支机构合作
+        cgi_cirrus__issuing = ''  # cgi-顺风卡-发卡
+        cgi_cirrus_acquiring_atm = ''  # cgi-顺风卡-ATM收单
+        cgi_cirrus_optp2p_ms = ''  # cgi-顺风卡-moneysend
+        cgi_cirrus_optp2p_mscb = ''  # cgi-顺风卡-跨境发送
+        cgi_cirrus_optp2p_mpqr = ''  # cgi-万顺风卡-masterpass QR
+        info_a_bool = ''  # 如果发行借记卡、信用卡、预付卡，将是否对现金交易进行控制
+        info_a_explain = ''  # 原因
+        additional_services_transfer = ''  # 是否提供额外服务
+        acquiring_rePower = ''  #
+        data_crdt = ''  # 数据创建时间
+        data_cruser = ''  # 数据创建人id
+        data_updt = ''  # 数据更新时间
+        data_upuser = ''  # 数据更新人id
+
+        all_col = [ctif_id, ctnm, fi_mcard_principal, fi_mcard_affillate, fi_mcard_association, fi_mcard_issuing, fi_mcard_acquiring_merchants, fi_mcard_acquiring_atm, fi_mcard_acquiring_mcd, fi_mcard_optrpt_msd, fi_mcard_optrpt_ms, fi_mcard_optrpt_mscb, fi_mcard_optrpt_mpqr, fi_mstro_principal, fi_mstro_affillate, fi_mstro_issuing, fi_mstro_acquiring_merchants, fi_mstro_acquiring_atm, fi_mstro_optrpt_msd, fi_mstro_optrpt_ms, fi_mstro_optrpt_mscb, fi_mstro_optrpt_mpqr, fi_cirrus_principal, fi_cirrus_affillate, fi_cirrus_issuing_atm, fi_cirrus_acquiring_atm, fi_cirrus_optp2p_ms, fi_cirrus_optp2p_mscb, fi_cirrus_optp2p_mpqr, cgi_mcard_principal, cgi_mcard_affillate, cgi_mcard_issuing_credit, cgi_mcard_issuing_debit, cgi_mcard_issuing_prepaid, cgi_mcard_acquiring_atm, cgi_mcard_acquiring_mcd, cgi_mcard_acquiring_merchants, cgi_mcard_acquiring_poi, cgi_mcard_optrpt_msd, cgi_mcard_optrpt_ms, cgi_mcard_optrpt_mscb, cgi_mcard_optrpt_mpqr, cgi_mstro_principal, cgi_mstro_affillate, cgi_mstro_issuing_debit, cgi_mstro_issuing_prepaid, cgi_mstro_acquiring_atm, cgi_mstro_acquiring_merchants, cgi_mstro_acquiring_poi, cgi_mstro_optrpt_msd, cgi_mstro_optrpt_ms, cgi_mstro_optrpt_mscb, cgi_mstro_optrpt_mpqr, cgi_cirrus_principal, cgi_cirrus_affillate, cgi_cirrus__issuing, cgi_cirrus_acquiring_atm, cgi_cirrus_optp2p_ms, cgi_cirrus_optp2p_mscb, cgi_cirrus_optp2p_mpqr, info_a_bool, info_a_explain, additional_services_transfer, acquiring_rePower, data_crdt, data_cruser, data_updt, data_upuser]
+        return all_col
+
+
     def make_stan_ptxn(self):
         """"
         """
