@@ -38,6 +38,40 @@ class ReadMySqlConfig(BaseConfig):
         return self.conf.get('mysql', 'PORT')
 
 
+class RedisConfig(BaseConfig):
+    def host(self):
+        return self.conf.get('redis', 'HOST')
+
+    def port(self):
+        return self.conf.get('redis', 'PORT')
+
+    def passwd(self):
+        return self.conf.get('redis', 'PASSWD')
+
+    def db(self):
+        return self.conf.get('redis', 'DB')
+
+
+class Setting(BaseConfig):
+    def get_num(self):
+        """设置多少条数据存储一次，若格式错误，默认10000条"""
+        temp = self.conf.get('setting', 'SAVENUM')
+        if temp.isalnum():
+            save_num = int(temp)
+        else:
+            save_num = 10000
+        return save_num
+
+    def data_num(self):
+        """数据数量"""
+        temp = self.conf.get('setting', 'DATANUM')
+        return temp
+
+    def stif_num(self):
+        temp = self.conf.get('setting', 'STIFNUM')
+        return temp
+
+
 class ReadOraclConfig(BaseConfig):
     def info(self):
         return self.conf.get('oracl', 'info')

@@ -8,6 +8,7 @@ import threading
 
 from make_data import MakeData
 from save_data import SaveFile
+from parm import savenum
 
 
 def main(beg, end):
@@ -19,11 +20,16 @@ def main(beg, end):
     dtxns = []
     txns = []
     stifs = []
+    survey_info1 = []
+    survey_info2 = []
+    survey_info3 = []
     sign = 0
-    all_data = ["orgs", "relations", "ptxns", "dtxns", "txns", "stifs"]
-    all_table_name = ["t_stan_org", "t_stan_relation", "t_stan_ptxn", "t_stan_dtxn", "t_stan_txn", "t_stan_stif"]
+    all_data = ["orgs", "relations", "ptxns", "dtxns", "txns", "stifs", "survey_info1", "survey_info2",
+                "survey_info3"]
+    all_table_name = ["t_stan_org", "t_stan_relation", "t_stan_ptxn", "t_stan_dtxn", "t_stan_txn", "t_stan_stif",
+                      "t_stan_survey_info1", "t_stan_survey_info2", "t_stan_survey_info3"]
     for num in range(beg, end):
-        t_stan_org = makedata.make_stan_org()
+        t_stan_org = makedata.make_stan_org(num)
         orgs.append(t_stan_org)
         t_stan_relation = makedata.make_stan_relation()
         relations.append(t_stan_relation)
@@ -35,10 +41,18 @@ def main(beg, end):
         txns.append(t_stan_txn)
         t_stan_stif = makedata.make_stan_stif()
         stifs.append(t_stan_stif)
+        t_stan_survey_info1 = makedata.make_stan_survey_info1()
+        survey_info1.append(t_stan_survey_info1)
+        t_stan_survey_info2 = makedata.make_stan_survey_info2()
+        survey_info2.append(t_stan_survey_info2)
+        t_stan_survey_info3 = makedata.make_stan_survey_info3()
+        survey_info3.append(t_stan_survey_info3)
+
+
         sign += 1
         # print(sign)
         # print(t_stan_relation)
-        if sign % 1000 == 0:  # 符合条件，多线程存储
+        if sign % savenum == 0:  # 符合条件，多线程存储
             print('存储数据')
             threads = []
             for ind, dat in enumerate(all_data):
@@ -68,7 +82,7 @@ def main(beg, end):
 
         for t in threads:
             t.join()
-        sign = 0
+        # sign = 0
 
         for data in all_data:  # 清空已写入数据
             eval(data).clear()

@@ -29,14 +29,14 @@ class MakeData:
         sub_company = ''  # 子公司
         former_name = ''  # 申请过的合法名称
         citp = comm.cert_type()  # 证件类型    必填
-        citp_nt = ''  # 证件类型说明    必填
+        citp_nt = '证件类型说明'  # 证件类型说明    必填
         ctid = comm.org_cert_num()  # 证件号码    必填
         ctid_edt = comm.cert_dateline()  # 证件有效期    必填
         state = ''  # 注册地址-省    应填
         city = ''  # 注册地址-市    应填
-        address = ''  # 注册地址    必填
+        address = comm.make_address()  # 注册地址    必填
         post_code = ''  # 注册地址-邮编
-        tel = ''  # 注册地址-联系电话    必填
+        tel = comm.make_tel_num()  # 注册地址-联系电话    必填
         fax = ''  # 注册地址-传真
         m_state = ''  # 邮寄地址-省
         m_city = ''  # 邮寄地址-市
@@ -170,8 +170,8 @@ class MakeData:
     def make_stan_survey_info1(self):
         """"
         """
-        ctif_id = ''  # 客户号
-        ctnm = ''  # 客户名称
+        ctif_id = self.busi_reg_no  # 客户号
+        ctnm = self.ctnm  # 客户名称
         info_a_bool = ''  # 是否遵守反洗钱或反恐融资法
         laws_name = ''  # 法律法规名称
         info_a_bool2 = ''  # 是否有反洗钱或反恐融资的程序或制度
