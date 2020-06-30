@@ -71,6 +71,18 @@ class Setting(BaseConfig):
         temp = self.conf.get('setting', 'STIFNUM')
         return temp
 
+    def get_save_path(self):
+        temp = self.conf.get('setting', 'WINSAVEPATH')
+        return temp
+
+    def get_linux_path(self):
+        temp = self.conf.get('setting', 'LINUXSAVEPATH')
+        return temp
+
+    def get_data_date(self):
+        """跑批数据日期"""
+        temp = self.conf.get('setting', 'DATADATE')
+        return temp
 
 class ReadOraclConfig(BaseConfig):
     def info(self):
