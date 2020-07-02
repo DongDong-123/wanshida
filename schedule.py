@@ -8,7 +8,7 @@ import threading
 
 from make_data import MakeData
 from save_data import SaveFile
-from parm import savenum, stifnum
+from parm import savenum, stifnum, filenum
 
 
 def main(beg, end, stif_time, file_date_time):
@@ -28,13 +28,13 @@ def main(beg, end, stif_time, file_date_time):
     all_table_name = ["org", "relation", "ptxn", "dtxn", "stif",
                       "survey_info1", "survey_info2", "survey_info3"]
     # save_ci = 1000000//savenum
-    save_ci = 100//savenum
-    sign_other = 0
-    sign_stif = 0
-    sc_other = 0
-    sc_stif = 0
-    stif_data_num = 1
-    file_num = 1
+    save_ci = filenum//savenum  # 每个数据文件需要储存的次数
+    sign_other = 0  # 其他表数量标识
+    sign_stif = 0  # 交易数量标识
+    sc_other = 0  # 其他表保存次数
+    sc_stif = 0  # 交易保存次数
+    stif_data_num = 1  # 交易数据文件编号
+    file_ord = 1  # 其他数据文件名编号
     for num in range(beg, end):
         t_stan_org = makedata.make_stan_org(num)
         orgs.append(t_stan_org)
@@ -67,34 +67,36 @@ def main(beg, end, stif_time, file_date_time):
                     print(dat)
 
                     thr = threading.Thread(target=savedata.write_to_csv, args=(
-                        eval(dat), all_table_name[ind], file_date_time, file_num))
+                        eval(dat), all_table_name[ind], file_date_time, file_ord))
                     thr.start()
                     threads.append(thr)
                     # savedata.write_to_csv(eval(dat), all_table_name[ind])
             if sc_other == save_ci:
-                file_num += 1
-
+                file_ord += 1
+                # savedata.make_control_file(sc_other)
+                sc_other = 0
             for t in threads:
                 t.join()
-            sign_other = 0
+
 
             for data in all_data:  # 清空已写入数据
                 eval(data).clear()
 
         # 交易单独储存
-        if (sign_stif * stifnum) % savenum == 0:  # 符合条件，多线程存储
+        sign_stif += stifnum
+        if (sign_stif) % savenum == 0:  # 符合条件，多线程存储
             sc_stif += 1
             print('存储交易数据')
             if len(txns):
-                thr = threading.Thread(target=savedata.write_to_csv, args=(
+                thr_stif = threading.Thread(target=savedata.write_to_csv, args=(
                     txns, "txn", file_date_time, stif_data_num))
-                thr.start()
-                thr.join()
+                thr_stif.start()
+                thr_stif.join()
 
             if sc_stif == save_ci:
                 stif_data_num += 1
+                sc_stif = 0
 
-            sign_stif = 0
             txns.clear()  # 清空已写入交易数据
 
 
@@ -104,14 +106,13 @@ def main(beg, end, stif_time, file_date_time):
         for ind, dat in enumerate(all_data):
             if eval(dat):
                 thr = threading.Thread(target=savedata.write_to_csv, args=(
-                    eval(dat), all_table_name[ind], file_date_time, file_num))
+                    eval(dat), all_table_name[ind], file_date_time, file_ord))
                 thr.start()
                 threads.append(thr)
                 # savedata.write_to_csv(eval(dat), all_table_name[ind])
 
         for t in threads:
             t.join()
-        # sign = 0
 
         for data in all_data:  # 清空已写入数据
             eval(data).clear()
@@ -119,10 +120,10 @@ def main(beg, end, stif_time, file_date_time):
     if sign_stif > 0:
         print('存储剩余交易数据')
         if len(txns):
-            thr = threading.Thread(target=savedata.write_to_csv, args=(
+            thr_stif = threading.Thread(target=savedata.write_to_csv, args=(
                 txns, "txn", file_date_time, stif_data_num))
-            thr.start()
-            thr.join()
+            thr_stif.start()
+            thr_stif.join()
 
         txns.clear()
 

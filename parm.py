@@ -7,9 +7,8 @@
 from readconfig import Setting, RedisConfig
 import os, sys
 
+
 parm_ob = Setting()
-
-
 # 数据参数
 savenum = parm_ob.get_num()  # 多少条数据写入文件一次
 datannum = int(parm_ob.data_num())  # 总数据数
@@ -17,6 +16,7 @@ stifnum = int(parm_ob.stif_num())  # 交易数据条数
 winsavepath = parm_ob.get_save_path()  # 数据存储路径 win
 linuxsavepath = parm_ob.get_linux_path()  # 数据存储路径 linux
 datadate = parm_ob.get_data_date()  # 开始数据日期，
+filenum = int(parm_ob.get_file_num())  # 每个数据文件储存的数据条数
 
 
 # redis 连接信息

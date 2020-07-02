@@ -8,10 +8,12 @@ import configparser
 import os
 
 
+# configfile = "config.ini"  # line
+configfile = "config_dev.ini"  # dev
+
 
 curPath = os.path.dirname(os.path.realpath(__file__))
-# curPath = os.getcwd()
-cfgPath = os.path.join(curPath, "config.ini")
+cfgPath = os.path.join(curPath, configfile)
 
 
 class BaseConfig:
@@ -82,6 +84,14 @@ class Setting(BaseConfig):
     def get_data_date(self):
         """跑批数据日期"""
         temp = self.conf.get('setting', 'DATADATE')
+        return temp
+
+    def get_file_num(self):
+        """
+
+        :return:
+        """
+        temp = self.conf.get('setting', 'FILENUM')
         return temp
 
 class ReadOraclConfig(BaseConfig):

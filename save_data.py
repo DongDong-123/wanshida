@@ -11,7 +11,8 @@ from parm import zip_floder
 import time
 
 conf = ReadMySqlConfig()
-t_stan_org = ("busi_reg_no", "ctnm", "ctsnm", "cten", "ctsen", "busi_name", "appli_country", "sub_company", "former_name", "citp", "citp_nt", "ctid", "ctid_edt", "state", "city", "address", "post_code", "tel", "fax", "m_state", "m_city", "m_address", "m_post_code", "m_tel", "m_fax", "pr_mr_ms", "pr_name", "pr_title", "pr_phone", "pr_fax", "pr_email", "pr_address", "sec_mr_ms", "sec_name", "sec_title", "sec_phone", "sec_fax", "sec_email", "sec_address", "aml_mr_ms", "aml_name", "aml_title", "aml_phone", "aml_fax", "aml_email", "aml_address", "client_tp", "lfa_type", "lfa_type_explain", "fud_date", "assets_size", "country", "other_oper_country", "desc_business", "tin", "busi_type", "ctvc", "indu_code", "indu_code_nt", "crnm", "crit", "crit_nt", "crid", "crid_edt", "reg_cptl", "reg_cptl_code", "remark_ctvc", "eecp", "scale", "rgdt", "cls_dt", "unit_code", "remark", "stat_flag_ori", "stat_flag", "mer_unit", "cmgr", "act_cd", "acc_type1", "bank_acc_name", "cabm", "country_2", "statement_type", "reals", "complex", "clear", "data_crdt", "data_cruser", "data_updt", "data_upuser")
+# t_stan_org = ("busi_reg_no", "ctnm", "ctsnm", "cten", "ctsen", "busi_name", "appli_country", "sub_company", "former_name", "citp", "citp_nt", "ctid", "ctid_edt", "state", "city", "address", "post_code", "tel", "fax", "m_state", "m_city", "m_address", "m_post_code", "m_tel", "m_fax", "pr_mr_ms", "pr_name", "pr_title", "pr_phone", "pr_fax", "pr_email", "pr_address", "sec_mr_ms", "sec_name", "sec_title", "sec_phone", "sec_fax", "sec_email", "sec_address", "aml_mr_ms", "aml_name", "aml_title", "aml_phone", "aml_fax", "aml_email", "aml_address", "client_tp", "lfa_type", "lfa_type_explain", "fud_date", "assets_size", "country", "other_oper_country", "desc_business", "tin", "busi_type", "ctvc", "indu_code", "indu_code_nt", "crnm", "crit", "crit_nt", "crid", "crid_edt", "crid_country", "reg_cptl", "reg_cptl_code", "remark_ctvc", "eecp", "scale", "rgdt", "cls_dt", "unit_code", "remark", "stat_flag_ori", "stat_flag", "mer_unit", "cmgr", "reals", "complex", "clear", "data_crdt", "data_cruser", "data_updt", "data_upuser")
+t_stan_org = ("csnm", "custormer_name", "custormer_sname", "custormer_ename", "custormer_sename", "busi_name", "appli_country", "sub_company", "former_name", "cert_tp", "cert_tp_explain", "cert_num", "cert_validity", "state", "city", "address", "post_code", "tel", "fax", "m_state", "m_city", "m_address", "m_post_code", "m_tel", "m_fax", "pr_mr_ms", "pr_name", "pr_title", "pr_phone", "pr_fax", "pr_email", "pr_address", "sec_mr_ms", "sec_name", "sec_title", "sec_phone", "sec_fax", "sec_email", "sec_address", "aml_mr_ms", "aml_name", "aml_title", "aml_phone", "aml_fax", "aml_email", "aml_address", "client_tp", "lfa_type", "lfa_type_explain", "found_date", "assets_size", "country", "other_oper_country", "desc_business", "tin", "busi_type", "industry_type", "indu_code", "indu_code_nt", "legal_p_name", "legal_p_ename", "legal_p_cert_tp", "legal_p_cert_explain", "legal_p_cert_num", "legal_cert_validity", "crid_country", "registered_capital", "registered_capital_currency", "business_scope", "enps_ecic_sectors", "scale", "establish_busi_date", "end_busi_date", "unit_code", "remark", "stat_flag_ori", "stat_flag", "mer_unit", "account_manager", "reals", "complex", "clear", "create_time", "update_time", "creator", "updator")
 t_stan_relation = ("ctif_id", "ctnm", "rel_tp", "rel_layer", "rel_cstp", "fir_name", "sec_name", "last_name", "citp", "citp_nt", "ctid", "ctid_edt", "rcnt", "dob", "cob", "years_comp", "years_indu", "rel_prov", "rel_city", "rel_area", "rear", "retl", "ret_mphone", "rel_fax", "rel_email", "gov_owned", "hold_per", "hold_amt", "remark", "data_crdt", "data_cruser", "data_updt", "data_upuser")
 t_stan_ptxn = ("msg_id", "msg_type", "inter_tran_type", "uuid", "trace_id", "tran_group_id", "tran_init", "tran_res", "card_bin", "card_type", "card_product", "card_brand", "card_media", "token_pan", "encrypt_pan", "hash_pan", "digsit", "crdhldr_tran_type", "crdhldr_acc_tp_from", "crdhldr_acc_tp_to", "tran_amount", "sett_amount", "bill_amount", "tran_datetime", "crdhldr_bill_fee", "sett_conv_rate", "bill_conv_rate", "sys_trace_audit_nbr", "local_tran_datetime", "exp_date", "sett_date", "conv_date", "mcc", "pos_entry_cd", "card_seq_num", "pos_pin_cptr_cd", "tran_fee_indi", "acq_srchg_amount", "acq_ins_id_cd", "fwd_ins_id_cd", "trk2_prsnt_sw", "retriv_ref_num", "auth_cd", "resp_cd", "pos_term_id", "acq_merch_id", "acq_merch_name", "acq_merch_city", "acq_merch_state", "frmt_resp_data", "additional_data", "funding_payment_tti", "tran_curr_cd", "sett_curr_cd", "bill_curr_cd", "data_integrated", "paym_account", "advice_reason_cd", "advice_reason_dt_cd", "advice_reason_dt_txt", "advice_reason_add_txt", "pos_data", "pos_crdhldr_present", "pos_tran_status", "inf_data", "ntw_mng_inf_cd", "org_mti", "org_stan", "org_tran_datetime", "org_acq_ins_id_cd", "org_fwd_ins_id_cd", "org_trace_id", "rcv_ins_id_cd", "iss_mti_cd", "iss_pcode", "iss_ins_id_cd", "acq_msg_flag", "iss_msg_flag", "single_dual_flag", "tran_buss_st", "tran_advice_st", "inter_resp_cd", "dc_id", "insert_timestamp", "insert_by", "last_update_timestamp", "last_update_by", "channel_type", "cash_back_amount", "cash_back_indicator", "mcht_data_srv", "tcc", "cvv2", "pos_cat_level", "merch_advic_cd", "src_member_id", "dest_member_id", "group_tran_type", "fee_category", "fan_ntw_cd", "int_rate_id", "net_ref_num", "bnk_ref_num", "acq_ref_num", "gcms_prc_num", "act_tran_amount", "act_sett_amount", "act_bill_amount", "zero_fill_amount", "reserve1", "reserve2", "reserve3", "data_transfer_dt")
 t_stan_dtxn = ("batclr_sngl_dspt_msg_id", "dspt_sys_id", "orig_trace_id", "card_type", "card_product", "card_brand", "token_pan", "encrypt_pan", "crdhldr_tran_type", "crdhldr_acc_tp_from", "crdhldr_acc_tp_to", "sett_conv_rate", "dspt_trace_aud_num", "orig_local_tran_datetime", "sett_date", "mcc", "pos_entry_cd", "retriv_ref_num", "auth_cd", "resp_cd", "pos_term_id", "tran_curr_cd", "sett_curr_cd", "dspt_advic_rsn_cd", "dspt_advic_rsn_dtl_cd", "org_stan", "channel_type", "cash_back_amount", "orig_tran_type", "dspt_tran_type", "send_ica", "rcvr_ica", "send_rl", "rcvr_rl", "dspt_tran_amt", "dspt_setl_amt", "orig_sett_date", "db_cr_flag", "tran_amt", "setl_amt", "actl_tran_amt", "setl_tran_amt", "cash_back_indicator", "mcht_data_srv", "dspt_ref_num", "insert_timestamp", "last_update_timestamp", "reserve1", "reserve2", "reserve3", "version", "case_id", "msg_rev_ind", "dspt_tran_dttm", "data_transfer_dt")
@@ -53,6 +54,7 @@ class SaveFile:
     def __init__(self):
         self.file_path = zip_floder
         self.currt_time = time.strftime('%Y%m%d', time.localtime())
+        self.file_full = None
         self.t_stan_org = t_stan_org
         self.t_stan_relation = t_stan_relation
         self.t_stan_ptxn = t_stan_ptxn
@@ -64,21 +66,25 @@ class SaveFile:
         self.t_stan_survey_info3 = t_stan_survey_info3
 
 
-    def write_to_csv(self, datas, file_name, date_time, num):
+    def write_to_csv(self, datas, file_name, date_time, num, total_num):
         if not self.file_path:
             self.file_path = os.path.join(os.getcwd(), 'data')
         if not os.path.exists(self.file_path):
             os.makedirs(self.file_path)
 
-        file_full = os.path.join(self.file_path, '{}-D{}-T{}_00{}.csv'.format(file_name, date_time, self.currt_time, num))
-        if not os.path.exists(file_full):
+        self.file_full = os.path.join(self.file_path, '{}-D{}-T{}_00{}.csv'.format(file_name, date_time, self.currt_time, num))
+        if not os.path.exists(self.file_full):
             title = eval('self.' + 't_stan_' + file_name)
-            csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
+            csvfile = open(self.file_full, 'a', encoding="utf-8-sig", newline='')
             writer = csv.writer(csvfile)
             writer.writerow(title)
             csvfile.close()
 
-        csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
+        csvfile = open(self.file_full, 'a', encoding="utf-8-sig", newline='')
         writer = csv.writer(csvfile)
         writer.writerows(datas)
         csvfile.close()
+
+    def make_control_file(self, num):
+        with open(self.file_full, 'w',encoding='utf-8') as f:
+            f.write(num)

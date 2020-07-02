@@ -11,7 +11,7 @@ comm = CommonFunction()
 
 class MakeData:
     def __init__(self):
-        self.busi_reg_no = None
+        self.csnm = None
         self.ctnm = 'zhangsansan'
 
     def make_stan_org(self, num):
@@ -19,19 +19,19 @@ class MakeData:
         机构数据
         :return:
         """
-        self.busi_reg_no = 'org_1_{}'.format(num)  # 客户号    必填
-        ctnm = comm.org_name()  # 客户名称    必填
-        ctsnm = ''.join([elem[0] for elem in ctnm.split()])  # 客户简称
-        cten = ''  # 拼音/英文名称
-        ctsen = ''  # 英文缩写
+        self.csnm = 'org_1_{}'.format(num)  # 客户号    必填
+        custormer_name = comm.org_name()  # 客户名称    必填
+        custormer_sname = ''.join([elem[0] for elem in custormer_name.split()])  # 客户简称
+        custormer_ename = ''  # 拼音/英文名称
+        custormer_sename = ''  # 英文缩写
         busi_name = ''  # doing business as name
         appli_country = comm.chiose_country()  # 申请许可国家    必填
         sub_company = ''  # 子公司
         former_name = ''  # 申请过的合法名称
-        citp = comm.cert_type()  # 证件类型    必填
-        citp_nt = '证件类型说明'  # 证件类型说明    必填
-        ctid = comm.org_cert_num()  # 证件号码    必填
-        ctid_edt = comm.make_date()  # 证件有效期    必填
+        cert_tp = comm.cert_type()  # 证件类型    必填
+        cert_tp_explain = '证件类型说明'  # 证件类型说明    必填
+        cert_num = comm.org_cert_num()  # 证件号码    必填
+        cert_validity = comm.make_date()  # 证件有效期    必填
         city = comm.random_city()  # 注册地址-市    应填
         state = comm.chiose_provance(city)  # 注册地址-省    应填
         address = comm.make_address(city)  # 注册地址    必填
@@ -68,51 +68,48 @@ class MakeData:
         aml_email = comm.make_email_data()  # 反洗钱联系人电子邮箱    应填
         aml_address = comm.make_address()  # 反洗钱联系人使用地址
         client_tp = comm.cust_tyep()  # 客户类别    必填
-        lfa_type = comm.org_type() # 组织机构类别    应填
+        lfa_type = comm.org_type()  # 组织机构类别    应填
         lfa_type_explain = ''  # 组织机构其他类别说明
-        fud_date = comm.make_date(-20, -1)  # 成立日期    必填
+        found_date = comm.make_date(-20, -1)  # 成立日期    必填
         assets_size = ''  # 资产规模(美元，当年）
         country = comm.chiose_country()  # 注册国家    必填
         other_oper_country = ''  # 其他运营国家
         desc_business = ''  # 经营说明
         tin = ''  # TIN
         busi_type = ''  # 业务类型    必填
-        ctvc = ''  # 主体的行业类别    必填
+        industry_type = ''  # 主体的行业类别    必填
         indu_code = ''  # 主体的行业代码原值    应填
         indu_code_nt = ''  # 主体的行业代码原值说明    应填
-        crnm = ''  # 主体的法定代表人姓名    必填
-        crit = ''  # 主体的法定代表人身份证件类型    必填
-        crit_nt = ''  # 主体的法定代表人证件类型说明    必填
-        crid = ''  # 主体的法定代表人身份证件号码    必填
-        crid_edt = ''  # 主体的法定代表人证件有效期    必填
-        reg_cptl = comm.random_num(8) # 注册资本
-        reg_cptl_code = ''  # 注册资本金币种
-        remark_ctvc = '组织文化艺术交流活动；文艺创作；体育运动项目经营（高危险性体育项目除外）；承办展览展示；婚庆服务；摄影服务；摄像服务；公共关系服务；礼仪服务；模特服务；会议服务；大型活动组织服务；经济信息咨询；婚纱礼服出租；花卉租摆；舞台策划；摄影器材租赁；舞台灯光音响设计；电脑图文设计；电脑动画设计；设计、制作、代理、发布广告。'  # 经营范围    必填
-        eecp = ''  # 企业经济成份
+        legal_p_name = ''  # 主体的法定代表人姓名    必填
+        legal_p_ename = ''  # 主体的法定代表人英文姓名
+        legal_p_cert_tp = ''  # 主体的法定代表人身份证件类型    必填
+        legal_p_cert_explain = ''  # 主体的法定代表人证件类型说明    必填
+        legal_p_cert_num = ''  # 主体的法定代表人身份证件号码    必填
+        legal_cert_validity = ''  # 主体的法定代表人证件有效期    必填
+        crid_country = ''
+        registered_capital = comm.random_num(8)  # 注册资本
+        registered_capital_currency = ''  # 注册资本金币种
+        business_scope = '组织文化艺术交流活动；文艺创作；体育运动项目经营（高危险性体育项目除外）；承办展览展示；婚庆服务；摄影服务；摄像服务；公共关系服务；礼仪服务；模特服务；会议服务；大型活动组织服务；经济信息咨询；婚纱礼服出租；花卉租摆；舞台策划；摄影器材租赁；舞台灯光音响设计；电脑图文设计；电脑动画设计；设计、制作、代理、发布广告。'  # 经营范围    必填
+        enps_ecic_sectors = ''  # 企业经济成份
         scale = ''  # 企业人数规模
-        rgdt = comm.make_date(-10, -1)  # 建立业务日期    必填
-        cls_dt = ''  # 终止业务日期    （注销的情况下）应填
+        establish_busi_date = comm.make_date(-10, -1)  # 建立业务日期    必填
+        end_busi_date = ''  # 终止业务日期    （注销的情况下）应填
         unit_code = ''  # 成员机构代码
         remark = ''  # 备注
         stat_flag_ori = comm.cust_status()  # 客户状态原值    应填
         stat_flag = comm.cust_status()  # 客户状态    必填
         mer_unit = ''  # 管理机构    必填
-        cmgr = ''  # 客户经理
-        act_cd = ''  # 账户号    四元组
-        acc_type1 = ''  # 账户类型    四元组
-        bank_acc_name = ''  # 账户名称    四元组
-        cabm = ''  # 账号开户机构名称    四元组
-        country_2 = ''  # 开户机构所在地
-        statement_type = ''  # 结算类型
+        account_manager = ''  # 客户经理
         reals = comm.make_reals_data()  # 客户真实有效性
         complex = comm.make_complex_data  # 非自然人结构复杂度
         clear = comm.make_clear_data()  # 非自然人股权可辨识度
-        data_crdt = comm.data_time()  # 数据创建时间    必填
-        data_cruser = comm.random_num(5)  # 数据创建人id    必填
-        data_updt = comm.data_time()  # 数据更新时间    必填
-        data_upuser = comm.random_num(5)   # 数据更新人id    必填
+        create_time = comm.data_time()  # 数据创建时间    必填
+        update_time = comm.data_time()  # 数据更新时间    必填
+        creator = comm.random_num(5)  # 数据创建人id    必填
+        updator = comm.random_num(5)  # 数据更新人id    必填
 
-        all_col = [self.busi_reg_no, ctnm, ctsnm, cten, ctsen, busi_name, appli_country, sub_company, former_name, citp, citp_nt, ctid, ctid_edt, state, city, address, post_code, tel, fax, m_state, m_city, m_address, m_post_code, m_tel, m_fax, pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, pr_address, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, aml_address, client_tp, lfa_type, lfa_type_explain, fud_date, assets_size, country, other_oper_country, desc_business, tin, busi_type, ctvc, indu_code, indu_code_nt, crnm, crit, crit_nt, crid, crid_edt, reg_cptl, reg_cptl_code, remark_ctvc, eecp, scale, rgdt, cls_dt, unit_code, remark, stat_flag_ori, stat_flag, mer_unit, cmgr, act_cd, acc_type1, bank_acc_name, cabm, country_2, statement_type, reals, complex, clear, data_crdt, data_cruser, data_updt, data_upuser]
+        # all_col = [self.csnm, ctnm, ctsnm, cten, ctsen, busi_name, appli_country, sub_company, former_name, citp, citp_nt, ctid, ctid_edt, state, city, address, post_code, tel, fax, m_state, m_city, m_address, m_post_code, m_tel, m_fax, pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, pr_address, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, aml_address, client_tp, lfa_type, lfa_type_explain, fud_date, assets_size, country, other_oper_country, desc_business, tin, busi_type, ctvc, indu_code, indu_code_nt, crnm, crit, crit_nt, crid, crid_edt, reg_cptl, reg_cptl_code, remark_ctvc, eecp, scale, rgdt, cls_dt, unit_code, remark, stat_flag_ori, stat_flag, mer_unit, cmgr, act_cd, acc_type1, bank_acc_name, cabm, country_2, statement_type, reals, complex, clear, data_crdt, data_cruser, data_updt, data_upuser]
+        all_col = [self.csnm, custormer_name, custormer_sname, custormer_ename, custormer_sename, busi_name, appli_country, sub_company, former_name, cert_tp, cert_tp_explain, cert_num, cert_validity, state, city, address, post_code, tel, fax, m_city, m_state, m_address, m_post_code, m_tel, m_fax, pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, pr_address, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, aml_address, client_tp, lfa_type, lfa_type_explain, found_date, assets_size, country, other_oper_country, desc_business, tin, busi_type, industry_type, indu_code, indu_code_nt, legal_p_name, legal_p_ename, legal_p_cert_tp, legal_p_cert_explain, legal_p_cert_num, legal_cert_validity, crid_country, registered_capital, registered_capital_currency, business_scope, enps_ecic_sectors, scale, establish_busi_date, end_busi_date, unit_code, remark, stat_flag_ori, stat_flag, mer_unit, account_manager, reals, complex, clear, create_time, update_time, creator, updator]
         return all_col
 
 
@@ -121,8 +118,8 @@ class MakeData:
         关系人表
         :return:
         """
-        ctif_id = self.busi_reg_no  # 客户号  必填
-        ctnm = self.ctnm  # 客户名称  必填
+        csnm = self.csnm  # 客户号  必填
+        custormer_name = self.ctnm  # 客户名称  必填
         rel_tp = comm.relation_type()  # 关系类型  必填
         rel_layer = comm.rel_layer()  # 关系人层级
         rel_cstp = '2'  # 关系人类别  必填
@@ -134,14 +131,14 @@ class MakeData:
             fir_name = comm.person_fir_name()
             sec_name = comm.person_fir_name()  # 关系人second name
             last_name = comm.person_fir_name()  # 关系人last name
-        citp = comm.cert_type()  # 关系人证件类型
-        citp_nt = ''  # 关系人证件类型说明
+        cert_tp = comm.cert_type()  # 关系人证件类型
+        cert_tp_explain = ''  # 关系人证件类型说明
         if rel_cstp == '1':
-            ctid = comm.random_num(18)  # 临时18位数字字符串
+            cert_num = comm.random_num(18)  # 临时18位数字字符串
             # ctid = comm.person_cert_num()  # 关系人证件号码
         else:
-            ctid = comm.org_cert_num()
-        ctid_edt = comm.make_date()  # 关系人证件有效期
+            cert_num = comm.org_cert_num()
+        cert_validity = comm.make_date()  # 关系人证件有效期
         rcnt = comm.chiose_country()  # 关系人国籍/国家
         dob = ''  # 关系人出生日期
         cob = ''  # 关系人出生国家
@@ -152,27 +149,26 @@ class MakeData:
         rel_area = ''  # 关系人区县
         rear = ''  # 关系人详细地址
         retl = ''  # 关系人联系电话
-        ret_mphone = ''  # 关系人手机
+        rel_phone = ''  # 关系人手机
         rel_fax = ''  # 关系人传真
         rel_email = ''  # 关系人电子邮箱
         gov_owned = ''  # 关系人是否国有持股
         hold_per = ''  # 持股比例
         hold_amt = ''  # 持股金额
         remark = ''  # 备注
-        data_crdt = comm.data_time()  # 数据创建时间  必填
-        data_cruser = comm.random_num(5)  # 数据创建人id  必填
-        data_updt = comm.data_time()  # 数据更新时间  必填
-        data_upuser = comm.random_num(5)  # 数据更新人id  必填
+        create_time = comm.data_time()  # 数据创建时间  必填
+        creator = comm.random_num(5)  # 数据创建人id  必填
+        update_time = comm.data_time()  # 数据更新时间  必填
+        updator = comm.random_num(5)  # 数据更新人id  必填
 
-        all_col = [ctif_id, ctnm, rel_tp, rel_layer, rel_cstp, fir_name, sec_name, last_name, citp, citp_nt, ctid, ctid_edt, rcnt, dob, cob, years_comp, years_indu, rel_prov, rel_city, rel_area, rear, retl, ret_mphone, rel_fax, rel_email, gov_owned, hold_per, hold_amt, remark, data_crdt, data_cruser, data_updt, data_upuser]
-
+        all_col = [csnm, custormer_name, rel_tp, rel_layer, rel_cstp, fir_name, sec_name, last_name, cert_tp, cert_tp_explain, cert_num, cert_validity, rcnt, dob, cob, years_comp, years_indu, rel_prov, rel_city, rel_area, rear, retl, rel_phone, rel_fax, rel_email, gov_owned, hold_per, hold_amt, remark, create_time, update_time, creator, updator]
         return all_col
 
 
     def make_stan_survey_info1(self):
         """"
         """
-        ctif_id = self.busi_reg_no  # 客户号
+        ctif_id = self.csnm  # 客户号
         ctnm = self.ctnm  # 客户名称
         info_a_bool = ''  # 是否遵守反洗钱或反恐融资法
         laws_name = ''  # 法律法规名称
