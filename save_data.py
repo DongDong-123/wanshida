@@ -54,7 +54,6 @@ class SaveFile:
     def __init__(self):
         self.file_path = zip_floder
         self.currt_time = time.strftime('%Y%m%d', time.localtime())
-        self.file_full = None
         self.t_stan_org = t_stan_org
         self.t_stan_relation = t_stan_relation
         self.t_stan_ptxn = t_stan_ptxn
@@ -67,24 +66,33 @@ class SaveFile:
 
 
     def write_to_csv(self, datas, file_name, date_time, num, total_num):
+        """
+
+        :param datas: 写入数据
+        :param file_name: 文件名
+        :param date_time: 文件名日期
+        :param num: 文件编号
+        :param total_num: 控制文件内数据数量
+        :return:
+        """
         if not self.file_path:
             self.file_path = os.path.join(os.getcwd(), 'data')
         if not os.path.exists(self.file_path):
             os.makedirs(self.file_path)
 
-        self.file_full = os.path.join(self.file_path, '{}-D{}-T{}_00{}.csv'.format(file_name, date_time, self.currt_time, num))
-        if not os.path.exists(self.file_full):
+        file_full = os.path.join(self.file_path, '{}-D{}-T{}_00{}.csv'.format(file_name, date_time, self.currt_time, num))
+        if not os.path.exists(file_full):
             title = eval('self.' + 't_stan_' + file_name)
-            csvfile = open(self.file_full, 'a', encoding="utf-8-sig", newline='')
+            csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
             writer = csv.writer(csvfile)
             writer.writerow(title)
             csvfile.close()
 
-        csvfile = open(self.file_full, 'a', encoding="utf-8-sig", newline='')
+        csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
         writer = csv.writer(csvfile)
         writer.writerows(datas)
         csvfile.close()
-
-    def make_control_file(self, num):
-        with open(self.file_full, 'w',encoding='utf-8') as f:
-            f.write(num)
+        # 控制文件写入数据数量
+        txt_file = os.path.join(self.file_path, '{}-D{}-T{}_00{}.txt'.format(file_name, date_time, self.currt_time, num))
+        with open(txt_file, 'w',encoding='utf-8') as f:
+            f.write(str(total_num))
