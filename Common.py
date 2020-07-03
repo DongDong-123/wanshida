@@ -447,3 +447,31 @@ class CommonFunction:
             "5"  # 其他风险较高股权或控制权结构（信托、代名股东等
         ])
         return clear
+
+    def make_rule_type(self):
+        """预警类型"""
+        return random.choice([
+            '00',  # 大额
+            '01'  # 可疑
+        ])
+
+    def make_warn_kd(self):
+        """预警方式"""
+        return random.choice([
+            '0',  # 人工手动
+            '1'  # 系统自动
+        ])
+
+    def make_ctif_tp(self):
+        """可疑主体类别"""
+        return random.choice([
+            '1',  # 持卡人
+            '2'  # 商户
+        ])
+
+    def make_tran_kd(self):
+        """交易种类"""
+        return random.choice([
+            '0',  # 差错交易
+            '1'  # 普通交易
+        ])

@@ -24,7 +24,7 @@ redis_conf = RedisConfig()
 redis_host = redis_conf.host()
 redis_port = int(redis_conf.port())
 redis_db = int(redis_conf.db())
-
+redis_passwd = int(redis_conf.passwd())
 
 if sys.platform == 'linux':
     os.chdir('/home/admin/make_data/tomysql/4v0')
