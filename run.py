@@ -29,8 +29,35 @@ def get_parm():
 
 
 def updtae_parm(n, t):
+    t = str(t)
+    year = int(t[:4])
+    month = int(t[4:6])
+    day = int(t[6:])
+    if month in [1,3,5,7,8,10,12]:
+        if day > 31:
+            day = day % 31
+            month += 1
+
+    elif month in [4,6,9,11]:
+        if day > 30:
+            day = day % 30
+            month += 1
+    else:
+        if year % 4 == 0 and day > 29:
+            day = day %29
+            month += 1
+        else:
+            if day > 28:
+                day = day % 28
+                month += 1
+    if month < 10:
+        month = '0' + str(month)
+    if day < 10:
+        day = '0'+ str(day)
+
+    pt = str(year) + str(month) + str(day)
     with open(os.path.join(current_path, 'parm.txt'), 'w', encoding='utf-8') as f:
-        f.write("{},{}".format(n, t))
+        f.write("{},{}".format(n, pt))
 
 
 def zip_file(start_dir, date):
@@ -52,6 +79,7 @@ def zip_file(start_dir, date):
                 os.remove(filename)
             else:
                 print(filename)
+                print('无匹配文件')
     z.close()
     return file_news
 

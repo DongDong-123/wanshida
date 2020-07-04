@@ -323,7 +323,8 @@ class CommonFunction:
         if not code:
             code = self.random_city()
         three_level_addr = pool.get_data(code)
-        three_level_addr.replace('-', '')
+        if '-' in three_level_addr:
+            three_level_addr.replace('-', '')
         street_address = random.choice([
             "解放路", "千佛山", "趵突泉", "泉城路", "大明湖", "东关", "文东", "建新", "甸柳", "燕山", "姚家", "龙洞", "智远", "舜华路", "大观园", "杆石桥",
             "四里村",
