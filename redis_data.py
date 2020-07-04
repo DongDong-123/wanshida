@@ -11,7 +11,7 @@ from parm import redis_host, redis_db, redis_port, redis_passwd
 
 class RedisConnect:
     def __init__(self):
-        self.conn = redis.Redis(host=redis_host,port=redis_port,passwd=redis_passwd,db=redis_db,decode_responses=True, charset='UTF-8', encoding='UTF-8')
+        self.conn = redis.Redis(host=redis_host,port=redis_port,password=redis_passwd,db=redis_db,decode_responses=True, charset='UTF-8', encoding='UTF-8')
 
     def save_k_v(self, k, v):
         self.conn.set(k, v)
