@@ -27,7 +27,7 @@ redis_db = int(redis_conf.db())
 
 
 if sys.platform == 'linux':
-    os.chdir('/home/admin/make_data/tomysql/4v0')
+    os.chdir('/home/admin/make_data/mcaml')
     zip_floder = linuxsavepath
 elif sys.platform == 'win32':
     zip_floder = winsavepath
