@@ -13,6 +13,8 @@ class MakeData:
     def __init__(self):
         self.csnm = None
         self.ctnm = 'zhangsansan'
+        self.unit_code = None
+
 
     def make_stan_org(self, num):
         """
@@ -94,7 +96,7 @@ class MakeData:
         scale = ''  # 企业人数规模
         establish_busi_date = comm.make_date(-10, -1)  # 建立业务日期    必填
         end_busi_date = ''  # 终止业务日期    （注销的情况下）应填
-        unit_code = ''  # 成员机构代码
+        self.unit_code = ''  # 成员机构代码
         remark = ''  # 备注
         stat_flag_ori = comm.cust_status()  # 客户状态原值    应填
         stat_flag = comm.cust_status()  # 客户状态    必填
@@ -586,14 +588,14 @@ class MakeData:
 
         :return:
         """
-        unit_code = ''  # 成员机构代码  必填
+        unit_code = self.unit_code  # 成员机构代码  必填
         warn_dt = ''  # 预警日期  必填
         rule_id = ''  # 预警规则  必填
-        rule_type = ''  # 预警类型  必填
-        warn_kd = ''  # 预警方式
+        rule_type = comm.make_rule_type()  # 预警类型  必填
+        warn_kd = comm.make_warn_kd()  # 预警方式
         susp_value = ''  # 可疑分数
-        ctif_tp = ''  # 可疑主体类别  必填
-        tran_kd = ''  # 交易种类  必填
+        ctif_tp = comm.make_ctif_tp()  # 可疑主体类别  必填
+        tran_kd = comm.make_tran_kd()  # 交易种类  必填
         card_type = ''  # 卡类型：借贷记  必填
         MCNO = ''  # 主体的商户代码  （商户）必填
         MCNM = ''  # 主体的商户名称  （商户）必填
