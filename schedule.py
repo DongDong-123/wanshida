@@ -47,7 +47,7 @@ def main(beg, end, stif_time, file_date_time):
         ptxns.append(t_stan_ptxn)
         t_stan_dtxn = makedata.make_stan_dtxn()
         dtxns.append(t_stan_dtxn)
-        t_stan_stif = makedata.make_stan_stif()
+        t_stan_stif = makedata.make_stan_stif(stif_time)
         stifs.append(t_stan_stif)
         t_stan_survey_info1 = makedata.make_stan_survey_info1()
         survey_info1.append(t_stan_survey_info1)

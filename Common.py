@@ -476,3 +476,119 @@ class CommonFunction:
             '0',  # 差错交易
             '1'  # 普通交易
         ])
+
+    def make_STCT_data(self):
+        """
+        主体使用的银行卡类型
+        :return:
+        """
+        return random.choice([
+            "01",  # 境内借记卡；
+            "02",  # 境内信用卡；
+            "03",  # 境内预付费卡；
+            "09",  # 其他境内卡（若选择此项，报告机构应对其境内卡类型做进一步说明）；
+            "11",  # 境外借记卡；
+            "12",  # 境外信用卡；
+            "13",  # 境外预付费卡；
+            "19",  # 其他境外卡（若选择此项，报告机构应对其境外卡类型做进一步说明）；
+            "99"  # 其他（若选择此项，报告机构应对其银行发行卡类型做进一步说明）
+        ])
+
+    def make_tstp_data(self):
+        """
+        交易方式
+        :return:
+        """
+        return random.choice([
+            "11",  # ATM现金交易业务；
+            "12",  # 银行柜面现金交易；
+            "19",  # 其他方式现金交易；（若选择此项，报告机构应对其现金交易方式做进一步说明）
+            "21",  # ATM转账业务；
+            "22",  # 银行柜面转账业务；
+            "23",  # 网银转账业务；
+            "29",  # 其他方式转账业务；（若选择此项，报告机构应对其转账方式做进一步说明）
+            "30",  # P0S消费；
+            "40",  # 网络收单交易；
+            "99"  # 其他方式（若选择此项，报告机构应对其交易方式做进一步说明）
+        ])
+
+    def make_time(self):
+        """生成随机时间，时分秒"""
+        hour = random.randint(0,23)
+        minite = random.randint(0,59)
+        second = random.randint(0,59)
+        if hour == 0:
+            hour = '0'
+        elif hour <10:
+            hour = '0' + str(hour)
+
+        if minite == 0:
+            minite = '00'
+        elif minite < 10:
+            minite = '0' + str(second)
+
+        if second == 0:
+            second = '00'
+        elif second < 10:
+            second = '0' + str(second)
+        return "{}:{}:{}".format(hour, minite, second)
+
+    def make_tsdr_data(self):
+        '''
+        相同码值共用
+        资金收付标识,境内外标识
+
+        '''
+        return random.choice([
+            '01',  # :收
+            '02'  # : 付
+        ])
+
+    def make_tctp_data(self):
+        """交易币种"""
+        return random.choice([
+
+        ])
+
+    def make_tcat_data(self):
+        """交易金额"""
+        return random.randint(1,10000)
+
+    def make_ticd_data(self):
+        """
+        交易流水的唯一识别码，时间戳加地区代码加5位随机数字
+        :return:
+        """
+        timestmp = time.time()
+        ticd = self.random_num(6) + str(timestmp).replace(".", "") + self.random_num(5)
+        return ticd
+
+    def make_busi_type(self):
+        return random.choice([
+            "01",  # 万事达卡
+            "02",  # 万事顺卡
+            "03"  # 顺利卡
+        ])
+
+    def make_trans_type(self):
+        return random.choice([
+            "00",  # 初始
+            "01",  # 成功
+            "02",  # 失败
+            "03",  # 超时
+            "04",  # 缺陷成功
+            "05"  # 未知失败
+        ])
+
+    def make_tran_advice_st(self):
+        return random.choice([
+            "00",  # 初始
+            "01",  # 预授权完成撤销
+            "11",  # 拒绝通知
+            "13",  # 已通知
+            "15",  # 预授权完成
+            "81",  # 部分撤销
+            "83",  # 已撤销
+            "85",  # 部分冲正
+            "89"  # 已冲正
+        ])

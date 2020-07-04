@@ -583,7 +583,7 @@ class MakeData:
         return all_col
 
 
-    def make_stan_stif(self):
+    def make_stan_stif(self, stiftime):
         """
 
         :return:
@@ -597,54 +597,64 @@ class MakeData:
         ctif_tp = comm.make_ctif_tp()  # 可疑主体类别  必填
         tran_kd = comm.make_tran_kd()  # 交易种类  必填
         card_type = ''  # 卡类型：借贷记  必填
-        MCNO = ''  # 主体的商户代码  （商户）必填
-        MCNM = ''  # 主体的商户名称  （商户）必填
-        ACCD = ''  # 收单机构代码  （商户）必填
+        mcc = ''  # 商户类型  必填   缺码表
+
+        if ctif_tp == '2':  # 商户
+            MCNO = ''  # 主体的商户代码  （商户）必填  缺码表
+            MCNM = ''  # 主体的商户名称  （商户）必填
+            ACCD = ''  # 收单机构代码  （商户）必填
+            STCT = ''  # 主体使用的银行卡类型  （持卡人）必填
+            STCI = ''  # 主体使用的银行卡号码  （持卡人）必填
+            IUCD = ''  # 主体开卡机构代码  （持卡人）必填
+        else:  # 持卡人
+            MCNO = ''  # 主体的商户代码  （商户）必填
+            MCNM = ''  # 主体的商户名称  （商户）必填
+            ACCD = ''  # 收单机构代码  （商户）必填
+            STCT = comm.make_STCT_data()  # 主体使用的银行卡类型  （持卡人）必填
+            STCI = comm.random_num(18)  # 主体使用的银行卡号码  （持卡人）必填
+            IUCD = ''  # 主体开卡机构代码  （持卡人）必填
         fwd_ins_id_cd = ''  # 收单代理机构号
-        STCT = ''  # 主体使用的银行卡类型  （持卡人）必填
-        card_product = ''  # 卡产品  必填
-        card_brand = ''  # 卡品牌
-        STCI = ''  # 主体使用的银行卡号码  （持卡人）必填
-        IUCD = ''  # 主体开卡机构代码  （持卡人）必填
+        card_product = ''  # 卡产品  必填  缺码表
+        card_brand = ''  # 卡品牌  缺码表
         rcv_ins_id_cd = ''  # 发卡代理机构号
-        tstm = ''  # 交易时间  必填
-        tsdr = ''  # 资金收付标志  必填
+        tstm = '{} {}'.format(stiftime, comm.make_time())  # 交易时间  必填
+        tsdr = comm.make_tsdr_data()  # 资金收付标志  必填
         TCPP = ''  # 资金用途
-        TCTP = ''  # 交易币种  必填
-        TCAT = ''  # 交易金额  必填
+        TCTP = comm.make_tctp_data()  # 交易币种  必填
+        TCAT = comm.make_tcat_data()  # 交易金额  必填
         TCMN = ''  # 交易对手的商户代码
         TCNM = ''  # 交易对手的商户名称
         CACD = ''  # 交易对方收单机构代码
         c_fwd_ins_id_cd = ''  # 收单代理机构号
         TCCT = ''  # 交易对手使用的银行卡类型
-        T_card_product = ''  # 交易对手卡产品  必填
+        T_card_product = ''  # 交易对手卡产品  必填   缺码表
         T_card_brand = ''  # 交易对手卡品牌
         TCCI = ''  # 交易对手使用的银行卡号码
         TCIC = ''  # 交易对手开卡机构代码
         c_rcv_ins_id_cd = ''  # 交易对手发卡代理机构号
         bptc = ''  # 清算组织与成员机构之间的业务交易编码  有就填
-        ticd = ''  # 业务标识号  必填
-        busi_type = ''  # 业务类型  必填
+        ticd = comm.make_ticd_data()  # 业务标识号  必填
+        busi_type = comm.make_busi_type()  # 业务类型  必填
         trans_type = ''  # 交易类型   必填
-        trans_stat = ''  # 交易状态  应填
-        tran_advice_st = ''  # 交易通知状态
+        trans_stat = comm.make_trans_type()  # 交易状态  应填
+        tran_advice_st = comm.make_tran_advice_st()  # 交易通知状态
+
         acq_merch_city = ''  # 收单商户城市  必填
         acq_merch_state = ''  # 收单商户状态
         TRCD = ''  # 交易发生地  应填
-        CBIF = ''  # 境内外标识  应填
+        CBIF = comm.make_tsdr_data()  # 境内外标识  应填  01：境内交易；02：跨境交易
         trans_channel = ''  # 交易渠道  应填
         PCTP = ''  # 清算币种  应填
         PCAT = ''  # 清算金额  应填
         crat_u = ''  # 交易金额折合美元  应填
         crat_c = ''  # 交易金额折合人民币  应填
-        TSTP = ''  # 交易方式  应填
-        mcc = ''  # 商户类型  必填
-        pos_entry_cd = ''  # POS机输入方式码  必填
+        TSTP = comm.make_tstp_data()  # 交易方式  应填
+        pos_entry_cd = ''  # POS机输入方式码  必填  # 缺码表
         retriv_ref_num = ''  # 检索参考号
         auth_cd = ''  # 授权码
         resp_cd = ''  # 应答码  必填
-        pos_term_id = ''  # POS机终端id  必填
-        mer_unit = ''  # 管理机构  必填
+        pos_term_id = comm.random_num(12)  # POS机终端id  必填
+        mer_unit = ''  # 管理机构  必填   缺码表
         run_dt = ''  # 可疑交易数据生成日期  必填
         data_transfer_dt = ''  # 可疑交易数据传输日期  必填
 

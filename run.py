@@ -29,6 +29,7 @@ def get_parm():
 
 
 def updtae_parm(n, t):
+    """执行完后，写入最新的编号和跑批日期"""
     t = str(t)
     year = int(t[:4])
     month = int(t[4:6])
@@ -93,7 +94,8 @@ def running():
         # st = datetime.datetime.strptime(str(t), "%Y%m%d")
         # file_date_time = str(st)[:10]
         file_date_time = str(t)
-        stif_time = "{}100000".format(t)
+        # stif_time = "{}100000".format(t)
+        stif_time = "{}".format(t)
 
         main(n, n + o, stif_time, file_date_time)
         n += o
