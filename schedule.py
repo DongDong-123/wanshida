@@ -43,10 +43,6 @@ def main(beg, end, stif_time, file_date_time):
         orgs.append(t_stan_org)
         t_stan_relation = makedata.make_stan_relation()
         relations.append(t_stan_relation)
-        t_stan_ptxn = makedata.make_stan_ptxn()
-        ptxns.append(t_stan_ptxn)
-        t_stan_dtxn = makedata.make_stan_dtxn()
-        dtxns.append(t_stan_dtxn)
         t_stan_stif = makedata.make_stan_stif(stif_time)
         stifs.append(t_stan_stif)
         t_stan_survey_info1 = makedata.make_stan_survey_info1()
@@ -57,7 +53,11 @@ def main(beg, end, stif_time, file_date_time):
         survey_info3.append(t_stan_survey_info3)
         # 单独生成交易数据
         for i in range(stifnum):
-            t_stan_txn = makedata.make_stan_txn(stif_time)
+            t_stan_ptxn, all_dict_data = makedata.make_stan_ptxn(stif_time)
+            ptxns.append(t_stan_ptxn)
+            t_stan_dtxn = makedata.make_stan_dtxn(all_dict_data)
+            dtxns.append(t_stan_dtxn)
+            t_stan_txn = makedata.make_stan_txn(stif_time, all_dict_data)
             txns.append(t_stan_txn)
 
         # 除交易外的存储

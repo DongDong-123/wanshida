@@ -473,8 +473,8 @@ class CommonFunction:
     def make_tran_kd(self):
         """交易种类"""
         return random.choice([
-            '0',  # 差错交易
-            '1'  # 普通交易
+            '00',  # 差错交易
+            '10'  # 普通交易
         ])
 
     def make_STCT_data(self):
@@ -537,7 +537,6 @@ class CommonFunction:
         '''
         相同码值共用
         资金收付标识,境内外标识
-
         '''
         return random.choice([
             '01',  # :收
@@ -786,4 +785,42 @@ class CommonFunction:
             "83",  # 已撤销
             "85",  # 部分冲正
             "89"  # 已冲正
+        ])
+
+    def make_yes_no(self):
+        """
+        通用，返回1是，0否
+        :return:
+        """
+        return random.choice(['1' if n %4 == 0 else '0' for n in range(10)])
+
+
+    def make_yes_no_unused(self):
+        """
+        通用，返回1是，0否
+        :return:
+        """
+        temp = ['1' if n %4 == 0 else '0' for n in range(10)]
+        temp.extend(['2', '2'])
+        return random.choice(temp)
+
+    def make_mingdan_type(self):
+        """名单种类"""
+        return random.choices([
+            '1',  # 政要名单
+            '2',  #  联合国制裁名单
+            '3'  # 其他
+        ])
+
+    def make_TRCD_data(self):
+        """交易发生地"""
+        local = "CHN{}".format(random.choices([130100, 130200, 130300, 130400, 130500, 130600, 130700, 130800, 130900, 131000, 131100, 140100, 140200, 140300, 140400, 140500, 140600, 140700, 140800, 140900, 141000, 141100, 150100, 150200, 150300, 150400, 150500, 150600]))
+        return local
+
+    def make_channel_type(self):
+        """交易渠道"""
+        return random.choice([
+            "01",  # POS
+            "02",  # ATM
+            "03"  # Teller
         ])
