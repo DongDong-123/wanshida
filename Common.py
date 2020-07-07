@@ -866,7 +866,7 @@ class CommonFunction:
         """
         temp = []
         for i in range(2):
-            temp.append(random.randint())
+            temp.append(str(random.randint(0,9)))
 
         return ''.join(temp)
 
@@ -877,7 +877,7 @@ class CommonFunction:
         """
         temp = []
         for i in range(2):
-            temp.append(random.randint())
+            temp.append(str(random.randint(0,9)))
 
         return ''.join(temp)
 
