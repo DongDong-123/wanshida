@@ -275,7 +275,7 @@ class CommonFunction:
         return datatime
 
     def random_num(self, num):
-        """ 接收int类型参数num，根据参数随机生成数字,返回字符串"""
+        """ 接收int类型参数num，根据参数随机生成数字,返回字符串,不以0开头"""
         res_list = []
         while len(res_list) < num:
             elem = random.randint(0, 9)
@@ -283,6 +283,31 @@ class CommonFunction:
                 res_list.append(str(elem))
 
         return "".join(res_list)
+
+    def random_num_head_0(self, num):
+        """ 接收int类型参数num，根据参数随机生成数字,返回字符串,可以以0开头"""
+        res_list = []
+        while len(res_list) < num:
+            elem = random.randint(0, 9)
+            res_list.append(str(elem))
+
+        return "".join(res_list)
+
+
+    def random_word_num_or_str(self, num):
+        """
+        随机生成指定位数的字母、数字组合，字母不区分大小写，
+        返回字符串
+        """
+
+        if num < 1:
+            raise ValueError("{} must be bigger than 0".format(num))
+        words = 'abcdefghigklmnopqrstuvwxyz01123456789'
+        temp = []
+        while len(temp) < num:
+            temp.append(random.choice(list(words)))
+        return "".join(temp)
+
 
     # 电话号码数据
     def make_tel_num(self, tp=11):
@@ -513,7 +538,7 @@ class CommonFunction:
         ])
 
     def make_time(self):
-        """生成随机时间，时分秒"""
+        """生成随机时间，时分秒 HH:mm:ss"""
         hour = random.randint(0,23)
         minite = random.randint(0,59)
         second = random.randint(0,59)
@@ -536,7 +561,7 @@ class CommonFunction:
     def make_tsdr_data(self):
         '''
         相同码值共用
-        资金收付标识,境内外标识
+        资金收付标识tsdr,境内外标识CBIF，卡类型card_media，
         '''
         return random.choice([
             '01',  # :收
@@ -823,4 +848,93 @@ class CommonFunction:
             "01",  # POS
             "02",  # ATM
             "03"  # Teller
+        ])
+
+    def make_digsit(self, code):
+        """
+        假设token_pan是正常卡号，取前六位后四位，中间用6位*代替
+        :return:
+        """
+        code = str(code)
+        return code[:6] + '*'*6 + code[-4:]
+
+
+    def make_crdhldr_acc_tp_from(self):
+        """
+        持卡人出方账户类型 ,缺码表，随机2位数代替
+        :return:
+        """
+        temp = []
+        for i in range(2):
+            temp.append(random.randint())
+
+        return ''.join(temp)
+
+    def make_crdhldr_acc_tp_to(self):
+        """
+        持卡人入方账户类型,缺码表，随机2位数代替
+        :return:
+        """
+        temp = []
+        for i in range(2):
+            temp.append(random.randint())
+
+        return ''.join(temp)
+
+    def make_trade_time19(self, date):
+        """19位时间 YYYY-MM-DD HH:mm:ss"""
+        return "{} {}".format(date, self.make_time())
+
+    # 有效期数据
+    def make_enable_date(self):
+        """
+        有效期,日期范围，本年本月本日起至前推20年之间，格式 YYYY-MM-DD
+        :return:
+        """
+        year_now = int(self.year)
+        num = random.randint(-2, 20)
+        year = year_now + num
+        month_now = int(self.month)
+        if year == year_now:
+            month = random.randint(1, month_now)
+        else:
+            month = random.randint(1, 12)
+        if month < 10:
+            month = "0" + str(month)
+        else:
+            month = str(month)
+        day_now = int(self.day)
+        if month == "02":
+            if year == year_now and int(month) == month_now:
+                day = str(random.randint(1, day_now))
+            else:
+                day = str(random.randint(1, 28))
+        else:
+            if year == year_now and int(month) == month_now:
+                day = str(random.randint(1, day_now))
+            else:
+                day = str(random.randint(1, 30))
+        if eval(day) < 10:
+            day = "0" + day
+
+        return "-".join([str(year), month, day])
+
+    def make_iss_mti_cd(self):
+        """
+        随机，缺码表
+        :return:
+        """
+        return random.choice([
+            '0',
+            '1'
+        ])
+
+    def make_iss_pcode(self):
+        """
+        随机，缺码表
+        :return:
+        """
+        return random.choice([
+            '0',
+            '1'
         ])
