@@ -22,8 +22,8 @@ def get_parm():
     parm = res.split(',')
     n = int(parm[0])
     t = int(parm[1])
-    print('开始序号{}'.format(n))
-    print('parm文件交易日期{}'.format(t))
+    print('客户号起始编号{}'.format(n))
+    print('数据交易日期{}'.format(t))
 
     return n, t
 
@@ -63,24 +63,25 @@ def updtae_parm(n, t):
 
 def zip_file(start_dir, date):
     """压缩数据文件和控制文件"""
+    print('开始压缩文件')
     os.chdir(start_dir)
     start_dir = start_dir  # 要压缩的文件夹路径
-    file_news = '{}'.format(date) + '_1.zip'  # 压缩后文件夹的名字
-    print(file_news)
+    file_news = '{}'.format(date) + '_1.zip'  # 压缩后文件的名字
+    print("压缩包名称：" , file_news)
     z = zipfile.ZipFile(file_news, 'w', zipfile.ZIP_DEFLATED)
     for dir_path, dir_names, file_names in os.walk(start_dir):
         f_path = dir_path.replace(start_dir, '')  # 不replace的话，就从根目录开始复制
         f_path = f_path and f_path + os.sep or ''  # 实现当前文件夹以及包含的所有文件的压缩
-        print('f_path', f_path)
+        # print('f_path', f_path)
         for filename in file_names:
             if date in filename and filename[-3:] in ("csv", "txt"):  # 添加数据文件和控制文件
-                print(filename)
+                print("添加{}到压缩文件：".format(filename))
                 z.write(os.path.join(dir_path, filename), f_path + filename)
-                print('tt', os.path.join(dir_path, filename), f_path + filename)
+                # print('tt', os.path.join(dir_path, filename), f_path + filename)
                 os.remove(filename)
             else:
-                print(filename)
-                print('无匹配文件')
+                # print(filename)
+                print('文件{}不符合压缩条件'.format(filename))
     z.close()
     return file_news
 
@@ -103,7 +104,7 @@ def running():
         zip_file(zip_floder, file_date_time)
 
     end_time = time.time()
-    print(end_time - start_time)  # 13
+    print("执行时间：", end_time - start_time)  # 13
 
     updtae_parm(n, t)
 

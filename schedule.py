@@ -64,7 +64,7 @@ def main(beg, end, stif_time, file_date_time):
         sign_other += 1
         if sign_other % savenum == 0:  # 符合条件，多线程存储
             sc_other += 1
-            print('存储数据')
+            print('存储数据，文件编号{}'.format(file_ord))
             threads = []
             for ind, dat in enumerate(all_data):
                 if len(eval(dat)):
@@ -86,7 +86,7 @@ def main(beg, end, stif_time, file_date_time):
         sign_stif += stifnum
         if (sign_stif) % savenum == 0:  # 符合条件，多线程存储
             sc_stif += 1
-            print('存储交易数据')
+            print('存储交易数据,文件编号{}'.format(stif_data_num))
             if len(txns):
                 thr_stif = threading.Thread(target=savedata.write_to_csv, args=(
                     txns, "txn", file_date_time, stif_data_num, sign_stif))
@@ -102,7 +102,7 @@ def main(beg, end, stif_time, file_date_time):
 
 
     if sign_other > 0:
-        print('存储剩余数据')
+        print('存储剩余数据,文件编号{}'.format(file_ord))
         threads = []
         for ind, dat in enumerate(all_data):
             if eval(dat):
@@ -118,7 +118,7 @@ def main(beg, end, stif_time, file_date_time):
             eval(data).clear()
 
     if sign_stif > 0:
-        print('存储剩余交易数据')
+        print('存储剩余交易数据,文件编号{}'.format(stif_data_num))
         if len(txns):
             thr_stif = threading.Thread(target=savedata.write_to_csv, args=(
                 txns, "txn", file_date_time, stif_data_num,sign_stif))
