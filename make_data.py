@@ -4,9 +4,10 @@
 # @FileName: make_data.py
 # @Software: PyCharm
 # 生成数据
+from faker import Faker
 from Common import CommonFunction
 comm = CommonFunction()
-
+fake = Faker(locale='zh_CN')
 
 
 class MakeData:
@@ -74,8 +75,8 @@ class MakeData:
         found_date = comm.make_date(-20, -1)  # 成立日期    必填
         assets_size = ''  # 资产规模(美元，当年）
         country = comm.chiose_country()  # 注册国家    必填
-        other_oper_country = ''  # 其他运营国家
-        desc_business = ''  # 经营说明
+        other_oper_country = fake.country()  # 其他运营国家  随机国家
+        desc_business = fake.paragraph()  # 经营说明  随机一句话
         tin = ''  # TIN
         busi_type = ''  # 业务类型    必填
         industry_type = ''  # 主体的行业类别    必填
@@ -96,7 +97,7 @@ class MakeData:
         establish_busi_date = comm.make_date(-10, -1)  # 建立业务日期    必填
         end_busi_date = ''  # 终止业务日期    （注销的情况下）应填
         self.unit_code = ''  # 成员机构代码
-        remark = ''  # 备注
+        remark = fake.paragraph()  # 备注  随机一段话
         stat_flag_ori = comm.cust_status()  # 客户状态原值    应填
         stat_flag = comm.cust_status()  # 客户状态    必填
         mer_unit = ''  # 管理机构    必填
@@ -142,21 +143,21 @@ class MakeData:
         cert_validity = comm.make_date()  # 关系人证件有效期
         rcnt = comm.chiose_country()  # 关系人国籍/国家
         dob = ''  # 关系人出生日期
-        cob = ''  # 关系人出生国家
+        cob = fake.country()  # 关系人出生国家
         years_comp = ''  # 关系人入职年限
         years_indu = ''  # 关系人从业年限
         rel_prov = ''  # 关系人省
         rel_city = ''  # 关系人市
         rel_area = ''  # 关系人区县
-        rear = ''  # 关系人详细地址
-        retl = ''  # 关系人联系电话
-        rel_phone = ''  # 关系人手机
+        rear = fake.address()  # 关系人详细地址
+        retl = fake.phone_number()  # 关系人联系电话
+        rel_phone = fake.phone_number()  # 关系人手机
         rel_fax = ''  # 关系人传真
-        rel_email = ''  # 关系人电子邮箱
+        rel_email = fake.ascii_email()  # 关系人电子邮箱
         gov_owned = ''  # 关系人是否国有持股
         hold_per = ''  # 持股比例
         hold_amt = ''  # 持股金额
-        remark = ''  # 备注
+        remark = fake.paragraph()  # 备注
         create_time = comm.data_time()  # 数据创建时间  必填
         creator = comm.random_num(5)  # 数据创建人id  必填
         update_time = comm.data_time()  # 数据更新时间  必填
