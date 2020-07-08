@@ -9,12 +9,14 @@ import threading
 from make_data import MakeData
 from save_data import SaveFile
 from parm import savenum, stifnum, filenum
-
+from Common import CommonFunction
+comm = CommonFunction()
 
 def main(beg, end, stif_time, file_date_time):
     savedata = SaveFile()
     makedata = MakeData()
     # 临时存储生成数据
+    stif_time = comm.turn_date8(stif_time)
     orgs = []
     relations = []
     ptxns = []

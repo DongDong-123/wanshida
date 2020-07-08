@@ -839,7 +839,7 @@ class CommonFunction:
 
     def make_TRCD_data(self):
         """交易发生地"""
-        local = "CHN{}".format(random.choices([130100, 130200, 130300, 130400, 130500, 130600, 130700, 130800, 130900, 131000, 131100, 140100, 140200, 140300, 140400, 140500, 140600, 140700, 140800, 140900, 141000, 141100, 150100, 150200, 150300, 150400, 150500, 150600]))
+        local = "CHN{}".format(random.choice([130100, 130200, 130300, 130400, 130500, 130600, 130700, 130800, 130900, 131000, 131100, 140100, 140200, 140300, 140400, 140500, 140600, 140700, 140800, 140900, 141000, 141100, 150100, 150200, 150300, 150400, 150500, 150600]))
         return local
 
     def make_channel_type(self):
@@ -884,6 +884,15 @@ class CommonFunction:
     def make_trade_time19(self, date):
         """19位时间 YYYY-MM-DD HH:mm:ss"""
         return "{} {}".format(date, self.make_time())
+
+    def turn_date8(self, date):
+        """
+        传入8位日期，返回10位日期
+        :param date:
+        :return:
+        """
+        temp = "{}-{}-{}".format(date[:4], date[4:6], date[6:])
+        return temp
 
     # 有效期数据
     def make_enable_date(self):

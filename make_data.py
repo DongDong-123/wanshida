@@ -103,7 +103,7 @@ class MakeData:
         mer_unit = ''  # 管理机构    必填
         account_manager = ''  # 客户经理
         reals = comm.make_reals_data()  # 客户真实有效性
-        complex = comm.make_complex_data  # 非自然人结构复杂度
+        complex = comm.make_complex_data()  # 非自然人结构复杂度
         clear = comm.make_clear_data()  # 非自然人股权可辨识度
         create_time = comm.data_time()  # 数据创建时间    必填
         update_time = comm.data_time()  # 数据更新时间    必填
