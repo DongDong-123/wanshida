@@ -12,6 +12,7 @@ from parm import savenum, stifnum, filenum
 from Common import CommonFunction
 comm = CommonFunction()
 
+
 def main(beg, end, stif_time, file_date_time):
     savedata = SaveFile()
     makedata = MakeData()
@@ -27,10 +28,10 @@ def main(beg, end, stif_time, file_date_time):
     survey_info2 = []
     survey_info3 = []
     # 临时数据变量名
-    all_data = ["orgs", "relations", "ptxns", "dtxns", "stifs", "survey_info1", "survey_info2",
+    all_data = ["orgs", "relations", "stifs", "survey_info1", "survey_info2",
                 "survey_info3"]
     # 表名，需和all_data一一对应。
-    all_table_name = ["org", "relation", "ptxn", "dtxn", "stif",
+    all_table_name = ["org", "relation", "stif",
                       "survey_info1", "survey_info2", "survey_info3"]
     save_ci = filenum//savenum  # 每个数据文件需要储存的次数
     sign_other = 0  # 其他表数量标识
@@ -56,9 +57,9 @@ def main(beg, end, stif_time, file_date_time):
         # 单独生成交易数据
         for i in range(stifnum):
             t_stan_ptxn, all_dict_data = makedata.make_stan_ptxn(stif_time)
-            ptxns.append(t_stan_ptxn)
-            t_stan_dtxn = makedata.make_stan_dtxn(all_dict_data)
-            dtxns.append(t_stan_dtxn)
+            # ptxns.append(t_stan_ptxn)
+            # t_stan_dtxn = makedata.make_stan_dtxn(all_dict_data)
+            # dtxns.append(t_stan_dtxn)
             t_stan_txn = makedata.make_stan_txn(stif_time, all_dict_data)
             txns.append(t_stan_txn)
 
@@ -66,7 +67,7 @@ def main(beg, end, stif_time, file_date_time):
         sign_other += 1
         if sign_other % savenum == 0:  # 符合条件，多线程存储
             sc_other += 1
-            print('存储数据，文件编号{}'.format(file_ord))
+            print('存储数据{}条，文件编号{}'.format(savenum, file_ord))
             threads = []
             for ind, dat in enumerate(all_data):
                 if len(eval(dat)):
@@ -88,7 +89,7 @@ def main(beg, end, stif_time, file_date_time):
         sign_stif += stifnum
         if (sign_stif) % savenum == 0:  # 符合条件，多线程存储
             sc_stif += 1
-            print('存储交易数据,文件编号{}'.format(stif_data_num))
+            print('存储交易数据{}条,文件编号{}'.format(savenum, stif_data_num))
             if len(txns):
                 thr_stif = threading.Thread(target=savedata.write_to_csv, args=(
                     txns, "txn", file_date_time, stif_data_num, sign_stif))
@@ -104,7 +105,7 @@ def main(beg, end, stif_time, file_date_time):
 
 
     if sign_other > 0:
-        print('存储剩余数据,文件编号{}'.format(file_ord))
+        print('存储剩余数据{}条,文件编号{}'.format(sign_other, file_ord))
         threads = []
         for ind, dat in enumerate(all_data):
             if eval(dat):
@@ -120,7 +121,7 @@ def main(beg, end, stif_time, file_date_time):
             eval(data).clear()
 
     if sign_stif > 0:
-        print('存储剩余交易数据,文件编号{}'.format(stif_data_num))
+        print('存储剩余交易数据{}条,文件编号{}'.format(sign_stif, stif_data_num))
         if len(txns):
             thr_stif = threading.Thread(target=savedata.write_to_csv, args=(
                 txns, "txn", file_date_time, stif_data_num,sign_stif))
@@ -128,4 +129,5 @@ def main(beg, end, stif_time, file_date_time):
             thr_stif.join()
 
         txns.clear()
+
 

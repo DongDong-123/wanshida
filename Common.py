@@ -9,7 +9,8 @@ import time
 import redis
 from redis_data import RedisConnect
 pool = RedisConnect()
-
+from faker import Faker
+fake = Faker(locale='zh_CN')
 
 class CommonFunction:
     def __init__(self):
@@ -496,11 +497,12 @@ class CommonFunction:
         ])
 
     def make_tran_kd(self):
-        """交易种类"""
-        return random.choice([
-            '00',  # 差错交易
-            '10'  # 普通交易
-        ])
+        """交易种类, 差错交易占1%，
+        '00',  # 差错交易
+        '10'  # 普通交易
+            """
+        return random.choice(['10' if n%60 == 0 else '00' for n in range(100)])
+
 
     def make_STCT_data(self):
         """
@@ -771,7 +773,8 @@ class CommonFunction:
 
     def make_tcat_data(self):
         """交易金额"""
-        return random.randint(1,10000)
+        temp = fake.pyfloat(positive=True)
+        return round(temp, 3)
 
     def make_ticd_data(self):
         """
@@ -881,9 +884,14 @@ class CommonFunction:
 
         return ''.join(temp)
 
-    def make_trade_time19(self, date):
+    def make_trade_time19(self, date=None):
         """19位时间 YYYY-MM-DD HH:mm:ss"""
-        return "{} {}".format(date, self.make_time())
+        if not date:
+            date = '{}-{}-{}'.format(self.year, self.month, self.day)
+            temp = "{} {}".format(date, self.make_time())
+        else:
+            temp = "{} {}".format(date, self.make_time())
+        return temp
 
     def turn_date8(self, date):
         """
@@ -947,3 +955,51 @@ class CommonFunction:
             '0',
             '1'
         ])
+
+    def make_tran_init(self):
+        """交易发起方"""
+        return random.choice([
+            '0',  # 联机平台
+            '1',  # 成员行发起
+            '2'  # 手工平台发起
+        ])
+
+    def make_tran_res(self):
+        """收单应答标识"""
+        return random.choice([
+            '0',  # 联机应答
+            '1',  # 成员行应答
+        ])
+
+    def make_card_type(self):
+        """卡类型"""
+        return random.choice([
+            '01',  # 借记卡
+            '02',  # 贷记卡
+        ])
+
+    def make_inter_tran_type(self):
+        """联机系统内部交易类型"""
+        return random.choice([
+            "11000001",  # 预授权
+            "21000002",  # 消费
+            "21000003",  # 取现
+            "21000004",  # 转账
+            "21000005",  # 存款
+            "21000006",  # 退货（联机）
+            "21000007",  # 代收
+            "21000008",  # 代付
+            "21010010",  # 转账转出
+            "21010011",  # 转账转入
+            "31000001",  # 账户验证
+            "31000002",  # 余额查询
+            "22000001"  # 预授权完成
+        ])
+    def make_hold_amt(self):
+        """
+        关系人持股金额,保留2位小数
+        :return:
+        """
+        temp = fake.pyfloat(positive=True)
+        temp = round(temp, 2)
+        return temp

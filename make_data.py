@@ -144,19 +144,19 @@ class MakeData:
         rcnt = comm.chiose_country()  # 关系人国籍/国家
         dob = ''  # 关系人出生日期
         cob = fake.country()  # 关系人出生国家
-        years_comp = ''  # 关系人入职年限
-        years_indu = ''  # 关系人从业年限
+        years_comp = comm.random_num(1)  # 关系人入职年限
+        years_indu = comm.random_num(1)  # 关系人从业年限
         rel_prov = ''  # 关系人省
         rel_city = ''  # 关系人市
         rel_area = ''  # 关系人区县
         rear = fake.address()  # 关系人详细地址
         retl = fake.phone_number()  # 关系人联系电话
         rel_phone = fake.phone_number()  # 关系人手机
-        rel_fax = ''  # 关系人传真
+        rel_fax = comm.random_num(8)  # 关系人传真
         rel_email = fake.ascii_email()  # 关系人电子邮箱
-        gov_owned = ''  # 关系人是否国有持股
+        gov_owned = comm.make_yes_no()  # 关系人是否国有持股
         hold_per = ''  # 持股比例
-        hold_amt = ''  # 持股金额
+        hold_amt = ""  # 持股金额
         remark = fake.paragraph()  # 备注
         create_time = comm.data_time()  # 数据创建时间  必填
         creator = comm.random_num(5)  # 数据创建人id  必填
@@ -178,17 +178,17 @@ class MakeData:
         info_a_bool3 = comm.make_yes_no_unused()  # 监管机构认为该制度是否得当
         supervisor_name = comm.make_name_data(3)  # 监管人员姓名
         inspection_time = comm.make_time()  # 检查时间
-        info_a_explain = ''  # 制度不完善地方
+        info_a_explain = "".join(fake.paragraphs())  # 制度不完善地方
         info_a_explain2 = ''  # 完善时间及方式
         info_b_bool = comm.make_yes_no()  # 是否有反洗钱专职人员
         info_b_bool2 = comm.make_yes_no()  # 是否有完整的风险评估程序
         info_b_bool3 = comm.make_yes_no()  # 是否有反洗钱相关的员工培训
-        info_b_explain = ''  # 员工培训制度
+        info_b_explain = "".join(fake.paragraphs())  # 员工培训制度
         info_c_bool = comm.make_yes_no()  # 是否被禁止在注册地进行银行业务
-        info_c_explain = ''  # 原因
+        info_c_explain = "".join(fake.paragraphs())  # 原因
         info_d_bool = comm.make_yes_no()  # 是否在任何国家、地区都没有实体存在的机构
         info_d_bool2 = comm.make_yes_no()  # 是否禁止与没有任何实体存在的机构建立关系
-        info_d_explain = ''  # 原因
+        info_d_explain = "".join(fake.paragraphs())  # 原因
         payment_card_org = ''  # 监管支付卡活动的机构
         compliance_org = ''  # 监管合规的机构
         chartered_institution = ''  # 特许机构
@@ -199,15 +199,15 @@ class MakeData:
         info_f_bool = comm.make_yes_no()  # 是否将万事达相关业务进行名单预警
         list_type = comm.make_mingdan_type()  # 名单种类
         other_list_type = ''  # 其他名单种类
-        info_f_explain = ''  # 原因
+        info_f_explain = "".join(fake.paragraphs())  # 原因
         info_g_bool = comm.make_yes_no()  # 是否存在影响申请的诉讼或其他
-        info_g_explain = ''  # 原因
+        info_g_explain = "".join(fake.paragraphs())  # 原因
         info_h_bool = comm.make_yes_no()  # 是否参与允许转账的业务
-        info_h_explain = ''  # 项目细节描述
-        data_crdt = ''  # 数据创建时间
-        data_cruser = ''  # 数据创建人id
-        data_updt = ''  # 数据更新时间
-        data_upuser = ''  # 数据更新人id
+        info_h_explain = "".join(fake.paragraphs())  # 项目细节描述
+        data_crdt = comm.make_trade_time19()  # 数据创建时间
+        data_cruser = comm.random_num(8)  # 数据创建人id
+        data_updt = comm.make_trade_time19()  # 数据更新时间
+        data_upuser = comm.random_num(8)  # 数据更新人id
 
         all_col = [ctif_id, ctnm, info_a_bool, laws_name, info_a_bool2, info_a_bool3, supervisor_name, inspection_time, info_a_explain, info_a_explain2, info_b_bool, info_b_bool2, info_b_bool3, info_b_explain, info_c_bool, info_c_explain, info_d_bool, info_d_bool2, info_d_explain, payment_card_org , compliance_org, chartered_institution, info_e_bool, info_e_bool2, info_e_bool3, supervision_trace_doc, info_f_bool, list_type, other_list_type, info_f_explain, info_g_bool, info_g_explain, info_h_bool, info_h_explain, data_crdt, data_cruser, data_updt, data_upuser]
         return all_col
@@ -239,11 +239,11 @@ class MakeData:
         info2_h_bool = comm.make_yes_no()  # 是否进行交易监测
         info2_h_explain = ''  # 确认可疑后的行为
         info2_i_bool = comm.make_yes_no()  # 是否可以上报可疑
-        info2_i_explain = ''  # 上报机构
-        data_crdt = ''  # 数据创建时间
-        data_cruser = ''  # 数据创建人id
-        data_updt = ''  # 数据更新时间
-        data_upuser = ''  # 数据更新人id
+        info2_i_explain = comm.random_str(10)  # 上报机构
+        data_crdt = comm.make_trade_time19()  # 数据创建时间
+        data_cruser = comm.random_num(8)  # 数据创建人id
+        data_updt = comm.make_trade_time19()  # 数据更新时间
+        data_upuser = comm.random_num(8)  # 数据更新人id
 
         all_col = [ctif_id, ctnm, info2_a_bool, info2_a_explain, info2_b_bool, info2_b_explain, agents_num, aml_role_explain, compliance_name, aml_workers, aml_position, info2_c_bool, info2_c_bool2, info2_c_explain, info2_d_bool, info2_d_explain, info2_e_bool, info2_f_bool, info2_g_bool, info2_g_explain, info2_h_bool, info2_h_explain, info2_i_bool, info2_i_explain, data_crdt, data_cruser, data_updt, data_upuser]
         return all_col
@@ -313,13 +313,13 @@ class MakeData:
         cgi_cirrus_optp2p_mscb = comm.make_yes_no()  # cgi-顺风卡-跨境发送
         cgi_cirrus_optp2p_mpqr = comm.make_yes_no()  # cgi-万顺风卡-masterpass QR
         info_a_bool = comm.make_yes_no_unused()  # 如果发行借记卡、信用卡、预付卡，将是否对现金交易进行控制
-        info_a_explain = ''  # 原因
+        info_a_explain = fake.paragraph()  # 原因
         additional_services_transfer = comm.make_yes_no()  # 是否提供额外服务
         acquiring_rePower = comm.make_yes_no()  #
-        data_crdt = ''  # 数据创建时间
-        data_cruser = ''  # 数据创建人id
-        data_updt = ''  # 数据更新时间
-        data_upuser = ''  # 数据更新人id
+        data_crdt = comm.make_trade_time19()  # 数据创建时间
+        data_cruser = comm.random_num(8)  # 数据创建人id
+        data_updt = comm.make_trade_time19()  # 数据更新时间
+        data_upuser = comm.random_num(8)  # 数据更新人id
 
         all_col = [ctif_id, ctnm, fi_mcard_principal, fi_mcard_affillate, fi_mcard_association, fi_mcard_issuing, fi_mcard_acquiring_merchants, fi_mcard_acquiring_atm, fi_mcard_acquiring_mcd, fi_mcard_optrpt_msd, fi_mcard_optrpt_ms, fi_mcard_optrpt_mscb, fi_mcard_optrpt_mpqr, fi_mstro_principal, fi_mstro_affillate, fi_mstro_issuing, fi_mstro_acquiring_merchants, fi_mstro_acquiring_atm, fi_mstro_optrpt_msd, fi_mstro_optrpt_ms, fi_mstro_optrpt_mscb, fi_mstro_optrpt_mpqr, fi_cirrus_principal, fi_cirrus_affillate, fi_cirrus_issuing_atm, fi_cirrus_acquiring_atm, fi_cirrus_optp2p_ms, fi_cirrus_optp2p_mscb, fi_cirrus_optp2p_mpqr, cgi_mcard_principal, cgi_mcard_affillate, cgi_mcard_issuing_credit, cgi_mcard_issuing_debit, cgi_mcard_issuing_prepaid, cgi_mcard_acquiring_atm, cgi_mcard_acquiring_mcd, cgi_mcard_acquiring_merchants, cgi_mcard_acquiring_poi, cgi_mcard_optrpt_msd, cgi_mcard_optrpt_ms, cgi_mcard_optrpt_mscb, cgi_mcard_optrpt_mpqr, cgi_mstro_principal, cgi_mstro_affillate, cgi_mstro_issuing_debit, cgi_mstro_issuing_prepaid, cgi_mstro_acquiring_atm, cgi_mstro_acquiring_merchants, cgi_mstro_acquiring_poi, cgi_mstro_optrpt_msd, cgi_mstro_optrpt_ms, cgi_mstro_optrpt_mscb, cgi_mstro_optrpt_mpqr, cgi_cirrus_principal, cgi_cirrus_affillate, cgi_cirrus__issuing, cgi_cirrus_acquiring_atm, cgi_cirrus_optp2p_ms, cgi_cirrus_optp2p_mscb, cgi_cirrus_optp2p_mpqr, info_a_bool, info_a_explain, additional_services_transfer, acquiring_rePower, data_crdt, data_cruser, data_updt, data_upuser]
         return all_col
@@ -330,18 +330,18 @@ class MakeData:
         """
         msg_id = comm.random_num(20)  # 消息id    必填
         msg_type = ''  # MTI消息类型标识    必填
-        inter_tran_type = ''  # 联机系统内部交易类型
+        inter_tran_type = comm.make_inter_tran_type()  # 联机系统内部交易类型
         uuid = comm.make_ticd_data()  # 交易唯一标识    必填
         trace_id = comm.random_num(12)  # 联机流水号    必填
         tran_group_id = ''  # 交易分组号
-        tran_init = ''  # 交易发起方：0-联机平台,1-成员行发起,2-手工平台发起    必填
-        tran_res = ''  # 收单应答标识：0-联机应答,1-成员行应答    必填
+        tran_init = comm.make_tran_init()  # 交易发起方：0-联机平台,1-成员行发起,2-手工平台发起    必填
+        tran_res = comm.make_tran_res()  # 收单应答标识：0-联机应答,1-成员行应答    必填
         card_bin = comm.random_num(9)  # 卡bin
-        card_type = ''  # 卡类型：借贷记    必填  缺码表
-        card_product = '信用卡'  # 卡产品    必填  缺码表
-        card_brand = '万事达'  # 卡品牌  缺码表
+        card_type = comm.make_card_type()  # 卡类型：借贷记    必填  缺码表
+        card_product = '卡产品'  # 卡产品    必填  缺码表
+        card_brand = '卡品牌'  # 卡品牌  缺码表
         card_media = comm.make_tsdr_data()  # 01磁条卡,02芯片卡
-        token_pan = comm.random_num(18)  # token卡号
+        token_pan = comm.random_num(32)  # token卡号
         encrypt_pan = fake.sha1()  # 加密后的卡号    必填
         hash_pan = fake.sha256()  # 卡号hash
         digsit = comm.make_digsit(token_pan)  # 前六后四卡号
@@ -360,12 +360,12 @@ class MakeData:
         exp_date = comm.make_enable_date()  # 卡有效期
         sett_date = stiftime  # 结算日期    必填
         conv_date = stiftime  # 汇率转换日期
-        mcc = comm.random_num_head_0(4)  # 商户类型    必填
-        pos_entry_cd = comm.random_num_head_0(3)  # POS机输入方式码    必填
+        mcc = comm.random_num_head_0(8)  # 商户类型    必填
+        pos_entry_cd = comm.random_num_head_0(8)  # POS机输入方式码    必填
         card_seq_num = comm.random_num_head_0(3)  # 卡序列号
         pos_pin_cptr_cd = comm.random_num_head_0(2)  # PIN获取码
         tran_fee_indi = 'C'  # 交易费借贷标识（暂不收费）
-        acq_srchg_amount = ''  # 交易费金额
+        acq_srchg_amount = '0'  # 交易费金额
         acq_ins_id_cd = comm.random_num(10)  # 收单机构号    必填
         fwd_ins_id_cd = comm.random_num(10)  # 收单代理机构号    必填
         trk2_prsnt_sw = comm.random_code()  # 2磁是否出现  随机选1,2
@@ -375,7 +375,7 @@ class MakeData:
         pos_term_id = comm.random_num(5)  # POS机终端id    必填
         acq_merch_id = comm.random_word_num_or_str(10)  # 收单商户id    必填
         acq_merch_name = '1'  # 收单商户名称    必填
-        acq_merch_city = '1'  # 收单商户城市    必填
+        acq_merch_city = comm.random_city()  # 收单商户城市    必填
         acq_merch_state = '1'  # 收单商户状态    必填
         frmt_resp_data = '1'  # 应答附加信息    必填
         additional_data = '1'  # 附加信息    必填
@@ -387,10 +387,10 @@ class MakeData:
         paym_account = comm.random_num(6)  # 支付账户    必填
         advice_reason_cd = comm.random_num(6)  # 通知码    必填
         advice_reason_dt_cd = comm.random_num(6)  # 通知详细码    必填
-        advice_reason_dt_txt = ''  # 通知详细描述    必填
-        advice_reason_add_txt = ''  # 通知附加描述    必填
+        advice_reason_dt_txt = fake.paragraph()  # 通知详细描述    必填
+        advice_reason_add_txt = fake.paragraph()  # 通知附加描述    必填
         pos_data = comm.random_num(18)  # POS数据    必填
-        pos_crdhldr_present = ''  # POS持卡人是否出现    必填
+        pos_crdhldr_present = comm.make_yes_no_unused()  # POS持卡人是否出现    必填
         pos_tran_status = comm.make_yes_no_unused()  # POS交易状态    必填
         inf_data = comm.random_num(10)  # 网络设施数据    必填
         ntw_mng_inf_cd = comm.random_num(6)  # 网络管理信息码    必填
@@ -403,7 +403,7 @@ class MakeData:
         rcv_ins_id_cd = comm.random_num(10)   # 发卡代理机构号    必填
         iss_mti_cd = comm.make_iss_mti_cd()  # 发给发卡方的交易类型标识    必填
         iss_pcode = comm.make_iss_pcode()  # 发给发卡方的持卡人交易类型    必填
-        iss_ins_id_cd = ''  # 发卡行机构代码    必填
+        iss_ins_id_cd = comm.random_str(12)  # 发卡行机构代码    必填
         acq_msg_flag = ''  # 收单行单双标识    必填
         iss_msg_flag = ''  # 发卡行收单标识    必填
         single_dual_flag = ''  # 单双转换信息标识    必填
@@ -678,7 +678,10 @@ class MakeData:
         cash_back_amount = ori_ptxn.get("cash_back_amount")  # 余额信息
         cash_back_indicator = ori_ptxn.get("cash_back_indicator")  # 余额借贷标识  缺码表
         tran_type = ori_ptxn.get("inter_tran_type")  # 交易类型    必填
-        dspt_tran_type = ''  # 差错交易类型
+        if tran_kd == '00':
+            dspt_tran_type = ori_ptxn.get("inter_tran_type")  # 差错交易类型
+        else:
+            dspt_tran_type = ''
         org_stan = ori_ptxn.get("org_stan")  # 原交易的系统跟踪号
         tran_buss_st = ori_ptxn.get("tran_buss_st")  # 交易业务状态    必填
         tran_advice_st = ori_ptxn.get("tran_advice_st")  # 交易通知状态

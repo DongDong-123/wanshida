@@ -27,10 +27,13 @@ def get_parm():
 
     return n, t
 
-
-def updtae_parm(n, t):
-    """执行完后，写入最新的编号和跑批日期"""
-    t = str(t)
+def process_time(tt):
+    """
+    处理时间函数，根据月份，限制天数
+    :param tt:
+    :return: str  YYYYmmdd
+    """
+    t = str(tt)
     year = int(t[:4])
     month = int(t[4:6])
     day = int(t[6:])
@@ -44,9 +47,10 @@ def updtae_parm(n, t):
             day = day % 30
             month += 1
     else:
-        if year % 4 == 0 and day > 29:
-            day = day %29
-            month += 1
+        if year % 4 == 0:
+            if day > 29:
+                day = day %29
+                month += 1
         else:
             if day > 28:
                 day = day % 28
@@ -57,6 +61,11 @@ def updtae_parm(n, t):
         day = '0'+ str(day)
 
     pt = str(year) + str(month) + str(day)
+    return pt
+
+def updtae_parm(n, pt):
+    """执行完后，写入最新的编号和跑批日期"""
+    # pt = process_time(pt)
     with open(os.path.join(current_path, 'parm.txt'), 'w', encoding='utf-8') as f:
         f.write("{},{}".format(n, pt))
 
@@ -101,6 +110,7 @@ def running():
         main(n, n + o, stif_time, file_date_time)
         n += o
         t += 1
+        t = int(process_time(t))  # 处理日期
         zip_file(zip_floder, file_date_time)
 
     end_time = time.time()
