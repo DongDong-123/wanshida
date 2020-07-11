@@ -570,6 +570,42 @@ class CommonFunction:
             '02'  # : 付
         ])
 
+    def process_time(self, tt):
+        """
+        处理自增日期函数，传入日期，根据月份，限制天数
+        :param tt:
+        :return: str  YYYYmmdd
+        """
+        t = str(tt)
+        year = int(t[:4])
+        month = int(t[4:6])
+        day = int(t[6:])
+        if month in [1, 3, 5, 7, 8, 10, 12]:
+            if day > 31:
+                day = day % 31
+                month += 1
+
+        elif month in [4, 6, 9, 11]:
+            if day > 30:
+                day = day % 30
+                month += 1
+        else:
+            if year % 4 == 0:
+                if day > 29:
+                    day = day % 29
+                    month += 1
+            else:
+                if day > 28:
+                    day = day % 28
+                    month += 1
+        if month < 10:
+            month = '0' + str(month)
+        if day < 10:
+            day = '0' + str(day)
+
+        pt = str(year) + str(month) + str(day)
+        return pt
+
     def make_tctp_data(self):
         """交易币种"""
         return random.choice([
@@ -893,7 +929,7 @@ class CommonFunction:
             temp = "{} {}".format(date, self.make_time())
         return temp
 
-    def turn_date8(self, date):
+    def turn_date10(self, date):
         """
         传入8位日期，返回10位日期
         :param date:

@@ -10,7 +10,8 @@ import os
 import zipfile
 import time
 import datetime
-
+from Common import CommonFunction
+comm = CommonFunction()
 
 current_path = os.getcwd()
 
@@ -22,46 +23,10 @@ def get_parm():
     parm = res.split(',')
     n = int(parm[0])
     t = int(parm[1])
-    print('客户号起始编号{}'.format(n))
-    print('数据交易日期{}'.format(t))
+
 
     return n, t
 
-def process_time(tt):
-    """
-    处理时间函数，根据月份，限制天数
-    :param tt:
-    :return: str  YYYYmmdd
-    """
-    t = str(tt)
-    year = int(t[:4])
-    month = int(t[4:6])
-    day = int(t[6:])
-    if month in [1,3,5,7,8,10,12]:
-        if day > 31:
-            day = day % 31
-            month += 1
-
-    elif month in [4,6,9,11]:
-        if day > 30:
-            day = day % 30
-            month += 1
-    else:
-        if year % 4 == 0:
-            if day > 29:
-                day = day %29
-                month += 1
-        else:
-            if day > 28:
-                day = day % 28
-                month += 1
-    if month < 10:
-        month = '0' + str(month)
-    if day < 10:
-        day = '0'+ str(day)
-
-    pt = str(year) + str(month) + str(day)
-    return pt
 
 def updtae_parm(n, pt):
     """执行完后，写入最新的编号和跑批日期"""
@@ -100,7 +65,9 @@ def running():
     start_time = time.time()
     o = datannum
 
-    for m in range(1):
+    for m in range(2):
+        print('客户号起始编号{}'.format(n))
+        print('数据交易日期{}'.format(t))
         # st = datetime.datetime.strptime(str(t), "%Y%m%d")
         # file_date_time = str(st)[:10]
         file_date_time = str(t)
@@ -110,13 +77,27 @@ def running():
         main(n, n + o, stif_time, file_date_time)
         n += o
         t += 1
-        t = int(process_time(t))  # 处理日期
+        t = int(comm.process_time(t))  # 处理日期
         zip_file(zip_floder, file_date_time)
 
     end_time = time.time()
     print("执行时间：", end_time - start_time)  # 13
 
     updtae_parm(n, t)
+
+def process_control_file(datatime, num=1):
+    curr_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    data_flode = os.path.join(zip_floder, 'data')
+    file_list = os.listdir(data_flode)
+    for file in file_list:
+        if file[-3:] == 'txt' and datatime in file:
+            with open(file, 'r', encoding='utf-8') as f:
+                res = f.read()
+
+            control_file = "D{}-T{}-000{}.txt".format(datatime, curr_time,num)
+            with open(control_file, '+a', encoding='UTF-8') as f:
+                f.read()
+
 
 if __name__ == "__main__":
     running()

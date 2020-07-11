@@ -92,7 +92,7 @@ class SaveFile:
         writer = csv.writer(csvfile)
         writer.writerows(datas)
         csvfile.close()
-        # 控制文件写入数据数量
-        txt_file = os.path.join(self.file_path, '{}-D{}-T{}_00{}.txt'.format(file_name, date_time, self.currt_time, num))
-        with open(txt_file, 'w',encoding='utf-8') as f:
-            f.write(str(total_num))
+        # # 控制文件写入数据数量
+        # txt_file = os.path.join(self.file_path, '{}-D{}-T{}_00{}.txt'.format(file_name, date_time, self.currt_time, num))
+        # with open(txt_file, 'w',encoding='utf-8') as f:
+        #     f.write(str(total_num))

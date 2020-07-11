@@ -440,7 +440,7 @@ class MakeData:
         reserve1 = ''  # 保留域1
         reserve2 = ''  # 保留域2
         reserve3 = ''  # 保留域3
-        data_transfer_dt = ''  # 数据传输日期
+        data_transfer_dt = comm.process_time(int(stiftime.replace("-",""))+1)  # 数据传输日期
 
         all_col = [msg_id, msg_type, inter_tran_type, uuid, trace_id, tran_group_id, tran_init, tran_res, card_bin, card_type, card_product, card_brand, card_media, token_pan, encrypt_pan, hash_pan, digsit, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_amount, sett_amount, bill_amount, tran_datetime, crdhldr_bill_fee, sett_conv_rate, bill_conv_rate, sys_trace_audit_nbr, local_tran_datetime, exp_date, sett_date, conv_date, mcc, pos_entry_cd, card_seq_num, pos_pin_cptr_cd, tran_fee_indi, acq_srchg_amount, acq_ins_id_cd, fwd_ins_id_cd, trk2_prsnt_sw, retriv_ref_num, auth_cd, resp_cd, pos_term_id, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, frmt_resp_data, additional_data, funding_payment_tti, tran_curr_cd, sett_curr_cd, bill_curr_cd, data_integrated, paym_account, advice_reason_cd, advice_reason_dt_cd, advice_reason_dt_txt, advice_reason_add_txt, pos_data, pos_crdhldr_present, pos_tran_status, inf_data, ntw_mng_inf_cd, org_mti, org_stan, org_tran_datetime, org_acq_ins_id_cd, org_fwd_ins_id_cd, org_trace_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_msg_flag, iss_msg_flag, single_dual_flag, tran_buss_st, tran_advice_st, inter_resp_cd, dc_id, insert_timestamp, insert_by, last_update_timestamp, last_update_by, channel_type, cash_back_amount, cash_back_indicator, mcht_data_srv, tcc, cvv2, pos_cat_level, merch_advic_cd, src_member_id, dest_member_id, group_tran_type, fee_category, fan_ntw_cd, int_rate_id, net_ref_num, bnk_ref_num, acq_ref_num, gcms_prc_num, act_tran_amount, act_sett_amount, act_bill_amount, zero_fill_amount, reserve1, reserve2, reserve3, data_transfer_dt]
         all_data = {
@@ -691,15 +691,15 @@ class MakeData:
         insert_by = ori_ptxn.get("insert_by")  # 记录创建人
         last_update_timestamp = ori_ptxn.get("last_update_timestamp")  # 记录最后更新时间
         last_update_by = ori_ptxn.get("last_update_by")  # 记录最后更新人
-        mer_unit = ''  # 管理机构    必填  缺码表
-        data_transfer_dt = comm.data_time()  # 数据传输日期    必填
+        mer_unit = '管理机构'  # 管理机构    必填  缺码表
+        data_transfer_dt = comm.process_time(int(stiftime.replace("-",""))+1)  # 数据传输日期    必填
 
         all_col = [id, tran_kd, uuid, trace_id, card_bin, card_type, card_type_pboc, card_product, card_brand, token_pan, encrypt_pan, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_datetime, orig_local_tran_datetime, tsdr, tran_amount, sett_amount, tran_curr_cd, sett_curr_cd, sett_conv_rate, sett_date, crat_u, crat_c, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, acq_ins_id_cd, fwd_ins_id_cd, TRCD, CBIF, channel_type, TSTP, cash_back_amount, cash_back_indicator, tran_type, dspt_tran_type, org_stan, tran_buss_st, tran_advice_st, mcht_data_srv, additional_data, insert_timestamp, insert_by, last_update_timestamp, last_update_by, mer_unit, data_transfer_dt]
 
         return all_col
 
 
-    def make_stan_stif(self, stiftime):
+    def make_stan_stif(self, stiftime, ori_ptxn):
         """
 
         :return:
@@ -770,9 +770,9 @@ class MakeData:
         auth_cd = ''  # 授权码
         resp_cd = ''  # 应答码  必填
         pos_term_id = comm.random_num(12)  # POS机终端id  必填
-        mer_unit = ''  # 管理机构  必填   缺码表
-        run_dt = ''  # 可疑交易数据生成日期  必填
-        data_transfer_dt = ''  # 可疑交易数据传输日期  必填
+        mer_unit = '管理机构'  # 管理机构  必填   缺码表
+        run_dt = stiftime  # 可疑交易数据生成日期  必填
+        data_transfer_dt = comm.process_time(int(stiftime.replace("-",""))+1)  # 可疑交易数据传输日期  必填
 
         all_col = [unit_code, warn_dt, rule_id, rule_type, warn_kd, susp_value, ctif_tp, tran_kd, card_type, MCNO, MCNM, ACCD, fwd_ins_id_cd, STCT, card_product, card_brand, STCI, IUCD, rcv_ins_id_cd, tstm, tsdr, TCPP, TCTP, TCAT, TCMN, TCNM, CACD, c_fwd_ins_id_cd, TCCT, T_card_product, T_card_brand, TCCI, TCIC, c_rcv_ins_id_cd, bptc, ticd, busi_type, trans_type, trans_stat, tran_advice_st, acq_merch_city, acq_merch_state, TRCD, CBIF, trans_channel, PCTP, PCAT, crat_u, crat_c, TSTP, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, mer_unit, run_dt, data_transfer_dt]
 
