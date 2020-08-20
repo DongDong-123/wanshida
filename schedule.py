@@ -8,7 +8,7 @@ import threading
 import time
 import os
 from make_data import MakeData
-from save_data import SaveFile
+from save_data import SaveFile,currt_time
 from parm import savenum, stifnum, filenum, zip_floder
 from Common import CommonFunction
 comm = CommonFunction()
@@ -24,27 +24,38 @@ survey_info1 = []
 survey_info2 = []
 survey_info3 = []
 # data_path = os.path.join(zip_floder, 'data')
-data_path = zip_floder
+# data_path = zip_floder
 
-def __threads(all_data, all_table_name, file_date_time, order, sign):
+
+def __threads(all_data, all_table_name, file_date_time, order, sign,delimiter):
     """抽出多线程部分"""
     threads = []
     for ind, dat in enumerate(all_data):
         if len(eval(dat)):
-            thr = threading.Thread(target=savedata.write_to_csv, args=(
-                eval(dat), all_table_name[ind], file_date_time, order, sign))
-            thr.start()
-            threads.append(thr)
+            if delimiter:
+                thr = threading.Thread(target=savedata.write_to_csv, args=(
+                    eval(dat), all_table_name[ind], file_date_time, order, sign, delimiter))
+                thr.start()
+                threads.append(thr)
+            else:
+                thr = threading.Thread(target=savedata.write_to_csv, args=(
+                    eval(dat), all_table_name[ind], file_date_time, order, sign))
+                thr.start()
+                threads.append(thr)
 
     for t in threads:
         t.join()
 
-def __control_file(file_name, file_date_time, file_num):
-    currt_time = time.strftime('%Y%m%d', time.localtime())
-    file_full = os.path.join(data_path, 'D{}-T{}_00{}.txt'.format(
-        file_date_time, currt_time, 1))
-    filename = '{}-D{}-T{}_00{}.csv'.format(file_name, file_date_time, currt_time, file_num)
+def __control_file(file_name, file_date_time, file_num,filepath):
+    file_full = os.path.join(filepath, 'D{}-T{}.txt'.format(
+        file_date_time, currt_time))
+
+    if file_num < 10:
+        filename = '{}-D{}-T{}_000{}.csv'.format(file_name, file_date_time, currt_time, file_num)
+    else:
+        filename = '{}-D{}-T{}_00{}.csv'.format(file_name, file_date_time, currt_time, file_num)
     with open(file_full, '+a', encoding="UTF-8") as f:
+        print('-----------------创建{}-------------------'.format(file_full))
         f.write(','.join([filename, str(savenum)]) + "\n")
 
 def main(beg, end, stif_time, file_date_time):
@@ -56,7 +67,8 @@ def main(beg, end, stif_time, file_date_time):
     # 临时数据变量名
     all_data = ["orgs", "relations", "survey_info1", "survey_info2", "survey_info3"]
     # 表名，需和all_data一一对应。
-    all_table_name = ["org", "relation", "survey_info1", "survey_info2", "survey_info3"]
+    # all_table_name = ["org", "relation", "survey_info1", "survey_info2", "survey_info3"]
+    all_table_name = ["org", "relation", "info1", "info2", "info3"]
     save_ci = filenum//savenum  # 每个数据文件需要储存的次数
     sign_other = 0  # 其他表数量标识
     sign_txn = 0  # 交易数量标识
@@ -84,21 +96,23 @@ def main(beg, end, stif_time, file_date_time):
             t_stan_txn = makedata.make_stan_txn(stif_time, all_dict_data)
             txns.append(t_stan_txn)
 
-            if num %10 == 0:
-                t_stan_stif = makedata.make_stan_stif(stif_time, all_dict_data)
-                stifs.append(t_stan_stif)
-                sign_stif += 1
-
+            # ---------可疑交易数据，暂时不用---------------
+            # if num %10 == 0:
+            #     t_stan_stif = makedata.make_stan_stif(stif_time, all_dict_data)
+            #     stifs.append(t_stan_stif)
+            #     sign_stif += 1
+            # -----------------------------------------------
         # 除交易外的存储
         sign_other += 1
         if sign_other % savenum == 0:  # 符合条件，多线程存储
             sc_other += 1
             print('{} 存储数据{}条，文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),savenum, file_ord))
-            __threads(all_data, all_table_name, file_date_time, file_ord, sign_other)
+            __threads(all_data, all_table_name, file_date_time, file_ord, sign_other,'')
 
             if sc_other == save_ci:
+                filepath = os.path.join(zip_floder, 'csutom', file_date_time)
                 for name in all_table_name:
-                    __control_file(name, file_date_time, file_ord)
+                    __control_file(name, file_date_time, file_ord,filepath)
                 file_ord += 1
                 sc_other = 0
                 sign_other = 0
@@ -112,10 +126,11 @@ def main(beg, end, stif_time, file_date_time):
             sc_stif += 1
             print('{} 存储交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),savenum, stif_data_num))
 
-            __threads(["txns"], ["txn"], file_date_time, stif_data_num, sign_txn)
+            __threads(["txns"], ["txn"], file_date_time, stif_data_num, sign_txn, '|')
 
             if sc_stif == save_ci:
-                __control_file("txn", file_date_time, stif_data_num)
+                filepath = os.path.join(zip_floder, 'txn', file_date_time)
+                __control_file("txn", file_date_time, stif_data_num, filepath)
                 # file_full = os.path.join(data_path, 'D{}-T{}_00{}.txt'.format(
                 #     file_date_time, currt_time, 1))
                 # filename = '{}-D{}-T{}_00{}.csv'.format("txn", file_date_time, currt_time, stif_data_num)
@@ -129,24 +144,26 @@ def main(beg, end, stif_time, file_date_time):
 
     if sign_other > 0:
         print('{} 存储剩余数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_other, file_ord))
-        __threads(all_data, all_table_name, file_date_time, file_ord, sign_other)
+        __threads(all_data, all_table_name, file_date_time, file_ord, sign_other,'')
+        filepath = os.path.join(zip_floder, 'csutom', file_date_time)
         for name in all_table_name:
-            __control_file(name, file_date_time, file_ord)
+            __control_file(name, file_date_time, file_ord, filepath)
         for data in all_data:  # 清空已写入数据
             eval(data).clear()
 
     if sign_txn > 0:
         print('{} 存储剩余交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_txn, stif_data_num))
-        __threads(["txns"], ["txn"], file_date_time, stif_data_num, sign_txn)
-        __control_file("txn", file_date_time, stif_data_num)
+        __threads(["txns"], ["txn"], file_date_time, stif_data_num, sign_txn,'|')
+        filepath = os.path.join(zip_floder, 'txn', file_date_time)
+        __control_file("txn", file_date_time, stif_data_num,filepath)
 
         txns.clear()
-
-    if sign_stif > 0:
-        print('{} 存储可疑交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_stif, 1))
-        __threads(["stifs"], ["stif"], file_date_time, 1, sign_stif)
-        __control_file("stif", file_date_time, sign_stif)
-
-        txns.clear()
-
+    # -----------------可疑交易存储--------------------------------
+    # if sign_stif > 0:
+    #     print('{} 存储可疑交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_stif, 1))
+    #     __threads(["stifs"], ["stif"], file_date_time, 1, sign_stif,'')
+    #     __control_file("stif", file_date_time, sign_stif, filepath)
+    #
+    #     txns.clear()
+    # -------------------------------------------------------------
 

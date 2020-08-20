@@ -78,7 +78,7 @@ def running():
         n += o
         t += 1
         t = int(comm.process_time(t))  # 处理日期
-        zip_file(zip_floder, file_date_time)
+        # zip_file(zip_floder, file_date_time)
 
     end_time = time.time()
     print("执行时间：", end_time - start_time)  # 13
