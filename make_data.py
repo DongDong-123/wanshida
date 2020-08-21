@@ -328,7 +328,7 @@ class MakeData:
     def make_stan_ptxn(self, stiftime):
         """"原始业务交易信息表
         """
-        msg_id = comm.random_num(20)  # 消息id    必填
+        msg_id = comm.random_num(19)  # 消息id    必填
         msg_type = ''  # MTI消息类型标识    必填
         inter_tran_type = comm.make_inter_tran_type()  # 联机系统内部交易类型
         uuid = comm.make_ticd_data()  # 交易唯一标识    必填

@@ -9,7 +9,6 @@ import os, csv
 from readconfig import ReadMySqlConfig
 from parm import zip_floder
 import time
-currt_time = round(time.time() * 1000)
 
 conf = ReadMySqlConfig()
 # t_stan_org = ("busi_reg_no", "ctnm", "ctsnm", "cten", "ctsen", "busi_name", "appli_country", "sub_company", "former_name", "citp", "citp_nt", "ctid", "ctid_edt", "state", "city", "address", "post_code", "tel", "fax", "m_state", "m_city", "m_address", "m_post_code", "m_tel", "m_fax", "pr_mr_ms", "pr_name", "pr_title", "pr_phone", "pr_fax", "pr_email", "pr_address", "sec_mr_ms", "sec_name", "sec_title", "sec_phone", "sec_fax", "sec_email", "sec_address", "aml_mr_ms", "aml_name", "aml_title", "aml_phone", "aml_fax", "aml_email", "aml_address", "client_tp", "lfa_type", "lfa_type_explain", "fud_date", "assets_size", "country", "other_oper_country", "desc_business", "tin", "busi_type", "ctvc", "indu_code", "indu_code_nt", "crnm", "crit", "crit_nt", "crid", "crid_edt", "crid_country", "reg_cptl", "reg_cptl_code", "remark_ctvc", "eecp", "scale", "rgdt", "cls_dt", "unit_code", "remark", "stat_flag_ori", "stat_flag", "mer_unit", "cmgr", "reals", "complex", "clear", "data_crdt", "data_cruser", "data_updt", "data_upuser")
@@ -22,7 +21,6 @@ t_stan_stif = ("unit_code", "warn_dt", "rule_id", "rule_type", "warn_kd", "susp_
 t_stan_info1 = ("ctif_id", "ctnm", "info_a_bool", "laws_name", "info_a_bool2", "info_a_bool3", "supervisor_name", "inspection_time", "info_a_explain", "info_a_explain2", "info_b_bool", "info_b_bool2", "info_b_bool3", "info_b_explain", "info_c_bool", "info_c_explain", "info_d_bool", "info_d_bool2", "info_d_explain", "payment_card_org ", "compliance_org", "chartered_institution", "info_e_bool", "info_e_bool2", "info_e_bool3", "supervision_trace_doc", "info_f_bool", "list_type", "other_list_type", "info_f_explain", "info_g_bool", "info_g_explain", "info_h_bool", "info_h_explain", "data_crdt", "data_cruser", "data_updt", "data_upuser")
 t_stan_info2 = ("ctif_id", "ctnm", "info2_a_bool", "info2_a_explain", "info2_b_bool", "info2_b_explain", "agents_num", "aml_role_explain", "compliance_name", "aml_workers", "aml_position", "info2_c_bool", "info2_c_bool2", "info2_c_explain", "info2_d_bool", "info2_d_explain", "info2_e_bool", "info2_f_bool", "info2_g_bool", "info2_g_explain", "info2_h_bool", "info2_h_explain", "info2_i_bool", "info2_i_explain", "data_crdt", "data_cruser", "data_updt", "data_upuser")
 t_stan_info3 = ("ctif_id", "ctnm", "fi_mcard_principal", "fi_mcard_affillate", "fi_mcard_association", "fi_mcard_issuing", "fi_mcard_acquiring_merchants", "fi_mcard_acquiring_atm", "fi_mcard_acquiring_mcd", "fi_mcard_optrpt_msd", "fi_mcard_optrpt_ms", "fi_mcard_optrpt_mscb", "fi_mcard_optrpt_mpqr", "fi_mstro_principal", "fi_mstro_affillate", "fi_mstro_issuing", "fi_mstro_acquiring_merchants", "fi_mstro_acquiring_atm", "fi_mstro_optrpt_msd", "fi_mstro_optrpt_ms", "fi_mstro_optrpt_mscb", "fi_mstro_optrpt_mpqr", "fi_cirrus_principal", "fi_cirrus_affillate", "fi_cirrus_issuing_atm", "fi_cirrus_acquiring_atm", "fi_cirrus_optp2p_ms", "fi_cirrus_optp2p_mscb", "fi_cirrus_optp2p_mpqr", "cgi_mcard_principal", "cgi_mcard_affillate", "cgi_mcard_issuing_credit", "cgi_mcard_issuing_debit", "cgi_mcard_issuing_prepaid", "cgi_mcard_acquiring_atm", "cgi_mcard_acquiring_mcd", "cgi_mcard_acquiring_merchants", "cgi_mcard_acquiring_poi", "cgi_mcard_optrpt_msd", "cgi_mcard_optrpt_ms", "cgi_mcard_optrpt_mscb", "cgi_mcard_optrpt_mpqr", "cgi_mstro_principal", "cgi_mstro_affillate", "cgi_mstro_issuing_debit", "cgi_mstro_issuing_prepaid", "cgi_mstro_acquiring_atm", "cgi_mstro_acquiring_merchants", "cgi_mstro_acquiring_poi", "cgi_mstro_optrpt_msd", "cgi_mstro_optrpt_ms", "cgi_mstro_optrpt_mscb", "cgi_mstro_optrpt_mpqr", "cgi_cirrus_principal", "cgi_cirrus_affillate", "cgi_cirrus__issuing", "cgi_cirrus_acquiring_atm", "cgi_cirrus_optp2p_ms", "cgi_cirrus_optp2p_mscb", "cgi_cirrus_optp2p_mpqr", "info_a_bool", "info_a_explain", "additional_services_transfer", "acquiring_rePower", "data_crdt", "data_cruser", "data_updt", "data_upuser")
-
 
 
 
@@ -64,9 +62,10 @@ class SaveFile:
         self.t_stan_info1 = t_stan_info1
         self.t_stan_info2 = t_stan_info2
         self.t_stan_info3 = t_stan_info3
+        currt_time = round(time.time() * 1000)
 
 
-    def write_to_csv(self, datas, file_name, date_time, num, total_num,delimiter=','):
+    def write_to_csv(self, datas, file_name, date_time, num, total_num,control_file_time,delimiter=','):
         """
 
         :param datas: 写入数据
@@ -87,22 +86,41 @@ class SaveFile:
             print('============make{}============='.format(file_path))
             os.makedirs(file_path)
         if num < 10:
-            file_full = os.path.join(file_path, '{}-D{}-T{}_000{}.csv'.format(file_name, date_time, currt_time, num))
+            file_full = os.path.join(file_path, '{}-D{}-T{}_000{}.csv'.format(file_name.upper(), date_time, control_file_time, num))
         else:
-            file_full = os.path.join(file_path, '{}-D{}-T{}_00{}.csv'.format(file_name, date_time, currt_time, num))
+            file_full = os.path.join(file_path, '{}-D{}-T{}_00{}.csv'.format(file_name.upper(), date_time, control_file_time, num))
+        # ============交易单独写入==================
+        if delimiter == '||':
+            if not os.path.exists(file_full):
+                title = eval('self.' + 't_stan_' + file_name)
+                # csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
+                # writer = csv.writer(csvfile, delimiter=delimiter)
+                # writer.writerow(title)
+                # csvfile.close()
+                with open(file_full, 'a', encoding="utf-8-sig") as f:
+                    f.write("||".join(title)+'\n')
 
-        if not os.path.exists(file_full):
-            title = eval('self.' + 't_stan_' + file_name)
+            # csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
+            # writer = csv.writer(csvfile, delimiter=delimiter)
+            # writer.writerows(datas)
+            # csvfile.close()
+            with open(file_full, 'a', encoding="utf-8-sig") as f:
+                for da in datas:
+                    f.write("||".join([str(tt) for tt in da]) + '\n')
+        # ============================================
+        else:
+            if not os.path.exists(file_full):
+                title = eval('self.' + 't_stan_' + file_name)
+                csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
+                writer = csv.writer(csvfile,delimiter=delimiter)
+                writer.writerow(title)
+                csvfile.close()
+
             csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
             writer = csv.writer(csvfile,delimiter=delimiter)
-            writer.writerow(title)
+            writer.writerows(datas)
             csvfile.close()
-
-        csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
-        writer = csv.writer(csvfile,delimiter=delimiter)
-        writer.writerows(datas)
-        csvfile.close()
-        # # 控制文件写入数据数量
-        # txt_file = os.path.join(self.file_path, '{}-D{}-T{}_00{}.txt'.format(file_name, date_time, self.currt_time, num))
-        # with open(txt_file, 'w',encoding='utf-8') as f:
-        #     f.write(str(total_num))
+            # # 控制文件写入数据数量
+            # txt_file = os.path.join(self.file_path, '{}-D{}-T{}_00{}.txt'.format(file_name, date_time, self.currt_time, num))
+            # with open(txt_file, 'w',encoding='utf-8') as f:
+            #     f.write(str(total_num))
