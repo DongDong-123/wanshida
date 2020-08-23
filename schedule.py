@@ -23,12 +23,11 @@ stifs = []
 survey_info1 = []
 survey_info2 = []
 survey_info3 = []
-# data_path = os.path.join(zip_floder, 'data')
-# data_path = zip_floder
 
 
 def __threads(all_data, all_table_name, file_date_time, order, sign,delimiter, control_file_time):
     """抽出多线程部分"""
+
     threads = []
     for ind, dat in enumerate(all_data):
         if len(eval(dat)):
@@ -60,14 +59,24 @@ def __control_file(file_name, file_date_time, file_num,filepath, control_file_ti
         filename = '{}-D{}-T{}_00{}.csv'.format(file_name.upper(), file_date_time, control_file_time, file_num)
     if file_name == 'txn':
         with open(file_full, '+a', encoding="UTF-8") as f:
-            print('-----------------创建{}-------------------'.format(file_full))
+            # print('-----------------创建{}-------------------'.format(file_full))
             f.write('||'.join([filename, str(filenum)]) + "\n")
     else:
         with open(file_full, '+a', encoding="UTF-8") as f:
-            print('-----------------创建{}-------------------'.format(file_full))
+            # print('-----------------创建{}-------------------'.format(file_full))
             f.write(','.join([filename, str(filenum)]) + "\n")
 
 def main(beg, end, stif_time, file_date_time, control_file_time):
+    # 创建存储文件夹
+    file_path1 = os.path.join(zip_floder, 'csutom', file_date_time)
+    file_path2 = os.path.join(zip_floder, 'txn', file_date_time)
+
+    if not os.path.exists(file_path1):
+        os.makedirs(file_path1)
+    if not os.path.exists(file_path2):
+        os.makedirs(file_path2)
+
+
     currt_time = time.strftime('%Y%m%d', time.localtime())
     makedata = MakeData()
     # 日期格式转换

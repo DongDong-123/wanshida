@@ -9,7 +9,7 @@ import os
 
 
 # configfile = "config.ini"  # line
-configfile = "config_dev.ini"  # dev
+configfile = "config_dev.ini"  # dev  配置文件路径
 
 
 curPath = os.path.dirname(os.path.realpath(__file__))

@@ -20,7 +20,9 @@ t_stan_txn = ("id", "tran_kd", "uuid", "trace_id", "card_bin", "card_type", "car
 t_stan_stif = ("unit_code", "warn_dt", "rule_id", "rule_type", "warn_kd", "susp_value", "ctif_tp", "tran_kd", "card_type", "MCNO", "MCNM", "ACCD", "fwd_ins_id_cd", "STCT", "card_product", "card_brand", "STCI", "IUCD", "rcv_ins_id_cd", "tstm", "tsdr", "TCPP", "TCTP", "TCAT", "TCMN", "TCNM", "CACD", "c_fwd_ins_id_cd", "TCCT", "T_card_product", "T_card_brand", "TCCI", "TCIC", "c_rcv_ins_id_cd", "bptc", "ticd", "busi_type", "trans_type", "trans_stat", "tran_advice_st", "acq_merch_city", "acq_merch_state", "TRCD", "CBIF", "trans_channel", "PCTP", "PCAT", "crat_u", "crat_c", "TSTP", "mcc", "pos_entry_cd", "retriv_ref_num", "auth_cd", "resp_cd", "pos_term_id", "mer_unit", "run_dt", "data_transfer_dt")
 t_stan_info1 = ("ctif_id", "ctnm", "info_a_bool", "laws_name", "info_a_bool2", "info_a_bool3", "supervisor_name", "inspection_time", "info_a_explain", "info_a_explain2", "info_b_bool", "info_b_bool2", "info_b_bool3", "info_b_explain", "info_c_bool", "info_c_explain", "info_d_bool", "info_d_bool2", "info_d_explain", "payment_card_org ", "compliance_org", "chartered_institution", "info_e_bool", "info_e_bool2", "info_e_bool3", "supervision_trace_doc", "info_f_bool", "list_type", "other_list_type", "info_f_explain", "info_g_bool", "info_g_explain", "info_h_bool", "info_h_explain", "data_crdt", "data_cruser", "data_updt", "data_upuser")
 t_stan_info2 = ("ctif_id", "ctnm", "info2_a_bool", "info2_a_explain", "info2_b_bool", "info2_b_explain", "agents_num", "aml_role_explain", "compliance_name", "aml_workers", "aml_position", "info2_c_bool", "info2_c_bool2", "info2_c_explain", "info2_d_bool", "info2_d_explain", "info2_e_bool", "info2_f_bool", "info2_g_bool", "info2_g_explain", "info2_h_bool", "info2_h_explain", "info2_i_bool", "info2_i_explain", "data_crdt", "data_cruser", "data_updt", "data_upuser")
-t_stan_info3 = ("ctif_id", "ctnm", "fi_mcard_principal", "fi_mcard_affillate", "fi_mcard_association", "fi_mcard_issuing", "fi_mcard_acquiring_merchants", "fi_mcard_acquiring_atm", "fi_mcard_acquiring_mcd", "fi_mcard_optrpt_msd", "fi_mcard_optrpt_ms", "fi_mcard_optrpt_mscb", "fi_mcard_optrpt_mpqr", "fi_mstro_principal", "fi_mstro_affillate", "fi_mstro_issuing", "fi_mstro_acquiring_merchants", "fi_mstro_acquiring_atm", "fi_mstro_optrpt_msd", "fi_mstro_optrpt_ms", "fi_mstro_optrpt_mscb", "fi_mstro_optrpt_mpqr", "fi_cirrus_principal", "fi_cirrus_affillate", "fi_cirrus_issuing_atm", "fi_cirrus_acquiring_atm", "fi_cirrus_optp2p_ms", "fi_cirrus_optp2p_mscb", "fi_cirrus_optp2p_mpqr", "cgi_mcard_principal", "cgi_mcard_affillate", "cgi_mcard_issuing_credit", "cgi_mcard_issuing_debit", "cgi_mcard_issuing_prepaid", "cgi_mcard_acquiring_atm", "cgi_mcard_acquiring_mcd", "cgi_mcard_acquiring_merchants", "cgi_mcard_acquiring_poi", "cgi_mcard_optrpt_msd", "cgi_mcard_optrpt_ms", "cgi_mcard_optrpt_mscb", "cgi_mcard_optrpt_mpqr", "cgi_mstro_principal", "cgi_mstro_affillate", "cgi_mstro_issuing_debit", "cgi_mstro_issuing_prepaid", "cgi_mstro_acquiring_atm", "cgi_mstro_acquiring_merchants", "cgi_mstro_acquiring_poi", "cgi_mstro_optrpt_msd", "cgi_mstro_optrpt_ms", "cgi_mstro_optrpt_mscb", "cgi_mstro_optrpt_mpqr", "cgi_cirrus_principal", "cgi_cirrus_affillate", "cgi_cirrus__issuing", "cgi_cirrus_acquiring_atm", "cgi_cirrus_optp2p_ms", "cgi_cirrus_optp2p_mscb", "cgi_cirrus_optp2p_mpqr", "info_a_bool", "info_a_explain", "additional_services_transfer", "acquiring_rePower", "data_crdt", "data_cruser", "data_updt", "data_upuser")
+t_stan_info3 = (
+    "ctif_id", "ctnm", "fi_mcard_principal", "fi_mcard_affillate", "fi_mcard_association", "fi_mcard_issuing", "fi_mcard_acquiring_merchants", "fi_mcard_acquiring_atm", "fi_mcard_acquiring_mcd", "fi_mcard_optrpt_msd", "fi_mcard_optrpt_ms", "fi_mcard_optrpt_mscb", "fi_mcard_optrpt_mpqr", "fi_mstro_principal", "fi_mstro_affillate", "fi_mstro_issuing", "fi_mstro_acquiring_merchants", "fi_mstro_acquiring_atm", "fi_mstro_optrpt_msd", "fi_mstro_optrpt_ms", "fi_mstro_optrpt_mscb", "fi_mstro_optrpt_mpqr", "fi_cirrus_principal", "fi_cirrus_affillate", "fi_cirrus_issuing_atm", "fi_cirrus_acquiring_atm", "fi_cirrus_optp2p_ms", "fi_cirrus_optp2p_mscb", "fi_cirrus_optp2p_mpqr", "cgi_mcard_principal", "cgi_mcard_affillate", "cgi_mcard_issuing_credit", "cgi_mcard_issuing_debit", "cgi_mcard_issuing_prepaid", "cgi_mcard_acquiring_atm", "cgi_mcard_acquiring_mcd", "cgi_mcard_acquiring_merchants", "cgi_mcard_acquiring_poi", "cgi_mcard_optrpt_msd", "cgi_mcard_optrpt_ms", "cgi_mcard_optrpt_mscb", "cgi_mcard_optrpt_mpqr", "cgi_mstro_principal", "cgi_mstro_affillate", "cgi_mstro_issuing_debit", "cgi_mstro_issuing_prepaid", "cgi_mstro_acquiring_atm", "cgi_mstro_acquiring_merchants", "cgi_mstro_acquiring_poi", "cgi_mstro_optrpt_msd", "cgi_mstro_optrpt_ms", "cgi_mstro_optrpt_mscb", "cgi_mstro_optrpt_mpqr", "cgi_cirrus_principal", "cgi_cirrus_affillate", "cgi_cirrus__issuing", "cgi_cirrus_acquiring_atm", "cgi_cirrus_optp2p_ms", "cgi_cirrus_optp2p_mscb", "cgi_cirrus_optp2p_mpqr", "info_a_bool", "info_a_explain", "additional_services_transfer", "acquiring_rePower", "data_crdt", "data_cruser", "data_updt", "data_upuser"
+)
 
 
 
@@ -80,30 +82,20 @@ class SaveFile:
             file_path = os.path.join(self.file_path,'csutom',date_time)
         else:
             file_path = os.path.join(self.file_path,'txn',date_time)
-        # if not self.file_path:
-        #     self.file_path = os.path.join(os.getcwd(), 'data')
-        if not os.path.exists(file_path):
-            print('============make{}============='.format(file_path))
-            os.makedirs(file_path)
+
         if num < 10:
             file_full = os.path.join(file_path, '{}-D{}-T{}_000{}.csv'.format(file_name.upper(), date_time, control_file_time, num))
         else:
             file_full = os.path.join(file_path, '{}-D{}-T{}_00{}.csv'.format(file_name.upper(), date_time, control_file_time, num))
         # ============交易单独写入==================
+        # 交易数据分割符为||，需要无法直接写入CSV，改用TXT写入
         if delimiter == '||':
             if not os.path.exists(file_full):
                 title = eval('self.' + 't_stan_' + file_name)
-                # csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
-                # writer = csv.writer(csvfile, delimiter=delimiter)
-                # writer.writerow(title)
-                # csvfile.close()
+
                 with open(file_full, 'a', encoding="utf-8-sig") as f:
                     f.write("||".join(title)+'\n')
 
-            # csvfile = open(file_full, 'a', encoding="utf-8-sig", newline='')
-            # writer = csv.writer(csvfile, delimiter=delimiter)
-            # writer.writerows(datas)
-            # csvfile.close()
             with open(file_full, 'a', encoding="utf-8-sig") as f:
                 for da in datas:
                     f.write("||".join([str(tt) for tt in da]) + '\n')
@@ -120,7 +112,3 @@ class SaveFile:
             writer = csv.writer(csvfile,delimiter=delimiter)
             writer.writerows(datas)
             csvfile.close()
-            # # 控制文件写入数据数量
-            # txt_file = os.path.join(self.file_path, '{}-D{}-T{}_00{}.txt'.format(file_name, date_time, self.currt_time, num))
-            # with open(txt_file, 'w',encoding='utf-8') as f:
-            #     f.write(str(total_num))
