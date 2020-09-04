@@ -68,7 +68,7 @@ def __control_file(file_name, file_date_time, file_num,filepath, control_file_ti
 
 def main(beg, end, stif_time, file_date_time, control_file_time):
     # 创建存储文件夹
-    file_path1 = os.path.join(zip_floder, 'csutom', file_date_time)
+    file_path1 = os.path.join(zip_floder, 'custom', file_date_time)
     file_path2 = os.path.join(zip_floder, 'txn', file_date_time)
 
     if not os.path.exists(file_path1):
@@ -128,7 +128,7 @@ def main(beg, end, stif_time, file_date_time, control_file_time):
             __threads(all_data, all_table_name, file_date_time, file_ord, sign_other,'', control_file_time)
             print(len(orgs),)
             if sc_other == save_ci:
-                filepath = os.path.join(zip_floder, 'csutom', file_date_time)
+                filepath = os.path.join(zip_floder, 'custom', file_date_time)
                 for name in all_table_name:
                     __control_file(name, file_date_time, file_ord,filepath, control_file_time)
                 file_ord += 1
@@ -163,7 +163,7 @@ def main(beg, end, stif_time, file_date_time, control_file_time):
     if sign_other > 0:
         print('{} 存储剩余数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_other, file_ord))
         __threads(all_data, all_table_name, file_date_time, file_ord, sign_other,'', control_file_time)
-        filepath = os.path.join(zip_floder, 'csutom', file_date_time)
+        filepath = os.path.join(zip_floder, 'custom', file_date_time)
         for name in all_table_name:
             __control_file(name, file_date_time, file_ord, filepath, control_file_time)
         for data in all_data:  # 清空已写入数据

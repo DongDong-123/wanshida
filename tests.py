@@ -177,5 +177,50 @@ city = fake.city_suffix()
 dis = fake.district()
 citd = fake.ssn()
 contant = fake.sentence()
-print(city,dis,citd,contant)
-print(name, address)
+# print(city,dis,citd,contant)
+# print(name, address)
+
+"""
+
+paragraph
+
+years_indu、rel_prov、rel_city、gov_owned、hold_per
+"""
+import random
+def make_time():
+    '''生成随机时间，时分秒 HH:mm:ss'''
+    hour = random.randint(0, 23)
+    minite = random.randint(0, 59)
+    second = random.randint(0, 59)
+    if hour == 0:
+        hour = '00'
+    elif hour < 10:
+        hour = '0' + str(hour)
+
+    if minite == 0:
+        minite = '00'
+    elif minite < 10:
+        minite = '0' + str(minite)
+
+    if second == 0:
+        second = '00'
+    elif second < 10:
+        second = '0' + str(second)
+    return '{}:{}:{}'.format(hour, minite, second)
+
+
+# for i in range(50):
+#     print(make_time())
+
+
+def test(m):
+    n=0
+    tmp = {'2','3','5'}
+    for i in range(m):
+        if set(str(i))&tmp:
+            n+=1
+            if n == m:
+                print(i)
+
+test(1000)
+
