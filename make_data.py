@@ -11,10 +11,12 @@ fake = Faker(locale='zh_CN')
 
 
 class MakeData:
-    def __init__(self):
+    def __init__(self, update_t):
         self.csnm = None
         self.ctnm = None
-        self.unit_code = None
+        # self.unit_code = None
+        self.data_time = comm.data_time()
+        self.update_time = update_t
 
     def make_stan_org(self, num):
         """
@@ -70,7 +72,7 @@ class MakeData:
         aml_email = comm.make_email_data()  # 反洗钱联系人电子邮箱    应填
         # aml_address = comm.random_code()  # 反洗钱联系人使用地址
         client_tp = comm.cust_tyep()  # 客户类别    必填
-        lfa_type = comm.org_type()  # 组织机构类别    应填
+        lfa_type = comm.org_type2()  # 组织机构类别    应填
         # lfa_type_explain = ''  # 组织机构其他类别说明
         found_date = comm.make_date(-20, -1)  # 成立日期    必填
         assets_size = ''  # 资产规模(美元，当年）
@@ -78,41 +80,42 @@ class MakeData:
         other_oper_country = fake.country()  # 其他运营国家  随机国家
         desc_business = fake.paragraph()  # 经营说明  随机一句话
         # tin = ''  # TIN
-        busi_type = ''  # 业务类型    必填
-        industry_type = ''  # 主体的行业类别    必填
+        busi_type = comm.busi_line()  # 业务类型    必填
+        industry_type = '2J'  # 主体的行业类别    必填
         # indu_code = ''  # 主体的行业代码原值    应填
         # indu_code_nt = ''  # 主体的行业代码原值说明    应填
-        legal_p_name = ''  # 主体的法定代表人姓名    必填
-        legal_p_ename = ''  # 主体的法定代表人英文姓名
-        legal_p_cert_tp = ''  # 主体的法定代表人身份证件类型    必填
-        legal_p_cert_explain = ''  # 主体的法定代表人证件类型说明    必填
-        legal_p_cert_num = ''  # 主体的法定代表人身份证件号码    必填
-        legal_cert_validity = ''  # 主体的法定代表人证件有效期    必填
+        legal_p_name = fake.name()  # 主体的法定代表人姓名    必填
+        legal_p_ename = comm.make_name_data()  # 主体的法定代表人英文姓名
+        legal_p_cert_tp = comm.cert_type()  # 主体的法定代表人身份证件类型    必填
+        legal_p_cert_explain = comm.cert_explain(legal_p_cert_tp)  # 主体的法定代表人证件类型说明    必填
+        legal_p_cert_num = fake.ssn()  # 主体的法定代表人身份证件号码    必填
+        legal_cert_validity = comm.make_date()  # 主体的法定代表人证件有效期    必填
         # crid_country = ''
         registered_capital = comm.random_num(8)  # 注册资本
-        registered_capital_currency = ''  # 注册资本金币种
+        registered_capital_currency = 'CNY'  # 注册资本金币种
         business_scope = '组织文化艺术交流活动；文艺创作；体育运动项目经营（高危险性体育项目除外）；承办展览展示；婚庆服务；摄影服务；摄像服务；公共关系服务；礼仪服务；模特服务；会议服务；大型活动组织服务；经济信息咨询；婚纱礼服出租；花卉租摆；舞台策划；摄影器材租赁；舞台灯光音响设计；电脑图文设计；电脑动画设计；设计、制作、代理、发布广告。'  # 经营范围    必填
-        enps_ecic_sectors = ''  # 企业经济成份
+        # enps_ecic_sectors = ''  # 企业经济成份
         # scale = ''  # 企业人数规模
         establish_busi_date = comm.make_date(-10, -1)  # 建立业务日期    必填
-        end_busi_date = ''  # 终止业务日期    （注销的情况下）应填
         # self.unit_code = ''  # 成员机构代码
         # remark = fake.paragraph()  # 备注  随机一段话
         stat_flag_ori = comm.cust_status()  # 客户状态原值    应填
         stat_flag = comm.cust_status()  # 客户状态    必填
-        mer_unit = ''  # 管理机构    必填
-        account_manager = ''  # 客户经理
+        end_busi_date = comm.end_date(stat_flag, establish_busi_date)  # 终止业务日期    （注销的情况下）应填
+
+        mer_unit = '000000001'  # 管理机构    必填
+        account_manager = fake.name()  # 客户经理
         # reals = comm.make_reals_data()  # 客户真实有效性
         # complex = comm.make_complex_data()  # 非自然人结构复杂度
         # clear = comm.make_clear_data()  # 非自然人股权可辨识度
-        create_time = comm.data_time()  # 数据创建时间    必填
-        update_time = comm.data_time()  # 数据更新时间    必填
+        create_time = self.data_time  # 数据创建时间    必填
+        update_time = self.update_time  # 数据更新时间    必填
         creator = comm.random_num(5)  # 数据创建人id    必填
         updator = comm.random_num(5)  # 数据更新人id    必填
 
         # all_col = [self.csnm, ctnm, ctsnm, cten, ctsen, busi_name, appli_country, sub_company, former_name, citp, citp_nt, ctid, ctid_edt, state, city, address, post_code, tel, fax, m_state, m_city, m_address, m_post_code, m_tel, m_fax, pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, pr_address, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, aml_address, client_tp, lfa_type, lfa_type_explain, fud_date, assets_size, country, other_oper_country, desc_business, tin, busi_type, ctvc, indu_code, indu_code_nt, crnm, crit, crit_nt, crid, crid_edt, reg_cptl, reg_cptl_code, remark_ctvc, eecp, scale, rgdt, cls_dt, unit_code, remark, stat_flag_ori, stat_flag, mer_unit, cmgr, act_cd, acc_type1, bank_acc_name, cabm, country_2, statement_type, reals, complex, clear, data_crdt, data_cruser, data_updt, data_upuser]
         # all_col = [self.csnm, self.ctnm, custormer_sname, custormer_ename, custormer_sename, busi_name, appli_country, sub_company, former_name, cert_tp, cert_tp_explain, cert_num, cert_validity, state, city, address, post_code, tel, fax, m_city, m_state, m_address, m_post_code, m_tel, m_fax, pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, pr_address, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, aml_address, client_tp, lfa_type, lfa_type_explain, found_date, assets_size, country, other_oper_country, desc_business, tin, busi_type, industry_type, indu_code, indu_code_nt, legal_p_name, legal_p_ename, legal_p_cert_tp, legal_p_cert_explain, legal_p_cert_num, legal_cert_validity, crid_country, registered_capital, registered_capital_currency, business_scope, enps_ecic_sectors, scale, establish_busi_date, end_busi_date, self.unit_code, remark, stat_flag_ori, stat_flag, mer_unit, account_manager, reals, complex, clear, create_time, update_time, creator, updator]
-        all_col = [self.csnm, self.ctnm, custormer_ename, custormer_sename, busi_name, appli_country, sub_company, former_name, cert_tp, cert_tp_explain, cert_num, cert_validity, state, city, address, post_code, tel, fax,pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, client_tp, lfa_type, found_date, assets_size, country, other_oper_country, desc_business, busi_type, industry_type, legal_p_name, legal_p_ename, legal_p_cert_tp, legal_p_cert_explain, legal_p_cert_num, legal_cert_validity, registered_capital, registered_capital_currency, business_scope, enps_ecic_sectors, establish_busi_date, end_busi_date, stat_flag_ori, stat_flag, mer_unit, account_manager,create_time, update_time, creator, updator]
+        all_col = [self.csnm, self.ctnm, custormer_ename, custormer_sename, busi_name, appli_country, sub_company, former_name, cert_tp, cert_tp_explain, cert_num, cert_validity, state, city, address, post_code, tel, fax,pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, client_tp, lfa_type, found_date, assets_size, country, other_oper_country, desc_business, busi_type, industry_type, legal_p_name, legal_p_ename, legal_p_cert_tp, legal_p_cert_explain, legal_p_cert_num, legal_cert_validity, registered_capital, registered_capital_currency, business_scope, establish_busi_date, end_busi_date, stat_flag_ori, stat_flag, mer_unit, account_manager,create_time, update_time, creator, updator]
         # return all_col
         return ['{}'.format(x) for x in all_col]
 
@@ -126,7 +129,7 @@ class MakeData:
         custormer_name = self.ctnm  # 客户名称  必填
         rel_tp = comm.relation_type()  # 关系类型  必填
         # rel_layer = comm.rel_layer()  # 关系人层级
-        rel_cstp = '2'  # 关系人类别  必填
+        rel_cstp = '1'  # 关系人类别  必填
         if rel_cstp == '2':
             fir_name = comm.org_name()  # 关系人first name  必填
             sec_name = ''.join([elem[0] for elem in fir_name.split()])  # 关系人second name
@@ -160,9 +163,9 @@ class MakeData:
         hold_per = ''  # 持股比例
         # hold_amt = ""  # 持股金额
         # remark = fake.paragraph()  # 备注
-        create_time = comm.data_time()  # 数据创建时间  必填
+        create_time = self.data_time  # 数据创建时间  必填
         creator = comm.random_num(5)  # 数据创建人id  必填
-        update_time = comm.data_time()  # 数据更新时间  必填
+        update_time = self.update_time  # 数据更新时间  必填
         updator = comm.random_num(5)  # 数据更新人id  必填
 
         all_col = [csnm, custormer_name, rel_tp, rel_cstp, fir_name, sec_name, last_name,dob, cob, years_comp, years_indu, hold_per, create_time, update_time, creator, updator]
@@ -182,17 +185,17 @@ class MakeData:
         info_a_bool3 = comm.make_yes_no_unused()  # 监管机构认为该制度是否得当
         supervisor_name = comm.make_name_data(3)  # 监管人员姓名
         # inspection_time = comm.make_time()  # 检查时间
-        info_a_explain = "".join(fake.paragraphs())  # 制度不完善地方
-        info_a_explain2 = ''  # 完善时间及方式
+        info_a_explain = "".join(fake.paragraphs(nb=3))  # 制度不完善地方
+        info_a_explain2 = "".join(fake.paragraphs(nb=3))  # 完善时间及方式
         info_b_bool = comm.make_yes_no()  # 是否有反洗钱专职人员
         info_b_bool2 = comm.make_yes_no()  # 是否有完整的风险评估程序
         info_b_bool3 = comm.make_yes_no()  # 是否有反洗钱相关的员工培训
-        info_b_explain = "".join(fake.paragraphs())  # 员工培训制度
+        info_b_explain = "".join(fake.paragraphs(nb=3))  # 员工培训制度
         # info_c_bool = comm.make_yes_no()  # 是否被禁止在注册地进行银行业务
         # info_c_explain = "".join(fake.paragraphs())  # 原因
         info_d_bool = comm.make_yes_no()  # 是否在任何国家、地区都没有实体存在的机构
         info_d_bool2 = comm.make_yes_no()  # 是否禁止与没有任何实体存在的机构建立关系
-        info_d_explain = "".join(fake.paragraphs())  # 原因
+        info_d_explain = "".join(fake.paragraphs(nb=3))  # 原因
         payment_card_org = ''  # 监管支付卡活动的机构
         compliance_org = ''  # 监管合规的机构
         chartered_institution = ''  # 特许机构
@@ -207,10 +210,10 @@ class MakeData:
         info_g_bool = comm.make_yes_no()  # 是否存在影响申请的诉讼或其他
         # info_g_explain = "".join(fake.paragraphs())  # 原因
         info_h_bool = comm.make_yes_no()  # 是否参与允许转账的业务
-        info_h_explain = "".join(fake.paragraphs())  # 项目细节描述
-        data_crdt = comm.make_trade_time19()  # 数据创建时间
+        info_h_explain = "".join(fake.paragraphs(nb=3))  # 项目细节描述
+        data_crdt = self.data_time  # 数据创建时间
         data_cruser = comm.random_num(8)  # 数据创建人id
-        data_updt = comm.make_trade_time19()  # 数据更新时间
+        data_updt = self.update_time  # 数据更新时间
         data_upuser = comm.random_num(8)  # 数据更新人id
 
         # all_col = [ctif_id, ctnm, info_a_bool, laws_name, info_a_bool2, info_a_bool3, supervisor_name, inspection_time, info_a_explain, info_a_explain2, info_b_bool, info_b_bool2, info_b_bool3, info_b_explain, info_c_bool, info_c_explain, info_d_bool, info_d_bool2, info_d_explain, payment_card_org , compliance_org, chartered_institution, info_e_bool, info_e_bool2, info_e_bool3, supervision_trace_doc, info_f_bool, list_type, other_list_type, info_f_explain, info_g_bool, info_g_explain, info_h_bool, info_h_explain, data_crdt, data_cruser, data_updt, data_upuser]
@@ -230,9 +233,9 @@ class MakeData:
         info2_b_explain = ""  # 原因
         agents_num = ""  # 分销渠道及代理商的数目
         # aml_role_explain = ""  # 反洗钱官或反洗钱合规部角色描述
-        compliance_name = ""  # 合规部负责人姓名
+        compliance_name = fake.name()  # 合规部负责人姓名
         # aml_workers = ""  # 反洗钱工作人数
-        aml_position = ""  # 反洗钱员工职位
+        aml_position = fake.job()  # 反洗钱员工职位
         info2_c_bool = comm.make_yes_no()  # 是否有内部审计职能或其他独立第三方定期评估其“反洗钱”政策和程序
         # info2_c_bool2 = comm.make_yes_no()  # 是否发现任何与“反洗钱”相关的缺陷
         # info2_c_explain = ""  # 请说明已发现的不足之处和解决问题的补救计划
@@ -246,9 +249,9 @@ class MakeData:
         info2_h_explain = ""  # 确认可疑后的行为
         info2_i_bool = comm.make_yes_no()  # 是否可以上报可疑
         info2_i_explain = comm.random_str(10)  # 上报机构
-        data_crdt = comm.make_trade_time19()  # 数据创建时间
+        data_crdt = self.data_time  # 数据创建时间
         data_cruser = comm.random_num(8)  # 数据创建人id
-        data_updt = comm.make_trade_time19()  # 数据更新时间
+        data_updt = self.update_time  # 数据更新时间
         data_upuser = comm.random_num(8)  # 数据更新人id
 
         # all_col = [ctif_id, ctnm, info2_a_bool, info2_a_explain, info2_b_bool, info2_b_explain, agents_num, aml_role_explain, compliance_name, aml_workers, aml_position, info2_c_bool, info2_c_bool2, info2_c_explain, info2_d_bool, info2_d_explain, info2_e_bool, info2_f_bool, info2_g_bool, info2_g_explain, info2_h_bool, info2_h_explain, info2_i_bool, info2_i_explain, data_crdt, data_cruser, data_updt, data_upuser]
@@ -324,9 +327,9 @@ class MakeData:
         # info_a_explain = fake.paragraph()  # 原因
         # additional_services_transfer = comm.make_yes_no()  # 是否提供额外服务
         # acquiring_rePower = comm.make_yes_no()  #
-        data_crdt = comm.make_trade_time19()  # 数据创建时间
+        data_crdt = self.data_time  # 数据创建时间
         data_cruser = comm.random_num(8)  # 数据创建人id
-        data_updt = comm.make_trade_time19()  # 数据更新时间
+        data_updt = self.update_time  # 数据更新时间
         data_upuser = comm.random_num(8)  # 数据更新人id
 
         # all_col = [ctif_id, ctnm, fi_mcard_principal, fi_mcard_affillate, fi_mcard_association, fi_mcard_issuing, fi_mcard_acquiring_merchants, fi_mcard_acquiring_atm, fi_mcard_acquiring_mcd, fi_mcard_optrpt_msd, fi_mcard_optrpt_ms, fi_mcard_optrpt_mscb, fi_mcard_optrpt_mpqr, fi_mstro_principal, fi_mstro_affillate, fi_mstro_issuing, fi_mstro_acquiring_merchants, fi_mstro_acquiring_atm, fi_mstro_optrpt_msd, fi_mstro_optrpt_ms, fi_mstro_optrpt_mscb, fi_mstro_optrpt_mpqr, fi_cirrus_principal, fi_cirrus_affillate, fi_cirrus_issuing_atm, fi_cirrus_acquiring_atm, fi_cirrus_optp2p_ms, fi_cirrus_optp2p_mscb, fi_cirrus_optp2p_mpqr, cgi_mcard_principal, cgi_mcard_affillate, cgi_mcard_issuing_credit, cgi_mcard_issuing_debit, cgi_mcard_issuing_prepaid, cgi_mcard_acquiring_atm, cgi_mcard_acquiring_mcd, cgi_mcard_acquiring_merchants, cgi_mcard_acquiring_poi, cgi_mcard_optrpt_msd, cgi_mcard_optrpt_ms, cgi_mcard_optrpt_mscb, cgi_mcard_optrpt_mpqr, cgi_mstro_principal, cgi_mstro_affillate, cgi_mstro_issuing_debit, cgi_mstro_issuing_prepaid, cgi_mstro_acquiring_atm, cgi_mstro_acquiring_merchants, cgi_mstro_acquiring_poi, cgi_mstro_optrpt_msd, cgi_mstro_optrpt_ms, cgi_mstro_optrpt_mscb, cgi_mstro_optrpt_mpqr, cgi_cirrus_principal, cgi_cirrus_affillate, cgi_cirrus__issuing, cgi_cirrus_acquiring_atm, cgi_cirrus_optp2p_ms, cgi_cirrus_optp2p_mscb, cgi_cirrus_optp2p_mpqr, info_a_bool, info_a_explain, additional_services_transfer, acquiring_rePower, data_crdt, data_cruser, data_updt, data_upuser]
@@ -451,7 +454,7 @@ class MakeData:
         reserve1 = ""  # 保留域1
         reserve2 = ""  # 保留域2
         reserve3 = ""  # 保留域3
-        data_transfer_dt = comm.process_time(int(stiftime.replace("-",""))+1)  # 数据传输日期
+        data_transfer_dt = self.update_time   # 数据传输日期
 
         all_col = [msg_id, msg_type, inter_tran_type, uuid, trace_id, tran_group_id, tran_init, tran_res, card_bin, card_type, card_product, card_brand, card_media, token_pan, encrypt_pan, hash_pan, digsit, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_amount, sett_amount, bill_amount, tran_datetime, crdhldr_bill_fee, sett_conv_rate, bill_conv_rate, sys_trace_audit_nbr, local_tran_datetime, exp_date, sett_date, conv_date, mcc, pos_entry_cd, card_seq_num, pos_pin_cptr_cd, tran_fee_indi, acq_srchg_amount, acq_ins_id_cd, fwd_ins_id_cd, trk2_prsnt_sw, retriv_ref_num, auth_cd, resp_cd, pos_term_id, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, frmt_resp_data, additional_data, funding_payment_tti, tran_curr_cd, sett_curr_cd, bill_curr_cd, data_integrated, paym_account, advice_reason_cd, advice_reason_dt_cd, advice_reason_dt_txt, advice_reason_add_txt, pos_data, pos_crdhldr_present, pos_tran_status, inf_data, ntw_mng_inf_cd, org_mti, org_stan, org_tran_datetime, org_acq_ins_id_cd, org_fwd_ins_id_cd, org_trace_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_msg_flag, iss_msg_flag, single_dual_flag, tran_buss_st, tran_advice_st, inter_resp_cd, dc_id, insert_timestamp, insert_by, last_update_timestamp, last_update_by, channel_type, cash_back_amount, cash_back_indicator, mcht_data_srv, tcc, cvv2, pos_cat_level, merch_advic_cd, src_member_id, dest_member_id, group_tran_type, fee_category, fan_ntw_cd, int_rate_id, net_ref_num, bnk_ref_num, acq_ref_num, gcms_prc_num, act_tran_amount, act_sett_amount, act_bill_amount, zero_fill_amount, reserve1, reserve2, reserve3, data_transfer_dt]
         all_data = {
@@ -661,7 +664,9 @@ class MakeData:
         tran_amount = ori_ptxn.get("tran_amount")   # 交易金额    必填
         sett_amount = ori_ptxn.get("sett_amount")  # 结算金额    必填
         tran_curr_cd = ori_ptxn.get("tran_curr_cd")  # 交易币种    必填
+        # tran_curr_cd = '156'  # 交易币种    必填
         sett_curr_cd = ori_ptxn.get("sett_curr_cd")  # 结算币种    必填
+        # sett_curr_cd = '156'  # 结算币种    必填
         sett_conv_rate = ori_ptxn.get("sett_conv_rate")  # 结算汇率    必填
         sett_date = ori_ptxn.get("sett_date")  # 结算日期    必填
         crat_u = int(tran_amount) / int(sett_conv_rate)  # 交易金额折合美元    必填
@@ -703,7 +708,7 @@ class MakeData:
         last_update_timestamp = ori_ptxn.get("last_update_timestamp")  # 记录最后更新时间
         last_update_by = ori_ptxn.get("last_update_by")  # 记录最后更新人
         mer_unit = "管理机构"  # 管理机构    必填  缺码表
-        data_transfer_dt = comm.process_time(int(stiftime.replace("-",""))+1)  # 数据传输日期    必填
+        data_transfer_dt = self.update_time  # 数据传输日期    必填
 
         all_col = [id, tran_kd, uuid, trace_id, card_bin, card_type, card_type_pboc, card_product, card_brand, token_pan, encrypt_pan, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_datetime, orig_local_tran_datetime, tsdr, tran_amount, sett_amount, tran_curr_cd, sett_curr_cd, sett_conv_rate, sett_date, crat_u, crat_c, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, acq_ins_id_cd, fwd_ins_id_cd, TRCD, CBIF, channel_type, TSTP, cash_back_amount, cash_back_indicator, tran_type, dspt_tran_type, org_stan, tran_buss_st, tran_advice_st, mcht_data_srv, additional_data, insert_timestamp, insert_by, last_update_timestamp, last_update_by, mer_unit, data_transfer_dt]
 
@@ -716,7 +721,7 @@ class MakeData:
 
         :return:
         """
-        unit_code = self.unit_code  # 成员机构代码  必填
+        unit_code = ''  # 成员机构代码  必填
         warn_dt = ""  # 预警日期  必填
         rule_id = ""  # 预警规则  必填
         rule_type = comm.make_rule_type()  # 预警类型  必填

@@ -66,7 +66,7 @@ def __control_file(file_name, file_date_time, file_num,filepath, control_file_ti
             # print('-----------------创建{}-------------------'.format(file_full))
             f.write(','.join([filename, str(filenum)]) + "\n")
 
-def main(beg, end, stif_time, file_date_time, control_file_time):
+def main(beg, end, stif_time, file_date_time):
     # 创建存储文件夹
     file_path1 = os.path.join(zip_floder, 'custom', file_date_time)
     file_path2 = os.path.join(zip_floder, 'txn', file_date_time)
@@ -76,9 +76,15 @@ def main(beg, end, stif_time, file_date_time, control_file_time):
     if not os.path.exists(file_path2):
         os.makedirs(file_path2)
 
+    # 控制文件时间戳
+    control_file_time = round(time.time() * 1000)
 
     currt_time = time.strftime('%Y%m%d', time.localtime())
-    makedata = MakeData()
+    update_date = comm.process_time(int(stif_time.replace("-",""))+1)
+    random_time = comm.make_time()
+    update_time = update_date+random_time.replace(':',"")
+
+    makedata = MakeData(update_time)
     # 日期格式转换
     stif_time = comm.turn_date10(stif_time)
 

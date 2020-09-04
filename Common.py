@@ -203,7 +203,8 @@ class CommonFunction:
             '12',  # 军人或武警身份证件
             '13',  # 港澳台通行证
             '14',  # 外国公民护照
-            '19']  # 其他个人有效证件(需进一步说明)
+            '19' # 其他个人有效证件(需进一步说明)
+            ]
         )
         else:
             cstp = random.choice([
@@ -211,6 +212,16 @@ class CommonFunction:
                 '29']  # 其他机构代码(需进一步说明)
             )
         return cstp
+
+    def cert_explain(self, cert_type):
+        """
+        证件类型，传入证件种类代码，返回中文名称
+        :param cert_type:
+        :return:
+        """
+        exp = {'11': "居民身份证或临时身份证", '12': "军人或武警身份证件", '13': "港澳台通行证", '14': "外国公民护照", '19': "其他个人有效证件(需进一步说明)"}
+        return exp.get(cert_type, '19')
+
 
     def person_cert_num(self):  # 个人证件号码
         ctid = self.random_num(18)
@@ -265,6 +276,17 @@ class CommonFunction:
             return '-'.join([make_year, make_month, make_day])
         else:
             return make_year + make_month + make_day
+
+    def end_date(self, typ, dat):
+        """结束日期"""
+        from datetime import date
+        if typ == 'c':
+            begin_date = date(year=int(dat[:4]),month=int(dat[4:6]),day=int(dat[6:]))
+            dd = fake.date_between(begin_date)
+        else:
+            dd = ''
+        return dd
+
     # 国籍
     def chiose_country(self):
         countrys = random.choice(['CHN', 'ALB', 'DZA', 'AFG', 'ARG', 'ARE', 'ABW', 'OMN', 'AZE', 'EGY', 'ETH', 'IRL', 'EST', 'AND', 'AGO', 'AIA', 'ATG', 'AUT', 'ALA', 'AUS', 'MAC', 'BRB', 'PNG', 'BHS', 'PAK', 'PRY', 'PSE', 'BHR', 'PAN', 'BRA', 'BLR', 'BMU', 'BGR', 'MNP', 'BEN', 'BEL', 'ISL', 'PRI', 'BIH', 'POL', 'BOL', 'BLZ', 'BWA', 'BTN', 'BFA', 'BDI', 'BVT', 'PRK', 'GNQ', 'DNK', 'DEU', 'TLS', 'TGO', 'DOM', 'DMA', 'RUS', 'ECU', 'ERI', 'FRA', 'FRO', 'PYF', 'GUF', 'ATF', 'MAF', 'VAT', 'PHL', 'FJI', 'FIN', 'CPV', 'GMB', 'COG', 'COD', 'COL', 'CRI', 'GRD', 'GRL', 'GEO', 'GGY', 'CUB', 'GLP', 'GUM', 'GUY', 'KAZ', 'HTI', 'KOR', 'NLD', 'BES', 'SXM', 'HMD', 'MNE', 'HND', 'KIR', 'DJI', 'KGZ', 'GIN', 'GNB', 'CAN', 'GHA', 'GAB', 'KHM', 'CZE', 'ZWE', 'CMR', 'QAT', 'CYM', 'CCK', 'COM', 'CIV', 'KWT', 'HRV', 'KEN', 'COK', 'CUW', 'LVA', 'LSO', 'LAO', 'LBN', 'LTU', 'LBR', 'LBY', 'LIE', 'REU', 'LUX', 'RWA', 'ROU', 'MDG', 'IMN', 'MDV', 'FLK', 'MLT', 'MWI', 'MYS', 'MLI', 'MKD', 'MHL', 'MTQ', 'MYT', 'MUS', 'MRT', 'USA', 'UMI', 'ASM', 'VIR', 'MNG', 'MSR', 'BGD', 'PER', 'FSM', 'MMR', 'MDA', 'MAR', 'MCO', 'MOZ', 'MEX', 'NKR', 'NAM', 'ZAF', 'ATA', 'SGS', 'SSD', 'NRU', 'NPL', 'NIC', 'NER', 'NGA', 'NIU', 'NOR', 'NFK', 'PLW', 'PCN', 'PRT', 'JPN', 'SWE', 'CHE', 'SLV', 'WSM', 'SRB', 'SLE', 'SEN', 'CYP', 'SYC', 'SAU', 'BLM', 'CXR', 'STP', 'SHN', 'KNA', 'LCA', 'SMR', 'SPM', 'VCT', 'LKA', 'SVK', 'SVN', 'SJM', 'SWZ', 'SDN', 'SUR', 'SLB', 'SOM', 'TJK', 'THA', 'TZA', 'TON', 'TCA', 'TTO', 'TUN', 'TUV', 'TUR', 'TKM', 'TKL', 'WLF', 'VUT', 'GTM', 'VEN', 'BRN', 'UGA', 'UKR', 'URY', 'UZB', 'ESP', 'ESH', 'GRC', 'HKG', 'SGP', 'NCL', 'NZL', 'HUN', 'SYR', 'JAM', 'ARM', 'YEM', 'IRQ', 'IRN', 'ISR', 'ITA', 'IND', 'IDN', 'GBR', 'VGB', 'IOT', 'JOR', 'VNM', 'ZMB', 'JEY', 'TCD', 'GIB', 'CHL', 'CAF', 'TWN'])
@@ -424,6 +446,25 @@ class CommonFunction:
         ])
         return code
 
+    def org_type2(self):
+        '''组织机构类别'''
+        code = random.choice([
+            "001",  # 个人独资企业
+            "002",  # 合伙企业
+            "003",  # 公司制企业
+            "004"  # 国有企业
+        ])
+        return code
+
+    def busi_line(self):
+        """机构业务类型"""
+        bl = random.choice([
+            "01",  # 发卡
+            "02",  # ATM收单
+            "03",  # 手工取现
+            "04"  # 商户收单
+        ])
+        return bl
 
     def random_code(self):
         '''多个共用，具体含义见字段注释'''
@@ -499,9 +540,9 @@ class CommonFunction:
     def make_tran_kd(self):
         '''交易种类, 差错交易占1%，
         '00',  # 差错交易
-        '10'  # 普通交易
+        '01'  # 普通交易
             '''
-        return random.choice(['10' if n%60 == 0 else '00' for n in range(100)])
+        return random.choice(['01' if n%60 == 0 else '00' for n in range(100)])
 
 
     def make_STCT_data(self):

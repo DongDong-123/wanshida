@@ -67,7 +67,7 @@ def running():
     o = datannum
 
     for m in range(3):
-        control_file_time = round(time.time() * 1000)
+
         print('客户号起始编号{}'.format(n))
         print('数据交易日期{}'.format(t))
         # st = datetime.datetime.strptime(str(t), "%Y%m%d")
@@ -76,7 +76,7 @@ def running():
         # stif_time = "{}100000".format(t)
         stif_time = "{}".format(t)
 
-        main(n, n + o, stif_time, file_date_time, control_file_time)
+        main(n, n + o, stif_time, file_date_time)
         n += o
         t += 1
         t = int(comm.process_time(t))  # 处理日期
