@@ -68,50 +68,51 @@ class MakeData:
         aml_phone = comm.make_tel_num()  # 反洗钱联系人电话    必填
         aml_fax = ''  # 反洗钱联系人传真
         aml_email = comm.make_email_data()  # 反洗钱联系人电子邮箱    应填
-        aml_address = comm.random_code()  # 反洗钱联系人使用地址
+        # aml_address = comm.random_code()  # 反洗钱联系人使用地址
         client_tp = comm.cust_tyep()  # 客户类别    必填
         lfa_type = comm.org_type()  # 组织机构类别    应填
-        lfa_type_explain = ''  # 组织机构其他类别说明
+        # lfa_type_explain = ''  # 组织机构其他类别说明
         found_date = comm.make_date(-20, -1)  # 成立日期    必填
         assets_size = ''  # 资产规模(美元，当年）
         country = comm.chiose_country()  # 注册国家    必填
         other_oper_country = fake.country()  # 其他运营国家  随机国家
         desc_business = fake.paragraph()  # 经营说明  随机一句话
-        tin = ''  # TIN
+        # tin = ''  # TIN
         busi_type = ''  # 业务类型    必填
         industry_type = ''  # 主体的行业类别    必填
-        indu_code = ''  # 主体的行业代码原值    应填
-        indu_code_nt = ''  # 主体的行业代码原值说明    应填
+        # indu_code = ''  # 主体的行业代码原值    应填
+        # indu_code_nt = ''  # 主体的行业代码原值说明    应填
         legal_p_name = ''  # 主体的法定代表人姓名    必填
         legal_p_ename = ''  # 主体的法定代表人英文姓名
         legal_p_cert_tp = ''  # 主体的法定代表人身份证件类型    必填
         legal_p_cert_explain = ''  # 主体的法定代表人证件类型说明    必填
         legal_p_cert_num = ''  # 主体的法定代表人身份证件号码    必填
         legal_cert_validity = ''  # 主体的法定代表人证件有效期    必填
-        crid_country = ''
+        # crid_country = ''
         registered_capital = comm.random_num(8)  # 注册资本
         registered_capital_currency = ''  # 注册资本金币种
         business_scope = '组织文化艺术交流活动；文艺创作；体育运动项目经营（高危险性体育项目除外）；承办展览展示；婚庆服务；摄影服务；摄像服务；公共关系服务；礼仪服务；模特服务；会议服务；大型活动组织服务；经济信息咨询；婚纱礼服出租；花卉租摆；舞台策划；摄影器材租赁；舞台灯光音响设计；电脑图文设计；电脑动画设计；设计、制作、代理、发布广告。'  # 经营范围    必填
         enps_ecic_sectors = ''  # 企业经济成份
-        scale = ''  # 企业人数规模
+        # scale = ''  # 企业人数规模
         establish_busi_date = comm.make_date(-10, -1)  # 建立业务日期    必填
         end_busi_date = ''  # 终止业务日期    （注销的情况下）应填
-        self.unit_code = ''  # 成员机构代码
-        remark = fake.paragraph()  # 备注  随机一段话
+        # self.unit_code = ''  # 成员机构代码
+        # remark = fake.paragraph()  # 备注  随机一段话
         stat_flag_ori = comm.cust_status()  # 客户状态原值    应填
         stat_flag = comm.cust_status()  # 客户状态    必填
         mer_unit = ''  # 管理机构    必填
         account_manager = ''  # 客户经理
-        reals = comm.make_reals_data()  # 客户真实有效性
-        complex = comm.make_complex_data()  # 非自然人结构复杂度
-        clear = comm.make_clear_data()  # 非自然人股权可辨识度
+        # reals = comm.make_reals_data()  # 客户真实有效性
+        # complex = comm.make_complex_data()  # 非自然人结构复杂度
+        # clear = comm.make_clear_data()  # 非自然人股权可辨识度
         create_time = comm.data_time()  # 数据创建时间    必填
         update_time = comm.data_time()  # 数据更新时间    必填
         creator = comm.random_num(5)  # 数据创建人id    必填
         updator = comm.random_num(5)  # 数据更新人id    必填
 
         # all_col = [self.csnm, ctnm, ctsnm, cten, ctsen, busi_name, appli_country, sub_company, former_name, citp, citp_nt, ctid, ctid_edt, state, city, address, post_code, tel, fax, m_state, m_city, m_address, m_post_code, m_tel, m_fax, pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, pr_address, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, aml_address, client_tp, lfa_type, lfa_type_explain, fud_date, assets_size, country, other_oper_country, desc_business, tin, busi_type, ctvc, indu_code, indu_code_nt, crnm, crit, crit_nt, crid, crid_edt, reg_cptl, reg_cptl_code, remark_ctvc, eecp, scale, rgdt, cls_dt, unit_code, remark, stat_flag_ori, stat_flag, mer_unit, cmgr, act_cd, acc_type1, bank_acc_name, cabm, country_2, statement_type, reals, complex, clear, data_crdt, data_cruser, data_updt, data_upuser]
-        all_col = [self.csnm, self.ctnm, custormer_sname, custormer_ename, custormer_sename, busi_name, appli_country, sub_company, former_name, cert_tp, cert_tp_explain, cert_num, cert_validity, state, city, address, post_code, tel, fax, m_city, m_state, m_address, m_post_code, m_tel, m_fax, pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, pr_address, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, aml_address, client_tp, lfa_type, lfa_type_explain, found_date, assets_size, country, other_oper_country, desc_business, tin, busi_type, industry_type, indu_code, indu_code_nt, legal_p_name, legal_p_ename, legal_p_cert_tp, legal_p_cert_explain, legal_p_cert_num, legal_cert_validity, crid_country, registered_capital, registered_capital_currency, business_scope, enps_ecic_sectors, scale, establish_busi_date, end_busi_date, self.unit_code, remark, stat_flag_ori, stat_flag, mer_unit, account_manager, reals, complex, clear, create_time, update_time, creator, updator]
+        # all_col = [self.csnm, self.ctnm, custormer_sname, custormer_ename, custormer_sename, busi_name, appli_country, sub_company, former_name, cert_tp, cert_tp_explain, cert_num, cert_validity, state, city, address, post_code, tel, fax, m_city, m_state, m_address, m_post_code, m_tel, m_fax, pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, pr_address, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, aml_address, client_tp, lfa_type, lfa_type_explain, found_date, assets_size, country, other_oper_country, desc_business, tin, busi_type, industry_type, indu_code, indu_code_nt, legal_p_name, legal_p_ename, legal_p_cert_tp, legal_p_cert_explain, legal_p_cert_num, legal_cert_validity, crid_country, registered_capital, registered_capital_currency, business_scope, enps_ecic_sectors, scale, establish_busi_date, end_busi_date, self.unit_code, remark, stat_flag_ori, stat_flag, mer_unit, account_manager, reals, complex, clear, create_time, update_time, creator, updator]
+        all_col = [self.csnm, self.ctnm, custormer_ename, custormer_sename, busi_name, appli_country, sub_company, former_name, cert_tp, cert_tp_explain, cert_num, cert_validity, state, city, address, post_code, tel, fax,pr_mr_ms, pr_name, pr_title, pr_phone, pr_fax, pr_email, sec_mr_ms, sec_name, sec_title, sec_phone, sec_fax, sec_email, sec_address, aml_mr_ms, aml_name, aml_title, aml_phone, aml_fax, aml_email, client_tp, lfa_type, found_date, assets_size, country, other_oper_country, desc_business, busi_type, industry_type, legal_p_name, legal_p_ename, legal_p_cert_tp, legal_p_cert_explain, legal_p_cert_num, legal_cert_validity, registered_capital, registered_capital_currency, business_scope, enps_ecic_sectors, establish_busi_date, end_busi_date, stat_flag_ori, stat_flag, mer_unit, account_manager,create_time, update_time, creator, updator]
         # return all_col
         return ['{}'.format(x) for x in all_col]
 
@@ -124,7 +125,7 @@ class MakeData:
         csnm = self.csnm  # 客户号  必填
         custormer_name = self.ctnm  # 客户名称  必填
         rel_tp = comm.relation_type()  # 关系类型  必填
-        rel_layer = comm.rel_layer()  # 关系人层级
+        # rel_layer = comm.rel_layer()  # 关系人层级
         rel_cstp = '2'  # 关系人类别  必填
         if rel_cstp == '2':
             fir_name = comm.org_name()  # 关系人first name  必填
@@ -134,37 +135,38 @@ class MakeData:
             fir_name = comm.person_fir_name()
             sec_name = comm.person_fir_name()  # 关系人second name
             last_name = comm.person_fir_name()  # 关系人last name
-        cert_tp = comm.cert_type()  # 关系人证件类型
-        cert_tp_explain = ''  # 关系人证件类型说明
-        if rel_cstp == '1':
-            cert_num = comm.random_num(18)  # 临时18位数字字符串
-            # ctid = comm.person_cert_num()  # 关系人证件号码
-        else:
-            cert_num = comm.org_cert_num()
-        cert_validity = comm.make_date()  # 关系人证件有效期
-        rcnt = comm.chiose_country()  # 关系人国籍/国家
+        # cert_tp = comm.cert_type()  # 关系人证件类型
+        # cert_tp_explain = ''  # 关系人证件类型说明
+        # if rel_cstp == '1':
+        #     cert_num = comm.random_num(18)  # 临时18位数字字符串
+        #     #ctid = comm.person_cert_num()  # 关系人证件号码
+        # else:
+        #     cert_num = comm.org_cert_num()
+        # cert_validity = comm.make_date()  # 关系人证件有效期
+        # rcnt = comm.chiose_country()  # 关系人国籍/国家
         dob = ''  # 关系人出生日期
         cob = fake.country()  # 关系人出生国家
         years_comp = comm.random_num(1)  # 关系人入职年限
         years_indu = comm.random_num(1)  # 关系人从业年限
-        rel_prov = ''  # 关系人省
-        rel_city = ''  # 关系人市
-        rel_area = ''  # 关系人区县
-        rear = fake.address()  # 关系人详细地址
-        retl = fake.phone_number()  # 关系人联系电话
-        rel_phone = fake.phone_number()  # 关系人手机
-        rel_fax = comm.random_num(8)  # 关系人传真
-        rel_email = fake.ascii_email()  # 关系人电子邮箱
-        gov_owned = comm.make_yes_no()  # 关系人是否国有持股
+        # rel_prov = ''  # 关系人省
+        # rel_city = ''  # 关系人市
+        # rel_area = ''  # 关系人区县
+        # rear = fake.address()  # 关系人详细地址
+        # retl = fake.phone_number()  # 关系人联系电话
+        # rel_phone = fake.phone_number()  # 关系人手机
+        # rel_fax = comm.random_num(8)  # 关系人传真
+        # rel_email = fake.ascii_email()  # 关系人电子邮箱
+        # gov_owned = comm.make_yes_no()  # 关系人是否国有持股
         hold_per = ''  # 持股比例
-        hold_amt = ""  # 持股金额
-        remark = fake.paragraph()  # 备注
+        # hold_amt = ""  # 持股金额
+        # remark = fake.paragraph()  # 备注
         create_time = comm.data_time()  # 数据创建时间  必填
         creator = comm.random_num(5)  # 数据创建人id  必填
         update_time = comm.data_time()  # 数据更新时间  必填
         updator = comm.random_num(5)  # 数据更新人id  必填
 
-        all_col = [csnm, custormer_name, rel_tp, rel_layer, rel_cstp, fir_name, sec_name, last_name, cert_tp, cert_tp_explain, cert_num, cert_validity, rcnt, dob, cob, years_comp, years_indu, rel_prov, rel_city, rel_area, rear, retl, rel_phone, rel_fax, rel_email, gov_owned, hold_per, hold_amt, remark, create_time, update_time, creator, updator]
+        all_col = [csnm, custormer_name, rel_tp, rel_cstp, fir_name, sec_name, last_name,dob, cob, years_comp, years_indu, hold_per, create_time, update_time, creator, updator]
+        # all_col = [csnm, custormer_name, rel_tp, rel_layer, rel_cstp, fir_name, sec_name, last_name, cert_tp, cert_tp_explain, cert_num, cert_validity, rcnt, dob, cob, years_comp, years_indu, rel_prov, rel_city, rel_area, rear, retl, rel_phone, rel_fax, rel_email, gov_owned, hold_per, hold_amt, remark, create_time, update_time, creator, updator]
         # return all_col
         return ['{}'.format(x) for x in all_col]
 
@@ -179,15 +181,15 @@ class MakeData:
         info_a_bool2 = comm.make_yes_no()  # 是否有反洗钱或反恐融资的程序或制度
         info_a_bool3 = comm.make_yes_no_unused()  # 监管机构认为该制度是否得当
         supervisor_name = comm.make_name_data(3)  # 监管人员姓名
-        inspection_time = comm.make_time()  # 检查时间
+        # inspection_time = comm.make_time()  # 检查时间
         info_a_explain = "".join(fake.paragraphs())  # 制度不完善地方
         info_a_explain2 = ''  # 完善时间及方式
         info_b_bool = comm.make_yes_no()  # 是否有反洗钱专职人员
         info_b_bool2 = comm.make_yes_no()  # 是否有完整的风险评估程序
         info_b_bool3 = comm.make_yes_no()  # 是否有反洗钱相关的员工培训
         info_b_explain = "".join(fake.paragraphs())  # 员工培训制度
-        info_c_bool = comm.make_yes_no()  # 是否被禁止在注册地进行银行业务
-        info_c_explain = "".join(fake.paragraphs())  # 原因
+        # info_c_bool = comm.make_yes_no()  # 是否被禁止在注册地进行银行业务
+        # info_c_explain = "".join(fake.paragraphs())  # 原因
         info_d_bool = comm.make_yes_no()  # 是否在任何国家、地区都没有实体存在的机构
         info_d_bool2 = comm.make_yes_no()  # 是否禁止与没有任何实体存在的机构建立关系
         info_d_explain = "".join(fake.paragraphs())  # 原因
@@ -197,13 +199,13 @@ class MakeData:
         info_e_bool = comm.make_yes_no()  # 是否将任何反洗钱或制裁责任外包
         info_e_bool2 = comm.make_yes_no()  # 是否对第三方进行监督
         info_e_bool3 = comm.make_yes_no()  # 监督是否在程序中留痕
-        supervision_trace_doc = ''  # 相关监督留痕文件
+        # supervision_trace_doc = ''  # 相关监督留痕文件
         info_f_bool = comm.make_yes_no()  # 是否将万事达相关业务进行名单预警
         list_type = comm.make_mingdan_type()  # 名单种类
         other_list_type = ''  # 其他名单种类
-        info_f_explain = "".join(fake.paragraphs())  # 原因
+        # info_f_explain = "".join(fake.paragraphs())  # 原因
         info_g_bool = comm.make_yes_no()  # 是否存在影响申请的诉讼或其他
-        info_g_explain = "".join(fake.paragraphs())  # 原因
+        # info_g_explain = "".join(fake.paragraphs())  # 原因
         info_h_bool = comm.make_yes_no()  # 是否参与允许转账的业务
         info_h_explain = "".join(fake.paragraphs())  # 项目细节描述
         data_crdt = comm.make_trade_time19()  # 数据创建时间
@@ -211,7 +213,8 @@ class MakeData:
         data_updt = comm.make_trade_time19()  # 数据更新时间
         data_upuser = comm.random_num(8)  # 数据更新人id
 
-        all_col = [ctif_id, ctnm, info_a_bool, laws_name, info_a_bool2, info_a_bool3, supervisor_name, inspection_time, info_a_explain, info_a_explain2, info_b_bool, info_b_bool2, info_b_bool3, info_b_explain, info_c_bool, info_c_explain, info_d_bool, info_d_bool2, info_d_explain, payment_card_org , compliance_org, chartered_institution, info_e_bool, info_e_bool2, info_e_bool3, supervision_trace_doc, info_f_bool, list_type, other_list_type, info_f_explain, info_g_bool, info_g_explain, info_h_bool, info_h_explain, data_crdt, data_cruser, data_updt, data_upuser]
+        # all_col = [ctif_id, ctnm, info_a_bool, laws_name, info_a_bool2, info_a_bool3, supervisor_name, inspection_time, info_a_explain, info_a_explain2, info_b_bool, info_b_bool2, info_b_bool3, info_b_explain, info_c_bool, info_c_explain, info_d_bool, info_d_bool2, info_d_explain, payment_card_org , compliance_org, chartered_institution, info_e_bool, info_e_bool2, info_e_bool3, supervision_trace_doc, info_f_bool, list_type, other_list_type, info_f_explain, info_g_bool, info_g_explain, info_h_bool, info_h_explain, data_crdt, data_cruser, data_updt, data_upuser]
+        all_col = [ctif_id, ctnm, info_a_bool, laws_name, info_a_bool2, info_a_bool3, supervisor_name,  info_a_explain, info_a_explain2, info_b_bool, info_b_bool2, info_b_bool3, info_b_explain, info_d_bool, info_d_bool2, info_d_explain, payment_card_org , compliance_org, chartered_institution, info_e_bool, info_e_bool2, info_e_bool3, info_f_bool, list_type, other_list_type, info_g_bool, info_h_bool, info_h_explain, data_crdt, data_cruser, data_updt, data_upuser]
         # return all_col
         return ['{}'.format(x) for x in all_col]
 
@@ -226,19 +229,19 @@ class MakeData:
         info2_b_bool = comm.make_yes_no()  # 政府当局能否对申请人处以罚款、暂停或接管其业务以确保其遵守适用的审慎标准
         info2_b_explain = ""  # 原因
         agents_num = ""  # 分销渠道及代理商的数目
-        aml_role_explain = ""  # 反洗钱官或反洗钱合规部角色描述
+        # aml_role_explain = ""  # 反洗钱官或反洗钱合规部角色描述
         compliance_name = ""  # 合规部负责人姓名
-        aml_workers = ""  # 反洗钱工作人数
+        # aml_workers = ""  # 反洗钱工作人数
         aml_position = ""  # 反洗钱员工职位
         info2_c_bool = comm.make_yes_no()  # 是否有内部审计职能或其他独立第三方定期评估其“反洗钱”政策和程序
-        info2_c_bool2 = comm.make_yes_no()  # 是否发现任何与“反洗钱”相关的缺陷
-        info2_c_explain = ""  # 请说明已发现的不足之处和解决问题的补救计划
-        info2_d_bool = comm.make_yes_no()  # 是否对其客户进行监督
-        info2_d_explain = ""  # 描述监督程序
+        # info2_c_bool2 = comm.make_yes_no()  # 是否发现任何与“反洗钱”相关的缺陷
+        # info2_c_explain = ""  # 请说明已发现的不足之处和解决问题的补救计划
+        # info2_d_bool = comm.make_yes_no()  # 是否对其客户进行监督
+        # info2_d_explain = ""  # 描述监督程序
         info2_e_bool = comm.make_yes_no()  # 是否有对其客户信息进行尽职调查的程序
         info2_f_bool = comm.make_yes_no()  # 申请人是否对政治敏感人士有足够的认识和了解
-        info2_g_bool = comm.make_yes_no()  # 万事达相关业务是否存在客户信息不完全或受益人信息不完整
-        info2_g_explain = ""  # 原因
+        # info2_g_bool = comm.make_yes_no()  # 万事达相关业务是否存在客户信息不完全或受益人信息不完整
+        # info2_g_explain = ""  # 原因
         info2_h_bool = comm.make_yes_no()  # 是否进行交易监测
         info2_h_explain = ""  # 确认可疑后的行为
         info2_i_bool = comm.make_yes_no()  # 是否可以上报可疑
@@ -248,7 +251,8 @@ class MakeData:
         data_updt = comm.make_trade_time19()  # 数据更新时间
         data_upuser = comm.random_num(8)  # 数据更新人id
 
-        all_col = [ctif_id, ctnm, info2_a_bool, info2_a_explain, info2_b_bool, info2_b_explain, agents_num, aml_role_explain, compliance_name, aml_workers, aml_position, info2_c_bool, info2_c_bool2, info2_c_explain, info2_d_bool, info2_d_explain, info2_e_bool, info2_f_bool, info2_g_bool, info2_g_explain, info2_h_bool, info2_h_explain, info2_i_bool, info2_i_explain, data_crdt, data_cruser, data_updt, data_upuser]
+        # all_col = [ctif_id, ctnm, info2_a_bool, info2_a_explain, info2_b_bool, info2_b_explain, agents_num, aml_role_explain, compliance_name, aml_workers, aml_position, info2_c_bool, info2_c_bool2, info2_c_explain, info2_d_bool, info2_d_explain, info2_e_bool, info2_f_bool, info2_g_bool, info2_g_explain, info2_h_bool, info2_h_explain, info2_i_bool, info2_i_explain, data_crdt, data_cruser, data_updt, data_upuser]
+        all_col = [ctif_id, ctnm, info2_a_bool, info2_a_explain, info2_b_bool, info2_b_explain, agents_num, compliance_name, aml_position, info2_c_bool, info2_e_bool, info2_f_bool, info2_h_bool, info2_h_explain, info2_i_bool, info2_i_explain, data_crdt, data_cruser, data_updt, data_upuser]
         # return all_col
         return ["{}".format(x) for x in all_col]
 
@@ -258,74 +262,76 @@ class MakeData:
         """
         ctif_id = self.csnm  # 客户号
         ctnm = self.ctnm  # 客户名称
-        fi_mcard_principal = comm.make_yes_no()  # 万事达卡-总部合作
-        fi_mcard_affillate = comm.make_yes_no()  # 万事达卡-分支机构合作
-        fi_mcard_association = comm.make_yes_no()  # 万事达卡-代理机构合作
+        # fi_mcard_principal = comm.make_yes_no()  # 万事达卡-总部合作
+        # fi_mcard_affillate = comm.make_yes_no()  # 万事达卡-分支机构合作
+        # fi_mcard_association = comm.make_yes_no()  # 万事达卡-代理机构合作
         fi_mcard_issuing = comm.make_yes_no()  # 万事达卡-发卡
         fi_mcard_acquiring_merchants = comm.make_yes_no()  # 万事达卡-商户收单
         fi_mcard_acquiring_atm = comm.make_yes_no()  # 万事达卡-ATM收单
         fi_mcard_acquiring_mcd = comm.make_yes_no()  # 万事达卡-手动付款收单
-        fi_mcard_optrpt_msd = comm.make_yes_no()  # 万事达卡-国内发送
-        fi_mcard_optrpt_ms = comm.make_yes_no()  # 万事达卡-moneysend
-        fi_mcard_optrpt_mscb = comm.make_yes_no()  # 万事达卡-跨境发送
-        fi_mcard_optrpt_mpqr = comm.make_yes_no()  # 万事达卡-masterpass QR
-        fi_mstro_principal = comm.make_yes_no()  # 万事顺卡-总部合作
-        fi_mstro_affillate = comm.make_yes_no()  # 万事顺卡-分支机构合作
-        fi_mstro_issuing = comm.make_yes_no()  # 万事顺卡-发卡
-        fi_mstro_acquiring_merchants = comm.make_yes_no()  # 万事顺卡-商户收单
-        fi_mstro_acquiring_atm = comm.make_yes_no()  # 万事顺卡-ATM收单
-        fi_mstro_optrpt_msd = comm.make_yes_no()  # 万事顺卡-国内发送
-        fi_mstro_optrpt_ms = comm.make_yes_no()  # 万事顺卡-moneysend
-        fi_mstro_optrpt_mscb = comm.make_yes_no()  # 万事顺卡-跨境发送
-        fi_mstro_optrpt_mpqr = comm.make_yes_no()  # 万事顺卡-masterpass QR
-        fi_cirrus_principal = comm.make_yes_no()  # 顺风卡-总部合作
-        fi_cirrus_affillate = comm.make_yes_no()  # 顺风卡-分支机构合作
-        fi_cirrus_issuing_atm = comm.make_yes_no()  # 顺风卡-发卡
-        fi_cirrus_acquiring_atm = comm.make_yes_no()  # 顺风卡-ATM收单
-        fi_cirrus_optp2p_ms = comm.make_yes_no()  # 顺风卡-moneysend
-        fi_cirrus_optp2p_mscb = comm.make_yes_no()  # 顺风卡-跨境发送
-        fi_cirrus_optp2p_mpqr = comm.make_yes_no()  # 顺风卡-masterpass QR
-        cgi_mcard_principal = comm.make_yes_no()  # cgi-万事达卡-总部合作
-        cgi_mcard_affillate = comm.make_yes_no()  # cgi-万事达卡-分支机构合作
-        cgi_mcard_issuing_credit = comm.make_yes_no()  # cgi-万事达卡-发卡-信用卡
-        cgi_mcard_issuing_debit = comm.make_yes_no()  # cgi-万事达卡-发卡-借记卡
-        cgi_mcard_issuing_prepaid = comm.make_yes_no()  # cgi-万事达卡-发卡-预付卡
-        cgi_mcard_acquiring_atm = comm.make_yes_no()  # cgi-万事达卡-ATM收单
-        cgi_mcard_acquiring_mcd = comm.make_yes_no()  # cgi-万事达卡-手动付款收单
-        cgi_mcard_acquiring_merchants = comm.make_yes_no()  # cgi-万事达卡-商户收单
-        cgi_mcard_acquiring_poi = comm.make_yes_no()  # cgi-万事达卡-POI收单
-        cgi_mcard_optrpt_msd = comm.make_yes_no()  # cgi-万事达卡-国内发送
-        cgi_mcard_optrpt_ms = comm.make_yes_no()  # cgi-万事达卡-moneysend
-        cgi_mcard_optrpt_mscb = comm.make_yes_no()  # cgi-万事达卡-跨境发送
-        cgi_mcard_optrpt_mpqr = comm.make_yes_no()  # cgi-万事达卡-masterpass QR
-        cgi_mstro_principal = comm.make_yes_no()  # cgi-万事顺卡-总部合作
-        cgi_mstro_affillate = comm.make_yes_no()  # cgi-万事顺卡-分支机构合作
-        cgi_mstro_issuing_debit = comm.make_yes_no()  # cgi-万事顺卡-发卡-借记卡
-        cgi_mstro_issuing_prepaid = comm.make_yes_no()  # cgi-万事顺卡-发卡-预付卡
-        cgi_mstro_acquiring_atm = comm.make_yes_no()  # cgi-万事顺卡-ATM收单
-        cgi_mstro_acquiring_merchants = comm.make_yes_no()  # cgi-万事顺卡-商户收单
-        cgi_mstro_acquiring_poi = comm.make_yes_no()  # cgi-万事顺卡-POI收单
-        cgi_mstro_optrpt_msd = comm.make_yes_no()  # cgi-万事顺卡-国内发送
-        cgi_mstro_optrpt_ms = comm.make_yes_no()  # cgi-万事顺卡-moneysend
-        cgi_mstro_optrpt_mscb = comm.make_yes_no()  # cgi-万事顺卡-跨境发送
-        cgi_mstro_optrpt_mpqr = comm.make_yes_no()  # cgi-万事顺卡-masterpass QR
-        cgi_cirrus_principal = comm.make_yes_no()  # cgi-顺风卡-总部合作
-        cgi_cirrus_affillate = comm.make_yes_no()  # cgi-顺风卡-分支机构合作
-        cgi_cirrus__issuing = comm.make_yes_no()  # cgi-顺风卡-发卡
-        cgi_cirrus_acquiring_atm = comm.make_yes_no()  # cgi-顺风卡-ATM收单
-        cgi_cirrus_optp2p_ms = comm.make_yes_no()  # cgi-顺风卡-moneysend
-        cgi_cirrus_optp2p_mscb = comm.make_yes_no()  # cgi-顺风卡-跨境发送
-        cgi_cirrus_optp2p_mpqr = comm.make_yes_no()  # cgi-万顺风卡-masterpass QR
-        info_a_bool = comm.make_yes_no_unused()  # 如果发行借记卡、信用卡、预付卡，将是否对现金交易进行控制
-        info_a_explain = fake.paragraph()  # 原因
-        additional_services_transfer = comm.make_yes_no()  # 是否提供额外服务
-        acquiring_rePower = comm.make_yes_no()  #
+        # fi_mcard_optrpt_msd = comm.make_yes_no()  # 万事达卡-国内发送
+        # fi_mcard_optrpt_ms = comm.make_yes_no()  # 万事达卡-moneysend
+        # fi_mcard_optrpt_mscb = comm.make_yes_no()  # 万事达卡-跨境发送
+        # fi_mcard_optrpt_mpqr = comm.make_yes_no()  # 万事达卡-masterpass QR
+        # fi_mstro_principal = comm.make_yes_no()  # 万事顺卡-总部合作
+        # fi_mstro_affillate = comm.make_yes_no()  # 万事顺卡-分支机构合作
+        # fi_mstro_issuing = comm.make_yes_no()  # 万事顺卡-发卡
+        # fi_mstro_acquiring_merchants = comm.make_yes_no()  # 万事顺卡-商户收单
+        # fi_mstro_acquiring_atm = comm.make_yes_no()  # 万事顺卡-ATM收单
+        # fi_mstro_optrpt_msd = comm.make_yes_no()  # 万事顺卡-国内发送
+        # fi_mstro_optrpt_ms = comm.make_yes_no()  # 万事顺卡-moneysend
+        # fi_mstro_optrpt_mscb = comm.make_yes_no()  # 万事顺卡-跨境发送
+        # fi_mstro_optrpt_mpqr = comm.make_yes_no()  # 万事顺卡-masterpass QR
+        # fi_cirrus_principal = comm.make_yes_no()  # 顺风卡-总部合作
+        # fi_cirrus_affillate = comm.make_yes_no()  # 顺风卡-分支机构合作
+        # fi_cirrus_issuing_atm = comm.make_yes_no()  # 顺风卡-发卡
+        # fi_cirrus_acquiring_atm = comm.make_yes_no()  # 顺风卡-ATM收单
+        # fi_cirrus_optp2p_ms = comm.make_yes_no()  # 顺风卡-moneysend
+        # fi_cirrus_optp2p_mscb = comm.make_yes_no()  # 顺风卡-跨境发送
+        # fi_cirrus_optp2p_mpqr = comm.make_yes_no()  # 顺风卡-masterpass QR
+        # cgi_mcard_principal = comm.make_yes_no()  # cgi-万事达卡-总部合作
+        # cgi_mcard_affillate = comm.make_yes_no()  # cgi-万事达卡-分支机构合作
+        # cgi_mcard_issuing_credit = comm.make_yes_no()  # cgi-万事达卡-发卡-信用卡
+        # cgi_mcard_issuing_debit = comm.make_yes_no()  # cgi-万事达卡-发卡-借记卡
+        # cgi_mcard_issuing_prepaid = comm.make_yes_no()  # cgi-万事达卡-发卡-预付卡
+        # cgi_mcard_acquiring_atm = comm.make_yes_no()  # cgi-万事达卡-ATM收单
+        # cgi_mcard_acquiring_mcd = comm.make_yes_no()  # cgi-万事达卡-手动付款收单
+        # cgi_mcard_acquiring_merchants = comm.make_yes_no()  # cgi-万事达卡-商户收单
+        # cgi_mcard_acquiring_poi = comm.make_yes_no()  # cgi-万事达卡-POI收单
+        # cgi_mcard_optrpt_msd = comm.make_yes_no()  # cgi-万事达卡-国内发送
+        # cgi_mcard_optrpt_ms = comm.make_yes_no()  # cgi-万事达卡-moneysend
+        # cgi_mcard_optrpt_mscb = comm.make_yes_no()  # cgi-万事达卡-跨境发送
+        # cgi_mcard_optrpt_mpqr = comm.make_yes_no()  # cgi-万事达卡-masterpass QR
+        # cgi_mstro_principal = comm.make_yes_no()  # cgi-万事顺卡-总部合作
+        # cgi_mstro_affillate = comm.make_yes_no()  # cgi-万事顺卡-分支机构合作
+        # cgi_mstro_issuing_debit = comm.make_yes_no()  # cgi-万事顺卡-发卡-借记卡
+        # cgi_mstro_issuing_prepaid = comm.make_yes_no()  # cgi-万事顺卡-发卡-预付卡
+        # cgi_mstro_acquiring_atm = comm.make_yes_no()  # cgi-万事顺卡-ATM收单
+        # cgi_mstro_acquiring_merchants = comm.make_yes_no()  # cgi-万事顺卡-商户收单
+        # cgi_mstro_acquiring_poi = comm.make_yes_no()  # cgi-万事顺卡-POI收单
+        # cgi_mstro_optrpt_msd = comm.make_yes_no()  # cgi-万事顺卡-国内发送
+        # cgi_mstro_optrpt_ms = comm.make_yes_no()  # cgi-万事顺卡-moneysend
+        # cgi_mstro_optrpt_mscb = comm.make_yes_no()  # cgi-万事顺卡-跨境发送
+        # cgi_mstro_optrpt_mpqr = comm.make_yes_no()  # cgi-万事顺卡-masterpass QR
+        # cgi_cirrus_principal = comm.make_yes_no()  # cgi-顺风卡-总部合作
+        # cgi_cirrus_affillate = comm.make_yes_no()  # cgi-顺风卡-分支机构合作
+        # cgi_cirrus__issuing = comm.make_yes_no()  # cgi-顺风卡-发卡
+        # cgi_cirrus_acquiring_atm = comm.make_yes_no()  # cgi-顺风卡-ATM收单
+        # cgi_cirrus_optp2p_ms = comm.make_yes_no()  # cgi-顺风卡-moneysend
+        # cgi_cirrus_optp2p_mscb = comm.make_yes_no()  # cgi-顺风卡-跨境发送
+        # cgi_cirrus_optp2p_mpqr = comm.make_yes_no()  # cgi-万顺风卡-masterpass QR
+        # info_a_bool = comm.make_yes_no_unused()  # 如果发行借记卡、信用卡、预付卡，将是否对现金交易进行控制
+        # info_a_explain = fake.paragraph()  # 原因
+        # additional_services_transfer = comm.make_yes_no()  # 是否提供额外服务
+        # acquiring_rePower = comm.make_yes_no()  #
         data_crdt = comm.make_trade_time19()  # 数据创建时间
         data_cruser = comm.random_num(8)  # 数据创建人id
         data_updt = comm.make_trade_time19()  # 数据更新时间
         data_upuser = comm.random_num(8)  # 数据更新人id
 
-        all_col = [ctif_id, ctnm, fi_mcard_principal, fi_mcard_affillate, fi_mcard_association, fi_mcard_issuing, fi_mcard_acquiring_merchants, fi_mcard_acquiring_atm, fi_mcard_acquiring_mcd, fi_mcard_optrpt_msd, fi_mcard_optrpt_ms, fi_mcard_optrpt_mscb, fi_mcard_optrpt_mpqr, fi_mstro_principal, fi_mstro_affillate, fi_mstro_issuing, fi_mstro_acquiring_merchants, fi_mstro_acquiring_atm, fi_mstro_optrpt_msd, fi_mstro_optrpt_ms, fi_mstro_optrpt_mscb, fi_mstro_optrpt_mpqr, fi_cirrus_principal, fi_cirrus_affillate, fi_cirrus_issuing_atm, fi_cirrus_acquiring_atm, fi_cirrus_optp2p_ms, fi_cirrus_optp2p_mscb, fi_cirrus_optp2p_mpqr, cgi_mcard_principal, cgi_mcard_affillate, cgi_mcard_issuing_credit, cgi_mcard_issuing_debit, cgi_mcard_issuing_prepaid, cgi_mcard_acquiring_atm, cgi_mcard_acquiring_mcd, cgi_mcard_acquiring_merchants, cgi_mcard_acquiring_poi, cgi_mcard_optrpt_msd, cgi_mcard_optrpt_ms, cgi_mcard_optrpt_mscb, cgi_mcard_optrpt_mpqr, cgi_mstro_principal, cgi_mstro_affillate, cgi_mstro_issuing_debit, cgi_mstro_issuing_prepaid, cgi_mstro_acquiring_atm, cgi_mstro_acquiring_merchants, cgi_mstro_acquiring_poi, cgi_mstro_optrpt_msd, cgi_mstro_optrpt_ms, cgi_mstro_optrpt_mscb, cgi_mstro_optrpt_mpqr, cgi_cirrus_principal, cgi_cirrus_affillate, cgi_cirrus__issuing, cgi_cirrus_acquiring_atm, cgi_cirrus_optp2p_ms, cgi_cirrus_optp2p_mscb, cgi_cirrus_optp2p_mpqr, info_a_bool, info_a_explain, additional_services_transfer, acquiring_rePower, data_crdt, data_cruser, data_updt, data_upuser]
+        # all_col = [ctif_id, ctnm, fi_mcard_principal, fi_mcard_affillate, fi_mcard_association, fi_mcard_issuing, fi_mcard_acquiring_merchants, fi_mcard_acquiring_atm, fi_mcard_acquiring_mcd, fi_mcard_optrpt_msd, fi_mcard_optrpt_ms, fi_mcard_optrpt_mscb, fi_mcard_optrpt_mpqr, fi_mstro_principal, fi_mstro_affillate, fi_mstro_issuing, fi_mstro_acquiring_merchants, fi_mstro_acquiring_atm, fi_mstro_optrpt_msd, fi_mstro_optrpt_ms, fi_mstro_optrpt_mscb, fi_mstro_optrpt_mpqr, fi_cirrus_principal, fi_cirrus_affillate, fi_cirrus_issuing_atm, fi_cirrus_acquiring_atm, fi_cirrus_optp2p_ms, fi_cirrus_optp2p_mscb, fi_cirrus_optp2p_mpqr, cgi_mcard_principal, cgi_mcard_affillate, cgi_mcard_issuing_credit, cgi_mcard_issuing_debit, cgi_mcard_issuing_prepaid, cgi_mcard_acquiring_atm, cgi_mcard_acquiring_mcd, cgi_mcard_acquiring_merchants, cgi_mcard_acquiring_poi, cgi_mcard_optrpt_msd, cgi_mcard_optrpt_ms, cgi_mcard_optrpt_mscb, cgi_mcard_optrpt_mpqr, cgi_mstro_principal, cgi_mstro_affillate, cgi_mstro_issuing_debit, cgi_mstro_issuing_prepaid, cgi_mstro_acquiring_atm, cgi_mstro_acquiring_merchants, cgi_mstro_acquiring_poi, cgi_mstro_optrpt_msd, cgi_mstro_optrpt_ms, cgi_mstro_optrpt_mscb, cgi_mstro_optrpt_mpqr, cgi_cirrus_principal, cgi_cirrus_affillate, cgi_cirrus__issuing, cgi_cirrus_acquiring_atm, cgi_cirrus_optp2p_ms, cgi_cirrus_optp2p_mscb, cgi_cirrus_optp2p_mpqr, info_a_bool, info_a_explain, additional_services_transfer, acquiring_rePower, data_crdt, data_cruser, data_updt, data_upuser]
+
+        all_col = [ctif_id, ctnm, fi_mcard_issuing, fi_mcard_acquiring_merchants, fi_mcard_acquiring_atm, fi_mcard_acquiring_mcd, data_crdt, data_cruser, data_updt, data_upuser]
         # return all_col
         return ["{}".format(x) for x in all_col]
 
