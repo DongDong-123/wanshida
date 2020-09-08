@@ -913,7 +913,7 @@ class CommonFunction:
 
     def make_mingdan_type(self):
         '''名单种类'''
-        return random.choices([
+        return random.choice([
             '1',  # 政要名单
             '2',  #  联合国制裁名单
             '3'  # 其他
