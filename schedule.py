@@ -9,7 +9,7 @@ import time
 import os
 from make_data import MakeData
 from save_data import SaveFile
-from parm import savenum, stifnum, filenum, zip_floder
+from parm import savenum,trade_filenum, stifnum, filenum, zip_floder
 from Common import CommonFunction
 comm = CommonFunction()
 savedata = SaveFile()
@@ -60,7 +60,7 @@ def __control_file(file_name, file_date_time, file_num,filepath, control_file_ti
     if file_name == 'txn':
         with open(file_full, '+a', encoding="UTF-8") as f:
             # print('-----------------创建{}-------------------'.format(file_full))
-            f.write('||'.join([filename, str(filenum)]) + "\n")
+            f.write('||'.join([filename, str(trade_filenum)]) + "\n")
     else:
         with open(file_full, '+a', encoding="UTF-8") as f:
             # print('-----------------创建{}-------------------'.format(file_full))
@@ -93,7 +93,8 @@ def main(beg, end, stif_time, file_date_time):
     # 表名，需和all_data一一对应。
     # all_table_name = ["org", "relation", "survey_info1", "survey_info2", "survey_info3"]
     all_table_name = ["org", "relation", "info1", "info2", "info3"]
-    save_ci = filenum//savenum  # 每个数据文件需要储存的次数
+    save_ci = filenum//savenum  # 非交易数据文件需要储存的次数
+    trade_save_ci = trade_filenum//savenum  # 交易数据文件需要储存的次数
     sign_other = 0  # 其他表数量标识
     sign_txn = 0  # 交易数量标识
     sc_other = 0  # 其他表保存次数
@@ -152,7 +153,7 @@ def main(beg, end, stif_time, file_date_time):
 
             __threads(["txns"], ["txn"], file_date_time, stif_data_num, sign_txn, '||', control_file_time)
 
-            if sc_stif == save_ci:
+            if sc_stif == trade_save_ci:
                 filepath = os.path.join(zip_floder, 'txn', file_date_time)
                 __control_file("txn", file_date_time, stif_data_num, filepath, control_file_time)
                 # file_full = os.path.join(data_path, 'D{}-T{}_00{}.txt'.format(

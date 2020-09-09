@@ -77,7 +77,7 @@ class MakeData:
         found_date = comm.make_date(-20, -1)  # 成立日期    必填
         assets_size = ''  # 资产规模(美元，当年）
         country = comm.chiose_country()  # 注册国家    必填
-        other_oper_country = fake.country()  # 其他运营国家  随机国家
+        other_oper_country = comm.chiose_country()  # 其他运营国家  随机国家
         desc_business = fake.paragraph()  # 经营说明  随机一句话
         # tin = ''  # TIN
         busi_type = comm.busi_line()  # 业务类型    必填
@@ -148,7 +148,7 @@ class MakeData:
         # cert_validity = comm.make_date()  # 关系人证件有效期
         # rcnt = comm.chiose_country()  # 关系人国籍/国家
         dob = ''  # 关系人出生日期
-        cob = fake.country()  # 关系人出生国家
+        cob = comm.chiose_country()  # 关系人出生国家
         years_comp = comm.random_num(1)  # 关系人入职年限
         years_indu = comm.random_num(1)  # 关系人从业年限
         # rel_prov = ''  # 关系人省

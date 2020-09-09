@@ -88,12 +88,20 @@ class Setting(BaseConfig):
 
     def get_file_num(self):
         """
-
+        非交易文件数据条数
         :return:
         """
         temp = self.conf.get('setting', 'FILENUM')
         return temp
 
+
+    def get_trade_file_num(self):
+        """
+        交易文件数据条数
+        :return:
+        """
+        temp = self.conf.get('setting', 'TRADEFILENUM')
+        return temp
 class ReadOraclConfig(BaseConfig):
     def info(self):
         return self.conf.get('oracl', 'info')
