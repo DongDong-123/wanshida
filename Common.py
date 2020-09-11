@@ -287,6 +287,7 @@ class CommonFunction:
             dd = ''
         return dd
 
+
     # 国籍
     def chiose_country(self):
         countrys = random.choice([

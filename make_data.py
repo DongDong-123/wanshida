@@ -147,7 +147,7 @@ class MakeData:
         #     cert_num = comm.org_cert_num()
         # cert_validity = comm.make_date()  # 关系人证件有效期
         # rcnt = comm.chiose_country()  # 关系人国籍/国家
-        dob = ''  # 关系人出生日期
+        dob = comm.make_date(beg=-50,end=-15)  # 关系人出生日期
         cob = comm.chiose_country()  # 关系人出生国家
         years_comp = comm.random_num(1)  # 关系人入职年限
         years_indu = comm.random_num(1)  # 关系人从业年限
@@ -644,7 +644,7 @@ class MakeData:
         """
         :return:
         """
-        id = ori_ptxn.get("msg_id")  # 交易表主键    必填
+        # id = ori_ptxn.get("msg_id")  # 交易表主键    必填
         tran_kd = comm.make_tran_kd()  # 交易种类    必填
         uuid = ori_ptxn.get("uuid")  # 交易唯一标识    必填
         trace_id = ori_ptxn.get("trace_id")  # 联机流水号    必填
@@ -710,7 +710,7 @@ class MakeData:
         mer_unit = "管理机构"  # 管理机构    必填  缺码表
         data_transfer_dt = self.update_time  # 数据传输日期    必填
 
-        all_col = [id, tran_kd, uuid, trace_id, card_bin, card_type, card_type_pboc, card_product, card_brand, token_pan, encrypt_pan, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_datetime, orig_local_tran_datetime, tsdr, tran_amount, sett_amount, tran_curr_cd, sett_curr_cd, sett_conv_rate, sett_date, crat_u, crat_c, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, acq_ins_id_cd, fwd_ins_id_cd, TRCD, CBIF, channel_type, TSTP, cash_back_amount, cash_back_indicator, tran_type, dspt_tran_type, org_stan, tran_buss_st, tran_advice_st, mcht_data_srv, additional_data, insert_timestamp, insert_by, last_update_timestamp, last_update_by, mer_unit, data_transfer_dt]
+        all_col = [tran_kd, uuid, trace_id, card_bin, card_type, card_type_pboc, card_product, card_brand, token_pan, encrypt_pan, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_datetime, orig_local_tran_datetime, tsdr, tran_amount, sett_amount, tran_curr_cd, sett_curr_cd, sett_conv_rate, sett_date, crat_u, crat_c, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, acq_ins_id_cd, fwd_ins_id_cd, TRCD, CBIF, channel_type, TSTP, cash_back_amount, cash_back_indicator, tran_type, dspt_tran_type, org_stan, tran_buss_st, tran_advice_st, mcht_data_srv, additional_data, insert_timestamp, insert_by, last_update_timestamp, last_update_by, mer_unit, data_transfer_dt]
 
         return all_col
         # return ["{}".format(x) for x in all_col]
