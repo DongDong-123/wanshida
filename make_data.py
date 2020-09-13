@@ -26,12 +26,12 @@ class MakeData:
         self.csnm = 'org_1_{}'.format(num)  # 客户号    必填
         self.ctnm = comm.org_name()  # 客户名称    必填
         # custormer_sname = ''.join([elem[0] for elem in self.ctnm.split()])  # 客户简称
-        custormer_ename = ''  # 拼音/英文名称
-        custormer_sename = ''  # 英文缩写
-        busi_name = ''  # doing business as name
+        custormer_ename = comm.person_fir_name()  # 拼音/英文名称
+        custormer_sename = custormer_ename  # 英文缩写
+        busi_name = comm.person_fir_name()  # doing business as name
         appli_country = comm.chiose_country()  # 申请许可国家    必填
-        sub_company = ''  # 子公司
-        former_name = ''  # 申请过的合法名称
+        sub_company = comm.org_name()  # 子公司
+        former_name = comm.org_name()  # 申请过的合法名称
         cert_tp = comm.cert_type()  # 证件类型    必填
         cert_tp_explain = '证件类型说明'  # 证件类型说明    必填
         cert_num = comm.org_cert_num()  # 证件号码    必填
@@ -41,7 +41,7 @@ class MakeData:
         address = comm.make_address(city)  # 注册地址    必填
         post_code = comm.random_num(6)  # 注册地址-邮编
         tel = comm.make_tel_num()  # 注册地址-联系电话    必填
-        fax = ''  # 注册地址-传真
+        fax = comm.random_num(7)  # 注册地址-传真
         # ----------无注册地址时，邮寄地址必填------------------
         # m_city = comm.random_city()  # 邮寄地址-市
         # m_state = comm.chiose_provance(m_city)  # 邮寄地址-省
@@ -54,28 +54,28 @@ class MakeData:
         pr_name = comm.make_name_data()  # 第一联系人姓名    必填
         pr_title = ''  # 第一联系人职务
         pr_phone = comm.make_tel_num()  # 第一联系人电话    必填
-        pr_fax = ''  # 第一联系人传真
+        pr_fax = comm.random_num(8)  # 第一联系人传真
         pr_email = comm.make_email_data()  # 第一联系人电子邮箱    应填
         # pr_address = comm.random_code()  # 第一联系人使用地址
         sec_mr_ms = comm.random_chenghu()  # 第二联系人称呼
         sec_name = comm.make_name_data()  # 第二联系人姓名
-        sec_title = ''  # 第二联系人职务
+        sec_title = comm.random_post()  # 第二联系人职务
         sec_phone = comm.make_tel_num()  # 第二联系人电话
-        sec_fax = ''  # 第二联系人传真
+        sec_fax = comm.random_num(8)  # 第二联系人传真
         sec_email = comm.make_email_data()  # 第二联系人电子邮箱
         # sec_address = comm.random_code()  # 第二联系人使用地址；1:注册地址 2:邮寄地址
         aml_mr_ms = comm.random_chenghu()  # 反洗钱联系人称呼
         aml_name = comm.make_name_data()  # 反洗钱联系人姓名    必填
-        aml_title = ''  # 反洗钱联系人职务    必填
+        aml_title = comm.random_post()  # 反洗钱联系人职务    必填
         aml_phone = comm.make_tel_num()  # 反洗钱联系人电话    必填
-        aml_fax = ''  # 反洗钱联系人传真
+        aml_fax = comm.random_num(8)  # 反洗钱联系人传真
         aml_email = comm.make_email_data()  # 反洗钱联系人电子邮箱    应填
         # aml_address = comm.random_code()  # 反洗钱联系人使用地址
         client_tp = comm.cust_tyep()  # 客户类别    必填
         lfa_type = comm.org_type2()  # 组织机构类别    应填
         # lfa_type_explain = ''  # 组织机构其他类别说明
         found_date = comm.make_date(-20, -1)  # 成立日期    必填
-        assets_size = ''  # 资产规模(美元，当年）
+        assets_size = comm.random_num(8)  # 资产规模(美元，当年）
         country = comm.chiose_country()  # 注册国家    必填
         other_oper_country = comm.chiose_country()  # 其他运营国家  随机国家
         desc_business = fake.paragraph()  # 经营说明  随机一句话
@@ -180,7 +180,7 @@ class MakeData:
         ctif_id = self.csnm  # 客户号
         ctnm = self.ctnm  # 客户名称
         info_a_bool = comm.make_yes_no()  # 是否遵守反洗钱或反恐融资法
-        laws_name = ''  # 法律法规名称
+        laws_name = '《中国人民银行反洗钱法》'  # 法律法规名称
         info_a_bool2 = comm.make_yes_no()  # 是否有反洗钱或反恐融资的程序或制度
         info_a_bool3 = comm.make_yes_no_unused()  # 监管机构认为该制度是否得当
         supervisor_name = comm.make_name_data(3)  # 监管人员姓名
@@ -196,8 +196,8 @@ class MakeData:
         info_d_bool = comm.make_yes_no()  # 是否在任何国家、地区都没有实体存在的机构
         info_d_bool2 = comm.make_yes_no()  # 是否禁止与没有任何实体存在的机构建立关系
         info_d_explain = "".join(fake.paragraphs(nb=3))  # 原因
-        payment_card_org = ''  # 监管支付卡活动的机构
-        compliance_org = ''  # 监管合规的机构
+        payment_card_org = '中国人民银行'  # 监管支付卡活动的机构
+        compliance_org = '中国人民银行'  # 监管合规的机构
         chartered_institution = ''  # 特许机构
         info_e_bool = comm.make_yes_no()  # 是否将任何反洗钱或制裁责任外包
         info_e_bool2 = comm.make_yes_no()  # 是否对第三方进行监督
@@ -228,10 +228,10 @@ class MakeData:
         ctif_id = self.csnm  # 客户号
         ctnm = self.ctnm  # 客户名称
         info2_a_bool = comm.make_yes_no()  # 监管部门是否可以随时对申请人的档案进行审查或者深入调查
-        info2_a_explain = ""  # 最近五项检查的日期及结果
+        info2_a_explain = "{}，{}".format(comm.make_date(beg=-2,end=0), "检查正常")  # 最近五项检查的日期及结果
         info2_b_bool = comm.make_yes_no()  # 政府当局能否对申请人处以罚款、暂停或接管其业务以确保其遵守适用的审慎标准
-        info2_b_explain = ""  # 原因
-        agents_num = ""  # 分销渠道及代理商的数目
+        info2_b_explain = fake.paragraph()  # 原因
+        agents_num = comm.random_num(3)  # 分销渠道及代理商的数目
         # aml_role_explain = ""  # 反洗钱官或反洗钱合规部角色描述
         compliance_name = fake.name()  # 合规部负责人姓名
         # aml_workers = ""  # 反洗钱工作人数

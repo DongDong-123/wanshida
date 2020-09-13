@@ -213,6 +213,15 @@ class CommonFunction:
             )
         return cstp
 
+    def random_post(self):
+        return random.choice([
+            "职员",
+            "组长",
+            "经理",
+            "副经理",
+            "工程师",
+        ])
+
     def cert_explain(self, cert_type):
         """
         证件类型，传入证件种类代码，返回中文名称
