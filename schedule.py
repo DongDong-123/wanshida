@@ -55,7 +55,7 @@ def __threads(all_data, all_table_name, file_date_time, order, sign,delimiter, c
     for t in threads:
         t.join()
 
-def __control_file(file_name, file_date_time, file_num,filepath, control_file_time):
+def __control_file(file_name, file_date_time, file_num,filepath, control_file_time,data_num):
     if file_name == 'txn':
         file_full = os.path.join(filepath, 'TXN-D{}-T{}.txt'.format(
         file_date_time, control_file_time))
@@ -71,18 +71,23 @@ def __control_file(file_name, file_date_time, file_num,filepath, control_file_ti
     else:
         filename = '{}-D{}-T{}_00{}.csv'.format(file_name.upper(), file_date_time, control_file_time, file_num)
 
-    if file_name == 'txn':
-        with open(file_full, '+a', encoding="UTF-8") as f:
-            # print('-----------------创建{}-------------------'.format(file_full))
-            f.write('||'.join([filename, str(trade_filenum)]) + "\n")
-    elif file_name == 'mapping':
-        with open(file_full, '+a', encoding="UTF-8") as f:
-            # print('-----------------创建{}-------------------'.format(file_full))
-            f.write('||'.join([filename, str(trade_filenum*2)]) + "\n")
-    else:
-        with open(file_full, '+a', encoding="UTF-8") as f:
-            # print('-----------------创建{}-------------------'.format(file_full))
-            f.write(','.join([filename, str(filenum)]) + "\n")
+    with open(file_full, '+a', encoding="UTF-8") as f:
+        # print('-----------------创建{}-------------------'.format(file_full))
+        f.write('||'.join([filename, str(data_num)]) + "\n")
+
+    #
+    # if file_name == 'txn':
+    #     with open(file_full, '+a', encoding="UTF-8") as f:
+    #         # print('-----------------创建{}-------------------'.format(file_full))
+    #         f.write('||'.join([filename, str(data_num)]) + "\n")
+    # elif file_name == 'mapping':
+    #     with open(file_full, '+a', encoding="UTF-8") as f:
+    #         # print('-----------------创建{}-------------------'.format(file_full))
+    #         f.write('||'.join([filename, str(data_num)]) + "\n")
+    # else:
+    #     with open(file_full, '+a', encoding="UTF-8") as f:
+    #         # print('-----------------创建{}-------------------'.format(file_full))
+    #         f.write(','.join([filename, str(data_num)]) + "\n")
 
 def main(beg, end, stif_time, file_date_time):
     # 创建存储文件夹
@@ -164,7 +169,7 @@ def main(beg, end, stif_time, file_date_time):
             if sc_other == save_ci:
                 filepath = os.path.join(zip_floder, 'custom', file_date_time)
                 for name in all_table_name:
-                    __control_file(name, file_date_time, file_ord,filepath, control_file_time)
+                    __control_file(name, file_date_time, file_ord,filepath, control_file_time, filenum)
                 file_ord += 1
                 sc_other = 0
                 sign_other = 0
@@ -182,7 +187,7 @@ def main(beg, end, stif_time, file_date_time):
 
             if sc_stif == trade_save_ci:
                 filepath = os.path.join(zip_floder, 'txn', file_date_time)
-                __control_file("txn", file_date_time, stif_data_num, filepath, control_file_time)
+                __control_file("txn", file_date_time, stif_data_num, filepath, control_file_time,trade_filenum)
                 # file_full = os.path.join(data_path, 'D{}-T{}_00{}.txt'.format(
                 #     file_date_time, currt_time, 1))
                 # filename = '{}-D{}-T{}_00{}.csv'.format("txn", file_date_time, currt_time, stif_data_num)
@@ -204,7 +209,7 @@ def main(beg, end, stif_time, file_date_time):
 
             if sc_map == map_save_ci:
                 filepath = os.path.join(zip_floder, 'map', file_date_time)
-                __control_file("mapping", file_date_time, map_file_ord, filepath, control_file_time)
+                __control_file("mapping", file_date_time, map_file_ord, filepath, control_file_time,trade_filenum*2)
 
                 map_file_ord += 1
                 sc_map = 0
@@ -218,7 +223,7 @@ def main(beg, end, stif_time, file_date_time):
         __threads(all_data, all_table_name, file_date_time, file_ord, sign_other,'', control_file_time)
         filepath = os.path.join(zip_floder, 'custom', file_date_time)
         for name in all_table_name:
-            __control_file(name, file_date_time, file_ord, filepath, control_file_time)
+            __control_file(name, file_date_time, file_ord, filepath, control_file_time,sign_other)
         for data in all_data:  # 清空已写入数据
             eval(data).clear()
 
@@ -226,15 +231,15 @@ def main(beg, end, stif_time, file_date_time):
         print('{} 存储剩余交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_txn, stif_data_num))
         __threads(["txns"], ["txn"], file_date_time, stif_data_num, sign_txn,'||', control_file_time)
         filepath = os.path.join(zip_floder, 'txn', file_date_time)
-        __control_file("txn", file_date_time, stif_data_num,filepath, control_file_time)
+        __control_file("txn", file_date_time, stif_data_num,filepath, control_file_time,sign_txn)
 
         txns.clear()
 
     if sign_map > 0:
         print('{} 存储剩余map数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_map, map_file_ord))
-        __threads(["txns"], ["txn"], file_date_time, map_file_ord, sign_map,'||', control_file_time)
-        filepath = os.path.join(zip_floder, 'txn', file_date_time)
-        __control_file("txn", file_date_time, map_file_ord,filepath, control_file_time)
+        __threads(["mappings"], ["mapping"], file_date_time, map_file_ord, sign_map,'||', control_file_time)
+        filepath = os.path.join(zip_floder, 'map', file_date_time)
+        __control_file("mapping", file_date_time, map_file_ord,filepath, control_file_time,sign_map)
 
         mappings.clear()
     # -----------------可疑交易存储--------------------------------
