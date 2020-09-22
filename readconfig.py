@@ -102,6 +102,7 @@ class Setting(BaseConfig):
         """
         temp = self.conf.get('setting', 'TRADEFILENUM')
         return temp
+
 class ReadOraclConfig(BaseConfig):
     def info(self):
         return self.conf.get('oracl', 'info')

@@ -23,10 +23,20 @@ stifs = []
 survey_info1 = []
 survey_info2 = []
 survey_info3 = []
-
+mappings = []
 
 def __threads(all_data, all_table_name, file_date_time, order, sign,delimiter, control_file_time):
-    """抽出多线程部分"""
+    """
+    抽出多线程部分
+    :param all_data:  数据
+    :param all_table_name:  文件名
+    :param file_date_time:  文件时间
+    :param order:  文件编号
+    :param sign:  暂时没用
+    :param delimiter:   分割符
+    :param control_file_time: 控制文件时间
+    :return:
+    """
 
     threads = []
     for ind, dat in enumerate(all_data):
@@ -49,6 +59,9 @@ def __control_file(file_name, file_date_time, file_num,filepath, control_file_ti
     if file_name == 'txn':
         file_full = os.path.join(filepath, 'TXN-D{}-T{}.txt'.format(
         file_date_time, control_file_time))
+    elif file_name == 'mapping':
+        file_full = os.path.join(filepath, 'MAPPING-D{}-T{}.txt'.format(
+        file_date_time, control_file_time))
     else:
         file_full = os.path.join(filepath, 'D{}-T{}.txt'.format(
         file_date_time, control_file_time))
@@ -57,10 +70,15 @@ def __control_file(file_name, file_date_time, file_num,filepath, control_file_ti
         filename = '{}-D{}-T{}_000{}.csv'.format(file_name.upper(), file_date_time, control_file_time, file_num)
     else:
         filename = '{}-D{}-T{}_00{}.csv'.format(file_name.upper(), file_date_time, control_file_time, file_num)
+
     if file_name == 'txn':
         with open(file_full, '+a', encoding="UTF-8") as f:
             # print('-----------------创建{}-------------------'.format(file_full))
             f.write('||'.join([filename, str(trade_filenum)]) + "\n")
+    elif file_name == 'mapping':
+        with open(file_full, '+a', encoding="UTF-8") as f:
+            # print('-----------------创建{}-------------------'.format(file_full))
+            f.write('||'.join([filename, str(trade_filenum*2)]) + "\n")
     else:
         with open(file_full, '+a', encoding="UTF-8") as f:
             # print('-----------------创建{}-------------------'.format(file_full))
@@ -70,11 +88,14 @@ def main(beg, end, stif_time, file_date_time):
     # 创建存储文件夹
     file_path1 = os.path.join(zip_floder, 'custom', file_date_time)
     file_path2 = os.path.join(zip_floder, 'txn', file_date_time)
+    file_path3 = os.path.join(zip_floder, 'map', file_date_time)
 
     if not os.path.exists(file_path1):
         os.makedirs(file_path1)
     if not os.path.exists(file_path2):
         os.makedirs(file_path2)
+    if not os.path.exists(file_path3):
+        os.makedirs(file_path3)
 
     # 控制文件时间戳
     control_file_time = round(time.time() * 1000)
@@ -95,15 +116,21 @@ def main(beg, end, stif_time, file_date_time):
     all_table_name = ["org", "relation", "info1", "info2", "info3"]
     save_ci = filenum//savenum  # 非交易数据文件需要储存的次数
     trade_save_ci = trade_filenum//savenum  # 交易数据文件需要储存的次数
+    map_save_ci = trade_filenum*2//savenum  # map数据文件需要储存的次数
     sign_other = 0  # 其他表数量标识
     sign_txn = 0  # 交易数量标识
     sc_other = 0  # 其他表保存次数
     sc_stif = 0  # 交易保存次数
     stif_data_num = 1  # 交易数据文件编号
     file_ord = 1  # 其他数据文件名编号
+    map_file_ord = 1  # map文件名编号
     sign_stif = 0  # 可疑交易数量
+    sign_map = 0  # mapping文件数量
+    sc_map = 0  # map保存次数
+
     for num in range(beg, end):
         t_stan_org = makedata.make_stan_org(num)
+        customer_id = 'org_1_{}'.format(num)
         orgs.append(t_stan_org)
         t_stan_relation = makedata.make_stan_relation()
         relations.append(t_stan_relation)
@@ -118,9 +145,9 @@ def main(beg, end, stif_time, file_date_time):
         for i in range(stifnum):
             t_stan_ptxn, all_dict_data = makedata.make_stan_ptxn(stif_time)
 
-            t_stan_txn = makedata.make_stan_txn(stif_time, all_dict_data)
+            t_stan_txn, map_data = makedata.make_stan_txn(stif_time, all_dict_data)
             txns.append(t_stan_txn)
-
+            mappings.extend([[customer_id, ica, 'l',currt_time] for ica in map_data])
             # ---------可疑交易数据，暂时不用---------------
             # if num %10 == 0:
             #     t_stan_stif = makedata.make_stan_stif(stif_time, all_dict_data)
@@ -167,6 +194,25 @@ def main(beg, end, stif_time, file_date_time):
 
             txns.clear()  # 清空已写入交易数据
 
+        #   ---------------mapping文件--------------
+        sign_map += stifnum*2
+        if (sign_map) % savenum == 0:  # 符合条件，多线程存储
+            sc_map += 1
+            print('{} 存储map数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),savenum, map_file_ord))
+
+            __threads(["mappings"], ["mapping"], file_date_time, map_file_ord, sign_map, 'map', control_file_time)
+
+            if sc_map == map_save_ci:
+                filepath = os.path.join(zip_floder, 'map', file_date_time)
+                __control_file("mapping", file_date_time, map_file_ord, filepath, control_file_time)
+
+                map_file_ord += 1
+                sc_map = 0
+                sign_map = 0
+
+            mappings.clear()  # 清空已写入交易数据
+        #   ---------------mapping文件--------------
+
     if sign_other > 0:
         print('{} 存储剩余数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_other, file_ord))
         __threads(all_data, all_table_name, file_date_time, file_ord, sign_other,'', control_file_time)
@@ -183,6 +229,14 @@ def main(beg, end, stif_time, file_date_time):
         __control_file("txn", file_date_time, stif_data_num,filepath, control_file_time)
 
         txns.clear()
+
+    if sign_map > 0:
+        print('{} 存储剩余map数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_map, map_file_ord))
+        __threads(["txns"], ["txn"], file_date_time, map_file_ord, sign_map,'||', control_file_time)
+        filepath = os.path.join(zip_floder, 'txn', file_date_time)
+        __control_file("txn", file_date_time, map_file_ord,filepath, control_file_time)
+
+        mappings.clear()
     # -----------------可疑交易存储--------------------------------
     # if sign_stif > 0:
     #     print('{} 存储可疑交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_stif, 1))

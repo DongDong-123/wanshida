@@ -69,6 +69,7 @@ t_stan_info3 = [
     'ctif_id', 'ctnm', 'fi_mcard_issuing', 'fi_mcard_acquiring_merchants', 'fi_mcard_acquiring_atm', 'fi_mcard_acquiring_mcd','data_crdt', 'data_cruser', 'data_updt', 'data_upuser'
 ]
 
+t_stan_mapping = ["cid", "ica", "status", "create_time"]
 
 
 
@@ -110,6 +111,7 @@ class SaveFile:
         self.t_stan_info1 = t_stan_info1
         self.t_stan_info2 = t_stan_info2
         self.t_stan_info3 = t_stan_info3
+        self.t_stan_mapping = t_stan_mapping
         currt_time = round(time.time() * 1000)
 
 
@@ -126,6 +128,8 @@ class SaveFile:
 
         if delimiter == ',':
             file_path = os.path.join(self.file_path,'custom',date_time)
+        elif delimiter == 'map':
+            file_path = os.path.join(self.file_path,'map',date_time)
         else:
             file_path = os.path.join(self.file_path,'txn',date_time)
 
@@ -146,6 +150,16 @@ class SaveFile:
                 for da in datas:
                     f.write("||".join([str(tt) for tt in da]) + '\n')
         # ============================================
+        elif delimiter == 'map':
+            if not os.path.exists(file_full):
+                title = eval('self.' + 't_stan_' + file_name)
+
+                with open(file_full, 'a', encoding="utf-8-sig") as f:
+                    f.write("||".join(title)+'\n')
+
+            with open(file_full, 'a', encoding="utf-8-sig") as f:
+                for da in datas:
+                    f.write("||".join([str(tt) for tt in da]) + '\n')
         else:
             # if not os.path.exists(file_full):
             #     title = eval('self.' + 't_stan_' + file_name)
