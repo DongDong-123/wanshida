@@ -129,7 +129,7 @@ class SaveFile:
         if delimiter == ',':
             file_path = os.path.join(self.file_path,'custom',date_time)
         elif delimiter == 'map':
-            file_path = os.path.join(self.file_path,'map',date_time)
+            file_path = os.path.join(self.file_path,'mapping',date_time)
         else:
             file_path = os.path.join(self.file_path,'txn',date_time)
 

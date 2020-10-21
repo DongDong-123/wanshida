@@ -66,7 +66,7 @@ def running():
     start_time = time.time()
     o = datannum
 
-    for m in range(3):
+    for m in range(10):
 
         print('客户号起始编号{}'.format(n))
         print('数据交易日期{}'.format(t))

@@ -52,7 +52,7 @@ class MakeData:
         # -------------------------------------------------------
         pr_mr_ms = comm.random_chenghu()  # 第一联系人称呼
         pr_name = comm.make_name_data()  # 第一联系人姓名    必填
-        pr_title = ''  # 第一联系人职务
+        pr_title = comm.random_post()  # 第一联系人职务
         pr_phone = comm.make_tel_num()  # 第一联系人电话    必填
         pr_fax = comm.random_num(8)  # 第一联系人传真
         pr_email = comm.make_email_data()  # 第一联系人电子邮箱    应填
