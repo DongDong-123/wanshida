@@ -62,16 +62,19 @@ def __control_file(file_name, file_date_time, file_num,filepath, control_file_ti
     elif file_name == 'mapping':
         file_full = os.path.join(filepath, 'MAPPING-D{}-T{}.txt'.format(
         file_date_time, control_file_time))
+    elif file_name == 'dic':
+        file_full = os.path.join(filepath, 'DIC-D{}-T{}.txt'.format(
+        file_date_time, control_file_time))
     else:
         file_full = os.path.join(filepath, 'D{}-T{}.txt'.format(
         file_date_time, control_file_time))
 
     if file_num < 10:
-        filename = '{}-D{}-T{}_000{}.csv'.format(file_name.upper(), file_date_time, control_file_time, file_num)
+        filename = '{}-D{}-T{}-000{}.csv'.format(file_name.upper(), file_date_time, control_file_time, file_num)
     else:
-        filename = '{}-D{}-T{}_00{}.csv'.format(file_name.upper(), file_date_time, control_file_time, file_num)
+        filename = '{}-D{}-T{}-00{}.csv'.format(file_name.upper(), file_date_time, control_file_time, file_num)
 
-    if file_name == 'txn' or file_name == 'mapping':
+    if file_name == 'txn' or file_name == 'mapping' or file_name == 'dic':
         with open(file_full, '+a', encoding="UTF-8") as f:
             # print('-----------------创建{}-------------------'.format(file_full))
             f.write('||'.join([filename, str(data_num)]) + "\n")
@@ -86,6 +89,7 @@ def main(beg, end, stif_time, file_date_time):
     file_path1 = os.path.join(zip_floder, 'custom', file_date_time)
     file_path2 = os.path.join(zip_floder, 'txn', file_date_time)
     file_path3 = os.path.join(zip_floder, 'mapping', file_date_time)
+    file_path4 = os.path.join(zip_floder, 'dic', file_date_time)
 
     if not os.path.exists(file_path1):
         os.makedirs(file_path1)
@@ -93,7 +97,8 @@ def main(beg, end, stif_time, file_date_time):
         os.makedirs(file_path2)
     if not os.path.exists(file_path3):
         os.makedirs(file_path3)
-
+    if not os.path.exists(file_path4):
+        os.makedirs(file_path4)
     # 控制文件时间戳
     control_file_time = round(time.time() * 1000)
 
@@ -234,6 +239,10 @@ def main(beg, end, stif_time, file_date_time):
         __control_file("mapping", file_date_time, map_file_ord,filepath, control_file_time,sign_map)
 
         mappings.clear()
+
+    # dic 文件
+    __control_file('dic', file_date_time, 1, file_path4, control_file_time, 1)
+
     # -----------------可疑交易存储--------------------------------
     # if sign_stif > 0:
     #     print('{} 存储可疑交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_stif, 1))

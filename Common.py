@@ -864,7 +864,7 @@ class CommonFunction:
     def make_tcat_data(self):
         '''交易金额'''
         temp = fake.pyfloat(positive=True)
-        return round(temp, 3)+1000000
+        return round(temp, 3)+10000
 
     def make_ticd_data(self):
         '''

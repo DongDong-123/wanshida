@@ -160,7 +160,7 @@ class MakeData:
         # rel_fax = comm.random_num(8)  # 关系人传真
         # rel_email = fake.ascii_email()  # 关系人电子邮箱
         # gov_owned = comm.make_yes_no()  # 关系人是否国有持股
-        hold_per = ''  # 持股比例
+        hold_per = '0.23'  # 持股比例
         # hold_amt = ""  # 持股金额
         # remark = fake.paragraph()  # 备注
         create_time = self.data_time  # 数据创建时间  必填
@@ -708,7 +708,7 @@ class MakeData:
         last_update_timestamp = ori_ptxn.get("last_update_timestamp")  # 记录最后更新时间
         last_update_by = ori_ptxn.get("last_update_by")  # 记录最后更新人
         mer_unit = "管理机构"  # 管理机构    必填  缺码表
-        data_transfer_dt = self.update_time  # 数据传输日期    必填
+        data_transfer_dt = ori_ptxn.get("data_transfer_dt")  # 数据传输日期    必填
 
         all_col = [tran_kd, uuid, trace_id, card_bin, card_type, card_type_pboc, card_product, card_brand, token_pan, encrypt_pan, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_datetime, orig_local_tran_datetime, tsdr, tran_amount, sett_amount, tran_curr_cd, sett_curr_cd, sett_conv_rate, sett_date, crat_u, crat_c, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, acq_ins_id_cd, fwd_ins_id_cd, TRCD, CBIF, channel_type, TSTP, cash_back_amount, cash_back_indicator, tran_type, dspt_tran_type, org_stan, tran_buss_st, tran_advice_st, mcht_data_srv, additional_data, insert_timestamp, insert_by, last_update_timestamp, last_update_by, mer_unit, data_transfer_dt]
         # mapping 文件
@@ -795,3 +795,331 @@ class MakeData:
         all_col = [unit_code, warn_dt, rule_id, rule_type, warn_kd, susp_value, ctif_tp, tran_kd, card_type, MCNO, MCNM, ACCD, fwd_ins_id_cd, STCT, card_product, card_brand, STCI, IUCD, rcv_ins_id_cd, tstm, tsdr, TCPP, TCTP, TCAT, TCMN, TCNM, CACD, c_fwd_ins_id_cd, TCCT, T_card_product, T_card_brand, TCCI, TCIC, c_rcv_ins_id_cd, bptc, ticd, busi_type, trans_type, trans_stat, tran_advice_st, acq_merch_city, acq_merch_state, TRCD, CBIF, trans_channel, PCTP, PCAT, crat_u, crat_c, TSTP, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, mer_unit, run_dt, data_transfer_dt]
         return ['{}'.format(x) for x in all_col]
         # return all_col
+
+
+
+class RuleData():
+    def __init__(self):
+        """
+        encrypt_pan	加密卡号
+        iss_ins_id_cd	发卡行机构代码
+        acq_merch_id	收单商户id
+        acq_ins_id_cd	收单机构号
+        """
+        self.encrypt_pan = ''
+        self.iss_ins_id_cd = ""
+        self.acq_merch_id = ''
+        self.acq_ins_id_cd = ''
+
+
+    def make_stan_ptxn(self, stiftime, update_time, key_datas, take_cards):
+        """"原始业务交易信息表
+        """
+        msg_id = comm.random_num(19)  # 消息id    必填
+        msg_type = ""  # MTI消息类型标识    必填
+        inter_tran_type = comm.make_inter_tran_type()  # 联机系统内部交易类型
+        uuid = comm.make_ticd_data()  # 交易唯一标识    必填
+        trace_id = comm.random_num(12)  # 联机流水号    必填
+        tran_group_id = ""  # 交易分组号
+        tran_init = comm.make_tran_init()  # 交易发起方：0-联机平台,1-成员行发起,2-手工平台发起    必填
+        tran_res = comm.make_tran_res()  # 收单应答标识：0-联机应答,1-成员行应答    必填
+        card_bin = comm.random_num(9)  # 卡bin
+        card_type = comm.make_card_type()  # 卡类型：借贷记    必填  缺码表
+        card_product = "卡产品"  # 卡产品    必填  缺码表
+        card_brand = "卡品牌"  # 卡品牌  缺码表
+        card_media = comm.make_tsdr_data()  # 01磁条卡,02芯片卡
+        token_pan = comm.random_num(32)  # token卡号
+        encrypt_pan = take_cards  # 加密后的卡号    必填   ----------------------------------------
+        hash_pan = fake.sha256()  # 卡号hash
+        digsit = comm.make_digsit(token_pan)  # 前六后四卡号
+        crdhldr_tran_type = comm.random_num(2)  # 持卡人交易类型（内部使用）    必填
+        crdhldr_acc_tp_from = comm.make_crdhldr_acc_tp_from()  # 持卡人出方账户类型    必填
+        crdhldr_acc_tp_to = comm.make_crdhldr_acc_tp_to()  # 持卡人入方账户类型    必填
+        tran_amount = comm.make_tcat_data()  # 交易金额    必填
+        sett_amount = tran_amount  # 结算金额    必填
+        bill_amount = sett_amount  # 账单金额
+        tran_datetime = comm.make_trade_time19(stiftime) # 交易时间(YYYY-MM-DD HH:mm:ss)    必填
+        crdhldr_bill_fee = ""  # 持卡人账单费用（目前没有用上）
+        sett_conv_rate = "7"  # 结算汇率    必填
+        bill_conv_rate = sett_conv_rate  # 账单汇率
+        sys_trace_audit_nbr = comm.random_num(6)  # 系统跟踪号  8位随机数   必填
+        local_tran_datetime = comm.make_trade_time19(stiftime)  # 本地交易时间    必填
+        exp_date = comm.make_enable_date()  # 卡有效期
+        sett_date = stiftime  # 结算日期    必填
+        conv_date = stiftime  # 汇率转换日期
+        mcc = comm.random_num_head_0(8)  # 商户类型    必填
+        pos_entry_cd = comm.random_num_head_0(8)  # POS机输入方式码    必填
+        card_seq_num = comm.random_num_head_0(3)  # 卡序列号
+        pos_pin_cptr_cd = comm.random_num_head_0(2)  # PIN获取码
+        tran_fee_indi = "C"  # 交易费借贷标识（暂不收费）
+        acq_srchg_amount = "0"  # 交易费金额
+        acq_ins_id_cd = key_datas[2]  # 收单机构号    必填  -------------------------------------------
+        fwd_ins_id_cd = comm.random_num(10)  # 收单代理机构号    必填
+        trk2_prsnt_sw = comm.random_code()  # 2磁是否出现  随机选1,2
+        retriv_ref_num = comm.random_num(12)  # 检索参考号
+        auth_cd = comm.random_word_num_or_str(6)  # 授权码
+        resp_cd = comm.random_word_num_or_str(6)  # 应答码    必填
+        pos_term_id = comm.random_num(5)  # POS机终端id    必填
+        acq_merch_id = key_datas[1]  # 收单商户id    必填    --------------------------------
+        acq_merch_name = "1"  # 收单商户名称    必填
+        acq_merch_city = comm.random_city()  # 收单商户城市    必填
+        acq_merch_state = "1"  # 收单商户状态    必填
+        frmt_resp_data = "1"  # 应答附加信息    必填
+        additional_data = "1"  # 附加信息    必填
+        funding_payment_tti = ""  # 转出或者转入的交易类型标识    必填
+        tran_curr_cd = "CNY"  # 交易币种    必填
+        sett_curr_cd = "CNY"  # 结算币种    必填
+        bill_curr_cd = "CNY"  # 账单币种    必填
+        data_integrated = comm.random_word_num_or_str(214)  # 芯片卡信息    必填
+        paym_account = comm.random_num(6)  # 支付账户    必填
+        advice_reason_cd = comm.random_num(6)  # 通知码    必填
+        advice_reason_dt_cd = comm.random_num(6)  # 通知详细码    必填
+        advice_reason_dt_txt = fake.paragraph()  # 通知详细描述    必填
+        advice_reason_add_txt = fake.paragraph()  # 通知附加描述    必填
+        pos_data = comm.random_num(18)  # POS数据    必填
+        pos_crdhldr_present = comm.make_yes_no_unused()  # POS持卡人是否出现    必填
+        pos_tran_status = comm.make_yes_no_unused()  # POS交易状态    必填
+        inf_data = comm.random_num(10)  # 网络设施数据    必填
+        ntw_mng_inf_cd = comm.random_num(6)  # 网络管理信息码    必填
+        org_mti = comm.random_num(6)  # 原交易的消息类型标识    必填
+        org_stan = comm.random_num(6)  # 原交易的系统跟踪号    必填
+        org_tran_datetime = comm.make_trade_time19(stiftime)  # 原交易的交易时间    必填
+        org_acq_ins_id_cd = comm.random_num(6)  # 原交易的收单机构号    必填
+        org_fwd_ins_id_cd = comm.random_num(6)  # 原交易的收单代理机构号    必填
+        org_trace_id = comm.make_ticd_data()  # 原交易的联机流水号    必填
+        rcv_ins_id_cd = comm.random_num(10)   # 发卡代理机构号    必填
+        iss_mti_cd = comm.make_iss_mti_cd()  # 发给发卡方的交易类型标识    必填
+        iss_pcode = comm.make_iss_pcode()  # 发给发卡方的持卡人交易类型    必填
+        iss_ins_id_cd = key_datas[0]  # 发卡行机构代码    必填   -----------------------------------------
+        acq_msg_flag = ""  # 收单行单双标识    必填
+        iss_msg_flag = ""  # 发卡行收单标识    必填
+        single_dual_flag = ""  # 单双转换信息标识    必填
+        tran_buss_st = comm.make_trans_type()  # 交易业务状态    必填
+        tran_advice_st = comm.make_tran_advice_st()  # 交易通知状态    必填
+        inter_resp_cd = ""  # 内部应答码    必填
+        dc_id = ""  # 中心标识    必填
+        insert_timestamp = comm.data_time()  # 记录创建时间    必填
+        insert_by = ""  # 记录创建人    必填
+        last_update_timestamp = comm.data_time()  # 记录最后更新时间    必填
+        last_update_by = ""  # 记录最后更新人    必填
+        channel_type = comm.make_channel_type()  # 渠道类型    必填
+        cash_back_amount = comm.make_hold_amt()  # 余额信息
+        cash_back_indicator = ""  # 余额借贷标识
+        mcht_data_srv = ""  # 商户数据服务
+        tcc = ""  # 交易类型码
+        cvv2 = ""  # 卡片cvv2
+        pos_cat_level = ""  # POS持卡人激活终端级别
+        merch_advic_cd = ""  # 商户通知类型
+        src_member_id = ""  # 源成员行标识
+        dest_member_id = ""  # 目的成员行标识
+        group_tran_type = ""  # 交易类型分组    必填
+        fee_category = ""  # 收费类型    必填
+        fan_ntw_cd = ""  # 金融网络编码
+        int_rate_id = ""  # 转换率标识
+        net_ref_num = ""  # 网络参考号
+        bnk_ref_num = ""  # 银行网络参考号
+        acq_ref_num = ""  # 收单参考号
+        gcms_prc_num = ""  # GCMS处理数据和场次号
+        act_tran_amount = ""  # 实际交易金额
+        act_sett_amount = ""  # 实际结算金额
+        act_bill_amount = ""  # 实际账单金额
+        zero_fill_amount = ""  # 全零填充金额
+        reserve1 = ""  # 保留域1
+        reserve2 = ""  # 保留域2
+        reserve3 = ""  # 保留域3
+        data_transfer_dt = update_time   # 数据传输日期
+
+        all_col = [msg_id, msg_type, inter_tran_type, uuid, trace_id, tran_group_id, tran_init, tran_res, card_bin, card_type, card_product, card_brand, card_media, token_pan, encrypt_pan, hash_pan, digsit, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_amount, sett_amount, bill_amount, tran_datetime, crdhldr_bill_fee, sett_conv_rate, bill_conv_rate, sys_trace_audit_nbr, local_tran_datetime, exp_date, sett_date, conv_date, mcc, pos_entry_cd, card_seq_num, pos_pin_cptr_cd, tran_fee_indi, acq_srchg_amount, acq_ins_id_cd, fwd_ins_id_cd, trk2_prsnt_sw, retriv_ref_num, auth_cd, resp_cd, pos_term_id, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, frmt_resp_data, additional_data, funding_payment_tti, tran_curr_cd, sett_curr_cd, bill_curr_cd, data_integrated, paym_account, advice_reason_cd, advice_reason_dt_cd, advice_reason_dt_txt, advice_reason_add_txt, pos_data, pos_crdhldr_present, pos_tran_status, inf_data, ntw_mng_inf_cd, org_mti, org_stan, org_tran_datetime, org_acq_ins_id_cd, org_fwd_ins_id_cd, org_trace_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_msg_flag, iss_msg_flag, single_dual_flag, tran_buss_st, tran_advice_st, inter_resp_cd, dc_id, insert_timestamp, insert_by, last_update_timestamp, last_update_by, channel_type, cash_back_amount, cash_back_indicator, mcht_data_srv, tcc, cvv2, pos_cat_level, merch_advic_cd, src_member_id, dest_member_id, group_tran_type, fee_category, fan_ntw_cd, int_rate_id, net_ref_num, bnk_ref_num, acq_ref_num, gcms_prc_num, act_tran_amount, act_sett_amount, act_bill_amount, zero_fill_amount, reserve1, reserve2, reserve3, data_transfer_dt]
+        all_data = {
+            "msg_id": msg_id,
+            "msg_type": msg_type,
+            "inter_tran_type": inter_tran_type,
+            "uuid": uuid,
+            "trace_id": trace_id,
+            "tran_group_id": tran_group_id,
+            "tran_init": tran_init,
+            "tran_res": tran_res,
+            "card_bin": card_bin,
+            "card_type": card_type,
+            "card_product": card_product,
+            "card_brand": card_brand,
+            "card_media": card_media,
+            "token_pan": token_pan,
+            "encrypt_pan": encrypt_pan,
+            "hash_pan": hash_pan,
+            "digsit": digsit,
+            "crdhldr_tran_type": crdhldr_tran_type,
+            "crdhldr_acc_tp_from": crdhldr_acc_tp_from,
+            "crdhldr_acc_tp_to": crdhldr_acc_tp_to,
+            "tran_amount": tran_amount,
+            "sett_amount": sett_amount,
+            "bill_amount": bill_amount,
+            "tran_datetime": tran_datetime,
+            "crdhldr_bill_fee": crdhldr_bill_fee,
+            "sett_conv_rate": sett_conv_rate,
+            "bill_conv_rate": bill_conv_rate,
+            "sys_trace_audit_nbr": sys_trace_audit_nbr,
+            "local_tran_datetime": local_tran_datetime,
+            "exp_date": exp_date,
+            "sett_date": sett_date,
+            "conv_date": conv_date,
+            "mcc": mcc,
+            "pos_entry_cd": pos_entry_cd,
+            "card_seq_num": card_seq_num,
+            "pos_pin_cptr_cd": pos_pin_cptr_cd,
+            "tran_fee_indi": tran_fee_indi,
+            "acq_srchg_amount": acq_srchg_amount,
+            "acq_ins_id_cd": acq_ins_id_cd,
+            "fwd_ins_id_cd": fwd_ins_id_cd,
+            "trk2_prsnt_sw": trk2_prsnt_sw,
+            "retriv_ref_num": retriv_ref_num,
+            "auth_cd": auth_cd,
+            "resp_cd": resp_cd,
+            "pos_term_id": pos_term_id,
+            "acq_merch_id": acq_merch_id,
+            "acq_merch_name": acq_merch_name,
+            "acq_merch_city": acq_merch_city,
+            "acq_merch_state": acq_merch_state,
+            "frmt_resp_data": frmt_resp_data,
+            "additional_data": additional_data,
+            "funding_payment_tti": funding_payment_tti,
+            "tran_curr_cd": tran_curr_cd,
+            "sett_curr_cd": sett_curr_cd,
+            "bill_curr_cd": bill_curr_cd,
+            "data_integrated": data_integrated,
+            "paym_account": paym_account,
+            "advice_reason_cd": advice_reason_cd,
+            "advice_reason_dt_cd": advice_reason_dt_cd,
+            "advice_reason_dt_txt": advice_reason_dt_txt,
+            "advice_reason_add_txt": advice_reason_add_txt,
+            "pos_data": pos_data,
+            "pos_crdhldr_present": pos_crdhldr_present,
+            "pos_tran_status": pos_tran_status,
+            "inf_data": inf_data,
+            "ntw_mng_inf_cd": ntw_mng_inf_cd,
+            "org_mti": org_mti,
+            "org_stan": org_stan,
+            "org_tran_datetime": org_tran_datetime,
+            "org_acq_ins_id_cd": org_acq_ins_id_cd,
+            "org_fwd_ins_id_cd": org_fwd_ins_id_cd,
+            "org_trace_id": org_trace_id,
+            "rcv_ins_id_cd": rcv_ins_id_cd,
+            "iss_mti_cd": iss_mti_cd,
+            "iss_pcode": iss_pcode,
+            "iss_ins_id_cd": iss_ins_id_cd,
+            "acq_msg_flag": acq_msg_flag,
+            "iss_msg_flag": iss_msg_flag,
+            "single_dual_flag": single_dual_flag,
+            "tran_buss_st": tran_buss_st,
+            "tran_advice_st": tran_advice_st,
+            "inter_resp_cd": inter_resp_cd,
+            "dc_id": dc_id,
+            "insert_timestamp": insert_timestamp,
+            "insert_by": insert_by,
+            "last_update_timestamp": last_update_timestamp,
+            "last_update_by": last_update_by,
+            "channel_type": channel_type,
+            "cash_back_amount": cash_back_amount,
+            "cash_back_indicator": cash_back_indicator,
+            "mcht_data_srv": mcht_data_srv,
+            "tcc": tcc,
+            "cvv2": cvv2,
+            "pos_cat_level": pos_cat_level,
+            "merch_advic_cd": merch_advic_cd,
+            "src_member_id": src_member_id,
+            "dest_member_id": dest_member_id,
+            "group_tran_type": group_tran_type,
+            "fee_category": fee_category,
+            "fan_ntw_cd": fan_ntw_cd,
+            "int_rate_id": int_rate_id,
+            "net_ref_num": net_ref_num,
+            "bnk_ref_num": bnk_ref_num,
+            "acq_ref_num": acq_ref_num,
+            "gcms_prc_num": gcms_prc_num,
+            "act_tran_amount": act_tran_amount,
+            "act_sett_amount": act_sett_amount,
+            "act_bill_amount": act_bill_amount,
+            "zero_fill_amount": zero_fill_amount,
+            "reserve1": reserve1,
+            "reserve2": reserve2,
+            "reserve3": reserve3,
+            "data_transfer_dt": data_transfer_dt
+        }
+        return all_col, all_data
+
+
+    def make_stan_txn(self, stiftime, ori_ptxn):
+        """
+        :return:
+        """
+        # id = ori_ptxn.get("msg_id")  # 交易表主键    必填
+        tran_kd = comm.make_tran_kd()  # 交易种类    必填
+        uuid = ori_ptxn.get("uuid")  # 交易唯一标识    必填
+        trace_id = ori_ptxn.get("trace_id")  # 联机流水号    必填
+        card_bin = ori_ptxn.get("card_bin")  # 卡bin
+        card_type = ori_ptxn.get("card_type")  # 卡类型：借贷记    必填  缺码表
+        card_type_pboc = comm.make_STCT_data()  # 报送卡类型
+        card_product = ori_ptxn.get("card_product")  # 卡产品    必填  缺码表
+        card_brand = ori_ptxn.get("card_brand")  # 卡品牌  缺码表
+        token_pan = ori_ptxn.get("token_pan")  # token卡号
+        encrypt_pan = ori_ptxn.get("encrypt_pan")  # 加密卡号    必填
+        crdhldr_tran_type = ori_ptxn.get("crdhldr_tran_type")  # 持卡人交易类型（内部使用）  缺码表    必填
+        crdhldr_acc_tp_from = ori_ptxn.get("crdhldr_acc_tp_from")  # 持卡人出方账户类型  缺码表
+        crdhldr_acc_tp_to = ori_ptxn.get("crdhldr_acc_tp_to")  # 持卡人入方账户类型  缺码表
+        tran_datetime = ori_ptxn.get("tran_datetime")  # 交易时间    必填
+        orig_local_tran_datetime = ori_ptxn.get("local_tran_datetime")  # 原交易本地交易时间    必填
+        tsdr = comm.make_tsdr_data()  # 持卡人资金收付标志    必填
+        tran_amount = ori_ptxn.get("tran_amount")   # 交易金额    必填
+        sett_amount = ori_ptxn.get("sett_amount")  # 结算金额    必填
+        tran_curr_cd = ori_ptxn.get("tran_curr_cd")  # 交易币种    必填
+        # tran_curr_cd = '156'  # 交易币种    必填
+        sett_curr_cd = ori_ptxn.get("sett_curr_cd")  # 结算币种    必填
+        # sett_curr_cd = '156'  # 结算币种    必填
+        sett_conv_rate = ori_ptxn.get("sett_conv_rate")  # 结算汇率    必填
+        sett_date = ori_ptxn.get("sett_date")  # 结算日期    必填
+        crat_u = int(tran_amount) / int(sett_conv_rate)  # 交易金额折合美元    必填
+        crat_c = tran_amount  # 交易金额折合人民币    必填
+        mcc = ori_ptxn.get("mcc")  # 商户类型    必填  缺码表
+        pos_entry_cd = ori_ptxn.get("pos_entry_cd")  # POS机输入方式码    必填  缺码表
+        retriv_ref_num = ori_ptxn.get("retriv_ref_num")  # 检索参考号
+        auth_cd = ori_ptxn.get("auth_cd")  # 授权码  缺码表
+        resp_cd = ori_ptxn.get("resp_cd")  # 应答码    必填   缺码表
+        pos_term_id = ori_ptxn.get("pos_term_id")  # POS机终端id    必填
+        rcv_ins_id_cd = ori_ptxn.get("rcv_ins_id_cd")  # 发卡代理机构号
+        iss_mti_cd = ori_ptxn.get("iss_mti_cd")  # 发给发卡方的交易类型标识  缺码表
+        iss_pcode = ori_ptxn.get("iss_pcode")  # 发给发卡方的持卡人交易类型  缺码表
+        iss_ins_id_cd = ori_ptxn.get("iss_ins_id_cd")  # 发卡行机构代码    必填
+        acq_merch_id = ori_ptxn.get("acq_merch_id")  # 收单商户id    必填
+        acq_merch_name = ori_ptxn.get("acq_merch_name")  # 收单商户名称    必填
+        acq_merch_city = ori_ptxn.get("acq_merch_city")  # 收单商户城市    必填  缺码表
+        acq_merch_state = ori_ptxn.get("acq_merch_state")  # 收单商户状态  缺码表
+        acq_ins_id_cd = ori_ptxn.get("acq_ins_id_cd")  # 收单机构号    必填
+        fwd_ins_id_cd = ori_ptxn.get("fwd_ins_id_cd")  # 收单代理机构号    必填
+        TRCD = comm.make_TRCD_data()  # 交易发生地    必填
+        CBIF = comm.make_tsdr_data()  # 境内外标识    必填
+        channel_type = ori_ptxn.get("channel_type")  # 交易渠道    必填
+        TSTP = comm.make_tstp_data()  # 交易方式    必填
+        cash_back_amount = ori_ptxn.get("cash_back_amount")  # 余额信息
+        cash_back_indicator = ori_ptxn.get("cash_back_indicator")  # 余额借贷标识  缺码表
+        tran_type = ori_ptxn.get("inter_tran_type")  # 交易类型    必填
+        if tran_kd == "00":
+            dspt_tran_type = ori_ptxn.get("inter_tran_type")  # 差错交易类型
+        else:
+            dspt_tran_type = ""
+        org_stan = ori_ptxn.get("org_stan")  # 原交易的系统跟踪号
+        tran_buss_st = ori_ptxn.get("tran_buss_st")  # 交易业务状态    必填
+        tran_advice_st = ori_ptxn.get("tran_advice_st")  # 交易通知状态
+        mcht_data_srv = ori_ptxn.get("mcht_data_srv")  # 商户数据服务
+        additional_data = ori_ptxn.get("additional_data")  # 附加信息
+        insert_timestamp = ori_ptxn.get("insert_timestamp")  # 记录创建时间    必填
+        insert_by = ori_ptxn.get("insert_by")  # 记录创建人
+        last_update_timestamp = ori_ptxn.get("last_update_timestamp")  # 记录最后更新时间
+        last_update_by = ori_ptxn.get("last_update_by")  # 记录最后更新人
+        mer_unit = "管理机构"  # 管理机构    必填  缺码表
+        data_transfer_dt = ori_ptxn.get("data_transfer_dt")  # 数据传输日期    必填
+
+        all_col = [tran_kd, uuid, trace_id, card_bin, card_type, card_type_pboc, card_product, card_brand, token_pan, encrypt_pan, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_datetime, orig_local_tran_datetime, tsdr, tran_amount, sett_amount, tran_curr_cd, sett_curr_cd, sett_conv_rate, sett_date, crat_u, crat_c, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, acq_ins_id_cd, fwd_ins_id_cd, TRCD, CBIF, channel_type, TSTP, cash_back_amount, cash_back_indicator, tran_type, dspt_tran_type, org_stan, tran_buss_st, tran_advice_st, mcht_data_srv, additional_data, insert_timestamp, insert_by, last_update_timestamp, last_update_by, mer_unit, data_transfer_dt]
+        # mapping 文件
+        map_data = [iss_ins_id_cd,acq_ins_id_cd]
+        return all_col, map_data
+        # return ["{}".format(x) for x in all_col]

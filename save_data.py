@@ -9,7 +9,7 @@ import os, csv
 from readconfig import ReadMySqlConfig
 from parm import zip_floder
 import time
-
+import copy
 conf = ReadMySqlConfig()
 # t_stan_org = ("busi_reg_no", "ctnm", "ctsnm", "cten", "ctsen", "busi_name", "appli_country", "sub_company", "former_name", "citp", "citp_nt", "ctid", "ctid_edt", "state", "city", "address", "post_code", "tel", "fax", "m_state", "m_city", "m_address", "m_post_code", "m_tel", "m_fax", "pr_mr_ms", "pr_name", "pr_title", "pr_phone", "pr_fax", "pr_email", "pr_address", "sec_mr_ms", "sec_name", "sec_title", "sec_phone", "sec_fax", "sec_email", "sec_address", "aml_mr_ms", "aml_name", "aml_title", "aml_phone", "aml_fax", "aml_email", "aml_address", "client_tp", "lfa_type", "lfa_type_explain", "fud_date", "assets_size", "country", "other_oper_country", "desc_business", "tin", "busi_type", "ctvc", "indu_code", "indu_code_nt", "crnm", "crit", "crit_nt", "crid", "crid_edt", "crid_country", "reg_cptl", "reg_cptl_code", "remark_ctvc", "eecp", "scale", "rgdt", "cls_dt", "unit_code", "remark", "stat_flag_ori", "stat_flag", "mer_unit", "cmgr", "reals", "complex", "clear", "data_crdt", "data_cruser", "data_updt", "data_upuser")
 
@@ -72,21 +72,27 @@ t_stan_info3 = [
 t_stan_mapping = ["cid", "ica", "status", "create_time"]
 
 
-
 class ConnectMysql:
     def __init__(self):
         self.host = conf.host()
         self.user = conf.user()
         self.passwd = conf.passwd()
         self.db = conf.db()
-        self.port = conf.port()
+        self.port = int(conf.port())
 
 
     def save_to_mysql(self, datas, table_name):
-        conn = pymysql.connect(host=self.host, user=self.user, passwd=self.passwd, db=self.db, port=self.port, charset="utf8")
+        conn = pymysql.connect(host=self.host, user=self.user, password=self.passwd, db=self.db, port=self.port, charset="utf8")
         curs = conn.cursor()
-        for data in datas:
-            sql = "insert into {} {} VALUES {}".format(table_name, eval(table_name), tuple(data))
+        for data_t in datas:
+            if table_name == 't_stan_txn':
+                data_tmp = copy.deepcopy(data_t)
+                data_tmp.insert(0,0)
+            else:
+                data_tmp = data_t
+
+            sql = "insert into {} VALUES {}".format(table_name, tuple(data_tmp))
+            print("sql", sql)
             curs.execute(sql)
 
         try:
@@ -134,9 +140,9 @@ class SaveFile:
             file_path = os.path.join(self.file_path,'txn',date_time)
 
         if num < 10:
-            file_full = os.path.join(file_path, '{}-D{}-T{}_000{}.csv'.format(file_name.upper(), date_time, control_file_time, num))
+            file_full = os.path.join(file_path, '{}-D{}-T{}-000{}.csv'.format(file_name.upper(), date_time, control_file_time, num))
         else:
-            file_full = os.path.join(file_path, '{}-D{}-T{}_00{}.csv'.format(file_name.upper(), date_time, control_file_time, num))
+            file_full = os.path.join(file_path, '{}-D{}-T{}-00{}.csv'.format(file_name.upper(), date_time, control_file_time, num))
         # ============交易单独写入==================
         # 交易数据分割符为||，需要无法直接写入CSV，改用TXT写入
         if delimiter == '||':

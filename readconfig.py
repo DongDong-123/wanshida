@@ -31,7 +31,7 @@ class ReadMySqlConfig(BaseConfig):
         return self.conf.get('mysql', 'USER')
 
     def passwd(self):
-        return self.conf.get('mysql', 'PASSWD')
+        return self.conf.get('mysql', 'PASSWORD')
 
     def db(self):
         return self.conf.get('mysql', 'DB')
