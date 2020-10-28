@@ -71,6 +71,7 @@ t_stan_info3 = [
 
 t_stan_mapping = ["cid", "ica", "status", "create_time"]
 
+t_stan_dic = ["type", "code", "name", "ename", "insert_timestamp", "last_update_timestamp", "data_transfer_dt"]
 
 class ConnectMysql:
     def __init__(self):

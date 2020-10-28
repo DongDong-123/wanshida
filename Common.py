@@ -954,25 +954,29 @@ class CommonFunction:
 
     def make_crdhldr_acc_tp_from(self):
         '''
-        持卡人出方账户类型 ,缺码表，随机2位数代替
+        持卡人出方账户类型 ,
         :return:
         '''
-        temp = []
-        for i in range(2):
-            temp.append(str(random.randint(0,9)))
-
-        return ''.join(temp)
+        return random.choice([
+            "00",  # No account specified (NAS)/Default Account
+            "10",  # Savings Account
+            "20",  # Checking Account
+            "30",  # Credit Card Account
+            "40"  # Universal Account
+        ])
 
     def make_crdhldr_acc_tp_to(self):
         '''
-        持卡人入方账户类型,缺码表，随机2位数代替
+        持卡人入方账户类型,
         :return:
         '''
-        temp = []
-        for i in range(2):
-            temp.append(str(random.randint(0,9)))
-
-        return ''.join(temp)
+        return random.choice([
+            "00",  # No account specified (NAS)/Default Account
+            "10",  # Savings Account
+            "20",  # Checking Account
+            "30",  # Credit Card Account
+            "40"  # Universal Account
+        ])
 
     def make_trade_time19(self, date=None):
         '''19位时间 YYYY-MM-DD HH:mm:ss'''
@@ -1064,8 +1068,13 @@ class CommonFunction:
     def make_card_type(self):
         '''卡类型'''
         return random.choice([
-            '01',  # 借记卡
-            '02',  # 贷记卡
+            "00",  # 仅收单
+            "01",  # 商务信用卡
+            "02",  # 商务借记卡
+            "03",  # 个人信用卡
+            "04",  # 个人借记卡
+            "05",  # 中国令牌范围
+            "06"  # 公务卡
         ])
 
     def make_inter_tran_type(self):
@@ -1093,3 +1102,181 @@ class CommonFunction:
         temp = fake.pyfloat(positive=True)
         temp = round(temp, 2)
         return temp
+
+    def make_card_product_data(self):
+        """
+        卡产品
+        :return:
+        """
+        return random.choice([
+            "MCG",  # 金卡
+            "MCS",  # 普卡
+            "MPL",  # 白金卡
+            "MCT",  # 钛金卡
+            "MCW",  # 世界卡
+            "MWR",  # 世界睿我卡
+            "MWE",  # 世界之级卡
+            "MCB",  # 商务金卡
+            "MEB",  # 商务白金卡
+            "MWB",  # 商务世界卡
+            "MAB",  # 商务世界之极卡
+            "MCO",  # 公务金卡
+            "MEO",  # 公务白金卡
+            "MCP",  # 公司采购卡
+            "MBS",  # 对公业务卡
+            "MDS",  # 普卡
+            "MDG",  # 金卡
+            "MDP",  # 白金卡
+            "MDH",  # 世界卡
+            "MDW",  # 世界之极
+            "MDT"  # 商务借记卡
+        ])
+
+
+    def make_crdhldr_tran_type_data(self):
+        """
+        持卡人交易类型
+        :return:
+        """
+        return random.choice([
+            "00",  # Purchase
+            "01",  # Withdrawal
+            "10",  # Non Cash Funding, debit of an account for a transfer of funds to a different entity
+            "20",  # Refund
+            "21",  # Deposit
+            "28",  # Payment Transaction
+            "29",  # Original Credit Transaction
+            "30",  # Balance Inquiry
+            "39",  # Reserved for Future Use
+            "40"  # Account Transfer
+        ])
+
+    def make_pos_entry_cd_data(self):
+        """
+        POS机输入方式码
+        PAN,PIN 两种混合到一起，2位为pan，一位为pin
+
+        :return:
+        """
+
+        return random.choice([
+            "00",
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "07",
+            "09",
+            "10",
+            "79",
+            "80",
+            "81",
+            "82",
+            "90",
+            "91",
+            "0",
+            "1",
+            "2",
+            "3",
+            "8"
+        ])
+
+    def make_resp_cd_data(self):
+        """
+        应答码
+        :return:
+        """
+        res = [
+            "00",  # Approved or completed successfully
+            "01",  # Refer to cardissuer Valid fore-commerce only
+            "03",  # Invalid merchant
+            "04",  # Capture card
+            "05",  # Do not honor
+            "08",  # Honor with ID
+            "12",  # Invalid transaction
+            "13",  # Invalid amount
+            "14",  # Invalid card
+            "15",  # Invalid issuer
+            "26",  # Record not in active status.Processor not in active status.
+            "30",  # Message format error
+            "41",  # Lost card
+            "43",  # Stolen card
+            "51",  # Insufficient
+            "54",  # Expired card
+            "55",  # Invalid PIN
+            "57",  # Transaction not permitted to issuer or  cardholder
+            "58",  # Transaction not permitted to acquirer or terminal
+            "61",  # Exceeds withdrawal limit
+            "62",  # Restricted card
+            "63",  # Error in decryption of PIN block Security violation
+            "65",  # Exceeds withdrawal count limits
+            "70",  # Invalid transaction;contact card issuer
+            "71",  # PIN not changed
+            "75",  # Allowable number of PIN tries exceeded
+            "76",  # Invalid “To” account specified
+            "77",  # Invalid “From” account specified
+            "78",  # Invalid account specified. For Mastercard China Switch use only
+            "79",  # Key Exchange Validation failed
+            "80",  # System not available Duplicate add; action not performed.
+            "81",  # Domestic Debit Transaction Not Allowed
+            "84",  # Invalid Authorization Life Cycle
+            "85",  # No reason to decline
+            "86",  # PIN Validation not possible
+            "88",  # Cryptographic failure
+            "89",  # PIN unacceptable.Retry.
+            "91",
+            # Issuer or Switch system inoperative Format Error— Issuer processor returns invalid data in the response message/0110/0210.
+            "92",  # Unable to route transaction
+            "94",  # Duplicate transmission detected
+            "96",  # System error or system malfunction
+            "A0",  # MAC verification fails
+            "A2",  # Defective approval-with matched original transcation
+            "A4",  # Defective approvalwithout matched original transcation
+        ]
+        return random.choice(res)
+
+
+    def make_dspt_tran_type_data(self):
+        """
+        差错交易类型
+        :return:
+        """
+        return random.choice([
+            "95001001",  # Dispute Chargeback Transaction
+            "95001002",  # Dispute Debit Adjustment Transaction
+            "95001003",  # Dispute Credit Adjustment Transaction
+            "95001004",  # Dispute Re-Presentment Transaction
+            "95001005",  # Dispute Chargeback Reversal
+            "95001006",  # Dispute Debit Adjustment Reversal
+            "95001007",  # Dispute Credit Adjustment Reversal
+            "95001008",  # Dispute Re-Presentment Reversal
+            "95002001",  # Pre-arbitration Settlement
+            "95002002",  # Arbitration Settlement
+            "95002003",  # Pre-compliance Settlement
+            "95002004",  # Compliance Settlement
+            "95002005",  # Pre-arbitration Settlement Reversal
+            "95002006",  # Arbitration Settlement Reversal
+            "95002007",  # Pre-compliance Settlement Reversal
+            "95002008"  # Compliance Settlement Reversal
+        ])
+
+    def make_group_tran_type_data(self):
+        """
+        交易类型分组
+        :return:
+        """
+        res = [
+            "22000001",  # Pre-authorization completion
+            "21000002",  # Purchase
+            "21000003",  # Cash withdrawal
+            "21010010",  # Fund Transfer-out
+            "21010011",  # Fund Transfer-in
+            "21000005",  # Deposit
+            "21000006",  # Refund
+            "21000007",  # Recurring
+            "21000008",  # Payment
+            "22011001",  # Manual pre-authorization completion
+            "21011006"  # Manual Refund
+        ]
+        return random.choice(res)

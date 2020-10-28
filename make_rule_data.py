@@ -10,7 +10,7 @@ import os
 import random
 from make_data import MakeData, RuleData
 from save_data import SaveFile, ConnectMysql
-from parm import savenum,trade_filenum, stifnum, filenum, zip_floder
+from parm import savenum,trade_filenum, stifnum, filenum, zip_floder, run_date,init_date
 from Common import CommonFunction
 comm = CommonFunction()
 savedata = SaveFile()
@@ -100,7 +100,7 @@ def __process_mapping():
     :return:
     """
     # txn_path = r'D:\data\wanshida\txn\20190201\TXN-D20190201-T1603607189853_0001.csv'
-    file_path = r'D:\data\wanshida\txn\20190203'
+    file_path = r'D:\data\wanshida\txn\{}'.format(init_date)
     file_ = os.listdir(file_path)[1]
     if file_[-3:] == "txt":
         file_ = os.listdir(file_path)[0]
@@ -109,6 +109,7 @@ def __process_mapping():
     with open(txn_path, 'r', encoding='utf-8') as f:
         txn_datas = f.readlines()
         # print(txn_datas)
+    txn_datas.pop(0)
     all_cards = []
     key_datas_3 = []
     for txn_data in txn_datas:

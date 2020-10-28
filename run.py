@@ -4,7 +4,7 @@
 # @FileName: run.py
 # @Software: PyCharm
 # 启动文件
-from parm import datannum, zip_floder
+from parm import datannum, zip_floder, run_date,init_date
 from schedule import main
 # 规则调度
 from make_rule_data import main as rule_main
@@ -98,7 +98,7 @@ def running_rule_data():
     start_time = time.time()
     o = datannum
 
-    for m in range(60):
+    for m in range(3):
 
         print('客户号起始编号{}'.format(n))
         print('数据交易日期{}'.format(t))
@@ -148,18 +148,17 @@ def running_rule_data_tomysql():
     updtae_parm(n, t)
 
 
-
 def copy_mapping_file():
     """复制mapping文件"""
     path = r'D:\data\wanshida\mapping'
-    file_path = r'D:\data\wanshida\mapping\20190203'
+    file_path = r'D:\data\wanshida\mapping\{}'.format(init_date)
     file_ = os.listdir(file_path)[1]
     if file_[-3:] == "txt":
         file_ = os.listdir(file_path)[0]
     file_ = os.path.join(file_path,file_)
     dir_lists = os.listdir(path)
     for dir_ in dir_lists:
-        if dir_ != '20190203':
+        if dir_ >= run_date:
             to_path = os.path.join(path,dir_)
             print(to_path)
             mapping_name = os.listdir(to_path)[0]
@@ -175,12 +174,12 @@ def copy_mapping_file():
 def delete_custom_control():
     """删除custom中mapping文件"""
     path = r'D:\data\wanshida\custom'
-    file_path = r'D:\data\wanshida\custom\20190201'
+    file_path = r'D:\data\wanshida\custom\{}'.format(init_date)
 
 
     dir_lists = os.listdir(path)
     for dir_ in dir_lists:
-        if dir_ != '20190201':
+        if dir_ >= run_date:
             to_path = os.path.join(path,dir_)
             try:
                 file_ = os.listdir(to_path)[0]
@@ -209,7 +208,7 @@ def process_control_file(datatime, num=1):
 def make_dic_file():
     """创建dic文件，全部复制"""
     path = r'D:\data\wanshida\dic'
-    file_path = r'D:\data\wanshida\dic\20190203'
+    file_path = r'D:\data\wanshida\dic\{}'.format(init_date)
     # file_txt = os.listdir(file_path)[1]
     file_csv = os.listdir(file_path)[0]
     if file_csv[-3:] == "txt":
@@ -221,7 +220,7 @@ def make_dic_file():
 
     dir_lists = os.listdir(path)
     for dir_ in dir_lists:
-        if dir_ != '20190203':
+        if dir_ >= run_date:
             to_path = os.path.join(path,dir_)
             print(to_path)
             mapping_name = os.listdir(to_path)[0]
@@ -238,7 +237,7 @@ def make_custom_file():
     dir_lists = os.listdir(path)
 
     for dir_ in dir_lists:
-        if dir_ != '20190203':
+        if dir_ >= run_date:
             to_path = os.path.join(path,dir_)
             print(to_path)
             mapping_name = os.listdir(to_path)[0]
@@ -250,7 +249,7 @@ def make_custom_file():
                 print(new_name)
                 if not os.path.exists(os.path.join(to_path, new_name)):
                     with open(os.path.join(to_path, new_name), 'w', encoding='utf-8') as f:
-                        pass
+                        f.write('\n')
             # break
 
 

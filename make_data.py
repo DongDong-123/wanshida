@@ -351,15 +351,15 @@ class MakeData:
         tran_init = comm.make_tran_init()  # 交易发起方：0-联机平台,1-成员行发起,2-手工平台发起    必填
         tran_res = comm.make_tran_res()  # 收单应答标识：0-联机应答,1-成员行应答    必填
         card_bin = comm.random_num(9)  # 卡bin
-        card_type = comm.make_card_type()  # 卡类型：借贷记    必填  缺码表
-        card_product = "卡产品"  # 卡产品    必填  缺码表
-        card_brand = "卡品牌"  # 卡品牌  缺码表
+        card_type = comm.make_card_type()  # 卡类型：借贷记    必填
+        card_product = comm.make_card_product_data()  # 卡产品    必填
+        card_brand = "MCC"  # 卡品牌
         card_media = comm.make_tsdr_data()  # 01磁条卡,02芯片卡
         token_pan = comm.random_num(32)  # token卡号
         encrypt_pan = fake.sha1()  # 加密后的卡号    必填
         hash_pan = fake.sha256()  # 卡号hash
         digsit = comm.make_digsit(token_pan)  # 前六后四卡号
-        crdhldr_tran_type = comm.random_num(2)  # 持卡人交易类型（内部使用）    必填
+        crdhldr_tran_type = comm.make_crdhldr_tran_type_data()  # 持卡人交易类型（内部使用）    必填
         crdhldr_acc_tp_from = comm.make_crdhldr_acc_tp_from()  # 持卡人出方账户类型    必填
         crdhldr_acc_tp_to = comm.make_crdhldr_acc_tp_to()  # 持卡人入方账户类型    必填
         tran_amount = comm.make_tcat_data()  # 交易金额    必填
@@ -375,7 +375,7 @@ class MakeData:
         sett_date = stiftime  # 结算日期    必填
         conv_date = stiftime  # 汇率转换日期
         mcc = comm.random_num_head_0(8)  # 商户类型    必填
-        pos_entry_cd = comm.random_num_head_0(8)  # POS机输入方式码    必填
+        pos_entry_cd = comm.make_pos_entry_cd_data()  # POS机输入方式码    必填
         card_seq_num = comm.random_num_head_0(3)  # 卡序列号
         pos_pin_cptr_cd = comm.random_num_head_0(2)  # PIN获取码
         tran_fee_indi = "C"  # 交易费借贷标识（暂不收费）
@@ -385,7 +385,7 @@ class MakeData:
         trk2_prsnt_sw = comm.random_code()  # 2磁是否出现  随机选1,2
         retriv_ref_num = comm.random_num(12)  # 检索参考号
         auth_cd = comm.random_word_num_or_str(6)  # 授权码
-        resp_cd = comm.random_word_num_or_str(6)  # 应答码    必填
+        resp_cd = comm.make_resp_cd_data()  # 应答码    必填
         pos_term_id = comm.random_num(5)  # POS机终端id    必填
         acq_merch_id = comm.random_word_num_or_str(10)  # 收单商户id    必填
         acq_merch_name = "1"  # 收单商户名称    必填
@@ -439,7 +439,7 @@ class MakeData:
         merch_advic_cd = ""  # 商户通知类型
         src_member_id = ""  # 源成员行标识
         dest_member_id = ""  # 目的成员行标识
-        group_tran_type = ""  # 交易类型分组    必填
+        group_tran_type = comm.make_group_tran_type_data()  # 交易类型分组    必填
         fee_category = ""  # 收费类型    必填
         fan_ntw_cd = ""  # 金融网络编码
         int_rate_id = ""  # 转换率标识
@@ -609,7 +609,7 @@ class MakeData:
         channel_type = ""  # 交易渠道    必填
         cash_back_amount = ori_ptxn.get("cash_back_amount")  # 余额信息    N
         orig_tran_type = ori_ptxn.get("inter_tran_type")  # 原交易交易类型    必填
-        dspt_tran_type = ori_ptxn.get("inter_tran_type")  # 差错交易交易类型    必填
+        dspt_tran_type = comm.make_dspt_tran_type_data()  # 差错交易交易类型    必填
         send_ica = ""  # 交易发起方机构号    必填
         rcvr_ica = ""  # 交易接收方机构号    必填
         send_rl = ""  # 交易发起方角色    必填
@@ -651,8 +651,8 @@ class MakeData:
         card_bin = ori_ptxn.get("card_bin")  # 卡bin
         card_type = ori_ptxn.get("card_type")  # 卡类型：借贷记    必填  缺码表
         card_type_pboc = comm.make_STCT_data()  # 报送卡类型
-        card_product = ori_ptxn.get("card_product")  # 卡产品    必填  缺码表
-        card_brand = ori_ptxn.get("card_brand")  # 卡品牌  缺码表
+        card_product = ori_ptxn.get("card_product")  # 卡产品    必填
+        card_brand = ori_ptxn.get("card_brand")  # 卡品牌
         token_pan = ori_ptxn.get("token_pan")  # token卡号
         encrypt_pan = ori_ptxn.get("encrypt_pan")  # 加密卡号    必填
         crdhldr_tran_type = ori_ptxn.get("crdhldr_tran_type")  # 持卡人交易类型（内部使用）  缺码表    必填
@@ -675,7 +675,7 @@ class MakeData:
         pos_entry_cd = ori_ptxn.get("pos_entry_cd")  # POS机输入方式码    必填  缺码表
         retriv_ref_num = ori_ptxn.get("retriv_ref_num")  # 检索参考号
         auth_cd = ori_ptxn.get("auth_cd")  # 授权码  缺码表
-        resp_cd = ori_ptxn.get("resp_cd")  # 应答码    必填   缺码表
+        resp_cd = ori_ptxn.get("resp_cd")  # 应答码    必填
         pos_term_id = ori_ptxn.get("pos_term_id")  # POS机终端id    必填
         rcv_ins_id_cd = ori_ptxn.get("rcv_ins_id_cd")  # 发卡代理机构号
         iss_mti_cd = ori_ptxn.get("iss_mti_cd")  # 发给发卡方的交易类型标识  缺码表
@@ -695,7 +695,7 @@ class MakeData:
         cash_back_indicator = ori_ptxn.get("cash_back_indicator")  # 余额借贷标识  缺码表
         tran_type = ori_ptxn.get("inter_tran_type")  # 交易类型    必填
         if tran_kd == "00":
-            dspt_tran_type = ori_ptxn.get("inter_tran_type")  # 差错交易类型
+            dspt_tran_type = comm.make_dspt_tran_type_data()  # 差错交易类型
         else:
             dspt_tran_type = ""
         org_stan = ori_ptxn.get("org_stan")  # 原交易的系统跟踪号
@@ -730,7 +730,7 @@ class MakeData:
         susp_value = ""  # 可疑分数
         ctif_tp = comm.make_ctif_tp()  # 可疑主体类别  必填
         tran_kd = comm.make_tran_kd()  # 交易种类  必填
-        card_type = ""  # 卡类型：借贷记  必填
+        card_type = comm.make_card_type()  # 卡类型：借贷记  必填
         mcc = ""  # 商户类型  必填   缺码表
 
         if ctif_tp == "2":  # 商户
@@ -748,8 +748,8 @@ class MakeData:
             STCI = comm.random_num(18)  # 主体使用的银行卡号码  （持卡人）必填
             IUCD = ""  # 主体开卡机构代码  （持卡人）必填
         fwd_ins_id_cd = ""  # 收单代理机构号
-        card_product = ""  # 卡产品  必填  缺码表
-        card_brand = ""  # 卡品牌  缺码表
+        card_product = comm.make_card_product_data()  # 卡产品  必填
+        card_brand = "MCC"  # 卡品牌
         rcv_ins_id_cd = ""  # 发卡代理机构号
         tstm = "{} {}".format(stiftime, comm.make_time())  # 交易时间  必填
         tsdr = comm.make_tsdr_data()  # 资金收付标志  必填
@@ -786,7 +786,7 @@ class MakeData:
         pos_entry_cd = ""  # POS机输入方式码  必填  # 缺码表
         retriv_ref_num = ""  # 检索参考号
         auth_cd = ""  # 授权码
-        resp_cd = ""  # 应答码  必填
+        resp_cd = comm.make_resp_cd_data()  # 应答码  必填
         pos_term_id = comm.random_num(12)  # POS机终端id  必填
         mer_unit = "管理机构"  # 管理机构  必填   缺码表
         run_dt = stiftime  # 可疑交易数据生成日期  必填
@@ -825,14 +825,14 @@ class RuleData():
         tran_res = comm.make_tran_res()  # 收单应答标识：0-联机应答,1-成员行应答    必填
         card_bin = comm.random_num(9)  # 卡bin
         card_type = comm.make_card_type()  # 卡类型：借贷记    必填  缺码表
-        card_product = "卡产品"  # 卡产品    必填  缺码表
-        card_brand = "卡品牌"  # 卡品牌  缺码表
+        card_product = comm.make_card_product_data()  # 卡产品    必填
+        card_brand = "MCC"  # 卡品牌
         card_media = comm.make_tsdr_data()  # 01磁条卡,02芯片卡
         token_pan = comm.random_num(32)  # token卡号
         encrypt_pan = take_cards  # 加密后的卡号    必填   ----------------------------------------
         hash_pan = fake.sha256()  # 卡号hash
         digsit = comm.make_digsit(token_pan)  # 前六后四卡号
-        crdhldr_tran_type = comm.random_num(2)  # 持卡人交易类型（内部使用）    必填
+        crdhldr_tran_type = comm.make_crdhldr_tran_type_data()  # 持卡人交易类型（内部使用）    必填
         crdhldr_acc_tp_from = comm.make_crdhldr_acc_tp_from()  # 持卡人出方账户类型    必填
         crdhldr_acc_tp_to = comm.make_crdhldr_acc_tp_to()  # 持卡人入方账户类型    必填
         tran_amount = comm.make_tcat_data()  # 交易金额    必填
@@ -912,7 +912,7 @@ class RuleData():
         merch_advic_cd = ""  # 商户通知类型
         src_member_id = ""  # 源成员行标识
         dest_member_id = ""  # 目的成员行标识
-        group_tran_type = ""  # 交易类型分组    必填
+        group_tran_type = comm.make_group_tran_type_data()  # 交易类型分组    必填
         fee_category = ""  # 收费类型    必填
         fan_ntw_cd = ""  # 金融网络编码
         int_rate_id = ""  # 转换率标识
@@ -1057,10 +1057,10 @@ class RuleData():
         uuid = ori_ptxn.get("uuid")  # 交易唯一标识    必填
         trace_id = ori_ptxn.get("trace_id")  # 联机流水号    必填
         card_bin = ori_ptxn.get("card_bin")  # 卡bin
-        card_type = ori_ptxn.get("card_type")  # 卡类型：借贷记    必填  缺码表
+        card_type = ori_ptxn.get("card_type")  # 卡类型：借贷记    必填
         card_type_pboc = comm.make_STCT_data()  # 报送卡类型
-        card_product = ori_ptxn.get("card_product")  # 卡产品    必填  缺码表
-        card_brand = ori_ptxn.get("card_brand")  # 卡品牌  缺码表
+        card_product = ori_ptxn.get("card_product")  # 卡产品    必填
+        card_brand = ori_ptxn.get("card_brand")  # 卡品牌
         token_pan = ori_ptxn.get("token_pan")  # token卡号
         encrypt_pan = ori_ptxn.get("encrypt_pan")  # 加密卡号    必填
         crdhldr_tran_type = ori_ptxn.get("crdhldr_tran_type")  # 持卡人交易类型（内部使用）  缺码表    必填

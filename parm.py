@@ -18,7 +18,8 @@ linuxsavepath = parm_ob.get_linux_path()  # 数据存储路径 linux
 datadate = parm_ob.get_data_date()  # 开始数据日期，
 filenum = int(parm_ob.get_file_num())  # 非交易数据文件储存的数据条数
 trade_filenum = int(parm_ob.get_trade_file_num())    # 交易数据文件存储数据条数
-
+init_date = '20190210'
+run_date = '20190211'
 
 # redis 连接信息
 redis_conf = RedisConfig()
