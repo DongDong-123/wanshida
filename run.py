@@ -7,8 +7,8 @@
 from parm import datannum, zip_floder, run_date,init_date
 from schedule import main
 # 规则调度
-from make_rule_data import main as rule_main
-from make_rule_data import main_to_mysql
+from rule_schedule import main as rule_main, main_full
+from rule_schedule import main_to_mysql
 
 import os, shutil
 import zipfile
@@ -81,6 +81,34 @@ def running():
         stif_time = "{}".format(t)
 
         main(n, n + o, stif_time, file_date_time)
+        n += o
+        t += 1
+        t = int(comm.process_time(t))  # 处理日期
+        # zip_file(zip_floder, file_date_time)
+
+    end_time = time.time()
+    print("执行时间：", end_time - start_time)  # 13
+
+    updtae_parm(n, t)
+
+
+def running_2():
+    n, t = get_parm()
+    # t = 20190201   # 临时写死
+    start_time = time.time()
+    o = datannum
+
+    for m in range(1):
+
+        print('客户号起始编号{}'.format(n))
+        print('数据交易日期{}'.format(t))
+        # st = datetime.datetime.strptime(str(t), "%Y%m%d")
+        # file_date_time = str(st)[:10]
+        file_date_time = str(t)
+        # stif_time = "{}100000".format(t)
+        stif_time = "{}".format(t)
+
+        main_full(n, n + o, stif_time, file_date_time)
         n += o
         t += 1
         t = int(comm.process_time(t))  # 处理日期
@@ -191,7 +219,6 @@ def delete_custom_control():
                 print(e)
 
 
-
 def process_control_file(datatime, num=1):
     curr_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     data_flode = os.path.join(zip_floder, 'data')
@@ -256,12 +283,12 @@ def make_custom_file():
 
 
 if __name__ == "__main__":
-    # running()  # 生成一天的基准数据
+    running_2()  # 生成一天的基准数据
     # 规则数据，依次执行，根据基准数据，生成交易数据
     # running_rule_data()
     # copy_mapping_file()
     # make_dic_file()
-    make_custom_file()
+    # make_custom_file()
     # delete_custom_control()
     # 存库
     # running_rule_data_tomysql()

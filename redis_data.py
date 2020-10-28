@@ -28,6 +28,24 @@ class RedisConnect:
         res = self.conn.keys("*")
         return res
 
+    # 集合
+    def insert_set(self, name, value):
+        """插入集合,value"""
+        res = self.conn.sadd(name, value)
+        return res
+
+    def random_get_and_del(self,name):
+        """随机获取name集合的一个元素并删除"""
+        res = self.conn.spop(name)
+        return res
+
+    def get_set_count(self, name):
+        """"
+        获取集合内的数量
+        """
+        res = self.conn.scard(name)
+        return res
+
 def set_provance():
     """添加省映射"""
     redis_connect = RedisConnect()
@@ -191,6 +209,55 @@ def pro_temp():
             tt = redis_connect.update(i, datas)
             print(tt)
 
+class ProcessBank:
+    def __init__(self):
+        self.redis_connect = RedisConnect()
+
+    def insert_bank_name(self):
+        """
+        初始化插入银行名称
+        :return:
+        """
+        bank_list = [
+            "民生银行",
+            "廊坊银行",
+            "邯郸银行",
+            "承德银行",
+            "张家口银行",
+            "汇丰银行",
+            "渣打银行",
+            "花旗银行",
+            "富国银行",
+            "中国工商银行",
+            "招商银行",
+            "中国农业银行",
+            "中国建设银行",
+            "中国银行",
+            "中国民生银行",
+            "中国光大银行",
+            "中信银行",
+            "交通银行",
+            "兴业银行",
+            "华夏银行",
+            "厦门国际银行",
+            "北京银行",
+            "上海银行",
+            "中国邮政储蓄银行"
+        ]
+
+        for bank in bank_list:
+            res = self.redis_connect.insert_set("all_bank", bank)
+            if res:
+                print("插入成功")
+
+
+    def get_bank_name(self):
+        res = self.redis_connect.random_get_and_del('all_bank')
+        return res
+
+    def get_count(self):
+        res = self.redis_connect.get_set_count('all_bank')
+        return res
 
 def main():
     set_provance()
@@ -201,5 +268,19 @@ def main():
     # pro_city()
     pro_temp()
 
+def main2():
+    """"
+    初始化客户名称数据，插入bank
+    """
+    PB = ProcessBank()
+    PB.insert_bank_name()
+    res1 = PB.get_count()
+    print(res1)
+    # res2 = PB.get_bank_name()
+    # print(res2)
+    # res3 = PB.get_count()
+    # print(res3)
+
 if __name__ == "__main__":
-    main()
+    # main()
+    main2()
