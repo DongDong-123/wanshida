@@ -16,6 +16,8 @@ comm = CommonFunction()
 savedata = SaveFile()
 # 规则数据
 ruledata = RuleData()
+from redis_data import ProcessBank
+PB = ProcessBank()
 # 存入数据库
 
 # 临时存储生成数据
@@ -29,6 +31,9 @@ survey_info1 = []
 survey_info2 = []
 survey_info3 = []
 mappings = []
+
+dic_data = [["tstp", "1", "现金", "xj"]]
+
 
 def __threads(all_data, all_table_name, file_date_time, order, sign,delimiter, control_file_time):
     """
@@ -45,15 +50,19 @@ def __threads(all_data, all_table_name, file_date_time, order, sign,delimiter, c
 
     threads = []
     for ind, dat in enumerate(all_data):
-        if len(eval(dat)):
+        if isinstance(dat, str):
+            dats = eval(dat)
+        else:
+            dats = dat
+        if len(dats):
             if delimiter:
                 thr = threading.Thread(target=savedata.write_to_csv, args=(
-                    eval(dat), all_table_name[ind], file_date_time, order, sign,control_file_time, delimiter))
+                    dats, all_table_name[ind], file_date_time, order, sign,control_file_time, delimiter))
                 thr.start()
                 threads.append(thr)
             else:
                 thr = threading.Thread(target=savedata.write_to_csv, args=(
-                    eval(dat), all_table_name[ind], file_date_time, order, sign,control_file_time))
+                    dats, all_table_name[ind], file_date_time, order, sign,control_file_time))
                 thr.start()
                 threads.append(thr)
 
@@ -87,8 +96,8 @@ def __control_file(file_name, file_date_time, file_num,filepath, control_file_ti
     else:
         with open(file_full, '+a', encoding="UTF-8") as f:
             # print('-----------------创建{}-------------------'.format(file_full))
-            # f.write(','.join([filename, str(data_num)]) + "\n")
-            f.write(','.join([filename, '0']) + "\n")
+            f.write(','.join([filename, str(data_num)]) + "\n")
+            # f.write(','.join([filename, '0']) + "\n")
 
 
 def __process_mapping():
@@ -140,6 +149,8 @@ def main_full(beg, end, stif_time, file_date_time):
         os.makedirs(file_path3)
     if not os.path.exists(file_path4):
         os.makedirs(file_path4)
+    # 初始化插入数据
+    PB.insert_bank_name()
     # 控制文件时间戳
     control_file_time = round(time.time() * 1000)
 
@@ -170,10 +181,11 @@ def main_full(beg, end, stif_time, file_date_time):
     sign_stif = 0  # 可疑交易数量
     sign_map = 0  # mapping文件数量
     sc_map = 0  # map保存次数
-
     for num in range(beg, end):
-        t_stan_org = makedata.make_stan_org(num)
-        customer_id = 'org_1_{}'.format(num)
+        org_ctnm = PB.get_bank_name()  # 获取客户名称
+        org_csnm = PB.get_bank_value(org_ctnm)
+        t_stan_org = makedata.make_stan_org(org_csnm, org_ctnm)
+        customer_id = org_csnm
         orgs.append(t_stan_org)
         t_stan_relation = makedata.make_stan_relation()
         relations.append(t_stan_relation)
@@ -185,9 +197,9 @@ def main_full(beg, end, stif_time, file_date_time):
         t_stan_survey_info3 = makedata.make_stan_survey_info3()
         survey_info3.append(t_stan_survey_info3)
         # 单独生成交易数据,根据原始交易生产标准交易
-        acq_ins_id = [comm.random_num(6) for i in range(5)]
+        acq_ins_id = [comm.random_num(10) for i in range(5)]  # 生成acq号码，一个客户固定5个，重复使用
         for i in range(stifnum):
-            t_stan_ptxn, all_dict_data = makedata.make_stan_ptxn(stif_time, acq_ins_id)
+            t_stan_ptxn, all_dict_data = makedata.make_stan_ptxn(stif_time, acq_ins_id, org_ctnm)
 
             t_stan_txn, map_data = makedata.make_stan_txn(stif_time, all_dict_data)
             txns.append(t_stan_txn)
@@ -238,24 +250,24 @@ def main_full(beg, end, stif_time, file_date_time):
 
             txns.clear()  # 清空已写入交易数据
 
-        #   ---------------mapping文件--------------
-        sign_map += stifnum*2
-        if (sign_map) % savenum == 0:  # 符合条件，多线程存储
-            sc_map += 1
-            print('{} 存储map数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),savenum, map_file_ord))
-
-            __threads(["mappings"], ["mapping"], file_date_time, map_file_ord, sign_map, 'map', control_file_time)
-
-            if sc_map == map_save_ci:
-                filepath = os.path.join(zip_floder, 'mapping', file_date_time)
-                __control_file("mapping", file_date_time, map_file_ord, filepath, control_file_time,trade_filenum*2)
-
-                map_file_ord += 1
-                sc_map = 0
-                sign_map = 0
-
-            mappings.clear()  # 清空已写入交易数据
-        #   ---------------mapping文件--------------
+        # #   ---------------mapping文件--------------
+        # sign_map += stifnum*2
+        # if (sign_map) % savenum == 0:  # 符合条件，多线程存储
+        #     sc_map += 1
+        #     print('{} 存储map数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),savenum, map_file_ord))
+        #
+        #     __threads(["mappings"], ["mapping"], file_date_time, map_file_ord, sign_map, 'map', control_file_time)
+        #
+        #     if sc_map == map_save_ci:
+        #         filepath = os.path.join(zip_floder, 'mapping', file_date_time)
+        #         __control_file("mapping", file_date_time, map_file_ord, filepath, control_file_time,trade_filenum*2)
+        #
+        #         map_file_ord += 1
+        #         sc_map = 0
+        #         sign_map = 0
+        #
+        #     mappings.clear()  # 清空已写入交易数据
+        # #   ---------------mapping文件--------------
 
     if sign_other > 0:
         print('{} 存储剩余数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_other, file_ord))
@@ -273,16 +285,23 @@ def main_full(beg, end, stif_time, file_date_time):
         __control_file("txn", file_date_time, stif_data_num,filepath, control_file_time,sign_txn)
 
         txns.clear()
+    # if sign_map > 0:
+    process_data = []
+    for da in mappings:
+        single_data = "||".join([str(tt) for tt in da])
+        process_data.append(single_data)
+    process_data = list(set(process_data))
+    mapping_num = len(process_data)
+    print('{} 存储剩余map数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),mapping_num, map_file_ord))
+    __threads([process_data], ["mapping"], file_date_time, map_file_ord, sign_map,'map', control_file_time)
+    filepath = os.path.join(zip_floder, 'mapping', file_date_time)
+    __control_file("mapping", file_date_time, map_file_ord,filepath, control_file_time,mapping_num)
 
-    if sign_map > 0:
-        print('{} 存储剩余map数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_map, map_file_ord))
-        __threads(["mappings"], ["mapping"], file_date_time, map_file_ord, sign_map,'||', control_file_time)
-        filepath = os.path.join(zip_floder, 'mapping', file_date_time)
-        __control_file("mapping", file_date_time, map_file_ord,filepath, control_file_time,sign_map)
-
-        mappings.clear()
+    mappings.clear()
 
     # dic 文件
+    print('{} 存储剩余dic数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),1, 1))
+    __threads(["dic_data"], ["dic"], file_date_time, 1, 1, 'dic', control_file_time)
     __control_file('dic', file_date_time, 1, file_path4, control_file_time, 1)
 
     # -----------------可疑交易存储--------------------------------
@@ -293,6 +312,22 @@ def main_full(beg, end, stif_time, file_date_time):
     #
     #     txns.clear()
     # -------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def main(beg, end, stif_time, file_date_time):
@@ -312,13 +347,14 @@ def main(beg, end, stif_time, file_date_time):
         os.makedirs(file_path4)
     # 控制文件时间戳
     control_file_time = round(time.time() * 1000)
-
+    # 初始化插入数据
+    PB.insert_bank_name()
     currt_time = time.strftime('%Y%m%d', time.localtime())
     update_date = comm.process_time(int(stif_time.replace("-",""))+1)
     random_time = comm.make_time()
     update_time = update_date+random_time.replace(':',"")
 
-    makedata = MakeData(update_time)
+    makedata = RuleData()
     # 日期格式转换
     stif_time = comm.turn_date10(stif_time)
 
@@ -345,6 +381,7 @@ def main(beg, end, stif_time, file_date_time):
     key_datas, take_cards = __process_mapping()
 
     for num in range(beg, end):
+        org_ctnm = PB.get_bank_name()  # 获取客户名称
         # t_stan_org = makedata.make_stan_org(num)
         # customer_id = 'org_1_{}'.format(num)
         # orgs.append(t_stan_org)
@@ -362,7 +399,7 @@ def main(beg, end, stif_time, file_date_time):
             random_key = random.choice(key_datas)
             cards = random.choice(take_cards)
             # t_stan_ptxn, all_dict_data = makedata.make_stan_ptxn(stif_time)
-            t_stan_ptxn, all_dict_data = ruledata.make_stan_ptxn(stif_time,update_time,random_key,cards)
+            t_stan_ptxn, all_dict_data = ruledata.make_stan_ptxn(stif_time,update_time,random_key,cards, org_ctnm)
 
             t_stan_txn, map_data = ruledata.make_stan_txn(stif_time, all_dict_data)
             txns.append(t_stan_txn)

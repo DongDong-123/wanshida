@@ -72,6 +72,7 @@ t_stan_info3 = [
 t_stan_mapping = ["cid", "ica", "status", "create_time"]
 
 t_stan_dic = ["type", "code", "name", "ename", "insert_timestamp", "last_update_timestamp", "data_transfer_dt"]
+# t_stan_dic = ["type", "code", "name", "ename"]
 
 class ConnectMysql:
     def __init__(self):
@@ -119,6 +120,7 @@ class SaveFile:
         self.t_stan_info2 = t_stan_info2
         self.t_stan_info3 = t_stan_info3
         self.t_stan_mapping = t_stan_mapping
+        self.t_stan_dic = t_stan_dic
         currt_time = round(time.time() * 1000)
 
 
@@ -137,6 +139,8 @@ class SaveFile:
             file_path = os.path.join(self.file_path,'custom',date_time)
         elif delimiter == 'map':
             file_path = os.path.join(self.file_path,'mapping',date_time)
+        elif delimiter == 'dic':
+            file_path = os.path.join(self.file_path, 'dic', date_time)
         else:
             file_path = os.path.join(self.file_path,'txn',date_time)
 
@@ -164,6 +168,14 @@ class SaveFile:
                 with open(file_full, 'a', encoding="utf-8-sig") as f:
                     f.write("||".join(title)+'\n')
 
+            with open(file_full, 'a', encoding="utf-8-sig") as f:
+                for dat in datas:
+                    f.write(dat + '\n')
+        elif delimiter == 'dic':
+            if not os.path.exists(file_full):
+                title = eval('self.' + 't_stan_' + file_name)
+                with open(file_full, 'a', encoding="utf-8-sig") as f:
+                    f.write("||".join(title)+'\n')
             with open(file_full, 'a', encoding="utf-8-sig") as f:
                 for da in datas:
                     f.write("||".join([str(tt) for tt in da]) + '\n')

@@ -15,18 +15,19 @@ PB = ProcessBank()
 class MakeData:
     def __init__(self, update_t):
         self.csnm = None
-        self.ctnm = None
+        # self.ctnm = None
         # self.unit_code = None
         self.data_time = comm.data_time()
         self.update_time = update_t
 
-    def make_stan_org(self, num):
+    def make_stan_org(self, num, org_ctnm):
         """
         机构数据
         :return:
         """
-        self.csnm = 'org_1_{}'.format(num)  # 客户号    必填
-        self.ctnm = PB.get_bank_name()  # 客户名称    必填
+        # self.csnm = 'org_1_{}'.format(num)  # 客户号    必填
+        self.csnm = num  # 客户号    必填
+        self.ctnm = org_ctnm  # 客户名称    必填
         # custormer_sname = ''.join([elem[0] for elem in self.ctnm.split()])  # 客户简称
         custormer_ename = comm.person_fir_name()  # 拼音/英文名称
         custormer_sename = custormer_ename  # 英文缩写
@@ -78,7 +79,8 @@ class MakeData:
         # lfa_type_explain = ''  # 组织机构其他类别说明
         found_date = comm.make_date(-20, -1)  # 成立日期    必填
         assets_size = comm.random_num(8)  # 资产规模(美元，当年）
-        country = comm.chiose_country()  # 注册国家    必填
+        # country = comm.chiose_country()  # 注册国家    必填
+        country = 'CHN'  # 注册国家    必填
         other_oper_country = comm.chiose_country()  # 其他运营国家  随机国家
         desc_business = fake.paragraph()  # 经营说明  随机一句话
         # tin = ''  # TIN
@@ -87,7 +89,7 @@ class MakeData:
         # indu_code = ''  # 主体的行业代码原值    应填
         # indu_code_nt = ''  # 主体的行业代码原值说明    应填
         legal_p_name = fake.name()  # 主体的法定代表人姓名    必填
-        legal_p_ename = comm.make_name_data()  # 主体的法定代表人英文姓名
+        legal_p_ename = comm.person_fir_name()  # 主体的法定代表人英文姓名
         legal_p_cert_tp = comm.cert_type()  # 主体的法定代表人身份证件类型    必填
         legal_p_cert_explain = comm.cert_explain(legal_p_cert_tp)  # 主体的法定代表人证件类型说明    必填
         legal_p_cert_num = fake.ssn()  # 主体的法定代表人身份证件号码    必填
@@ -341,7 +343,7 @@ class MakeData:
         return ["{}".format(x) for x in all_col]
 
 
-    def make_stan_ptxn(self, stiftime, acq_ins_id):
+    def make_stan_ptxn(self, stiftime, acq_ins_id, org_ctnm):
         """"原始业务交易信息表
         """
         msg_id = comm.random_num(19)  # 消息id    必填
@@ -358,7 +360,7 @@ class MakeData:
         card_brand = "MCC"  # 卡品牌
         card_media = comm.make_tsdr_data()  # 01磁条卡,02芯片卡
         token_pan = comm.random_num(32)  # token卡号
-        encrypt_pan = fake.sha1()  # 加密后的卡号    必填
+        encrypt_pan = fake.sha1()  # 加密后的卡号    必填                --------------------------------------------
         hash_pan = fake.sha256()  # 卡号hash
         digsit = comm.make_digsit(token_pan)  # 前六后四卡号
         crdhldr_tran_type = comm.make_crdhldr_tran_type_data()  # 持卡人交易类型（内部使用）    必填
@@ -382,7 +384,7 @@ class MakeData:
         pos_pin_cptr_cd = comm.random_num_head_0(2)  # PIN获取码
         tran_fee_indi = "C"  # 交易费借贷标识（暂不收费）
         acq_srchg_amount = "0"  # 交易费金额
-        acq_ins_id_cd = comm.random_num(10)  # 收单机构号    必填
+        acq_ins_id_cd = random.choice(acq_ins_id)  # 收单机构号    必填     -----------------
         fwd_ins_id_cd = comm.random_num(10)  # 收单代理机构号    必填
         trk2_prsnt_sw = comm.random_code()  # 2磁是否出现  随机选1,2
         retriv_ref_num = comm.random_num(12)  # 检索参考号
@@ -413,13 +415,13 @@ class MakeData:
         org_mti = comm.random_num(6)  # 原交易的消息类型标识    必填
         org_stan = comm.random_num(6)  # 原交易的系统跟踪号    必填
         org_tran_datetime = comm.make_trade_time19(stiftime)  # 原交易的交易时间    必填
-        org_acq_ins_id_cd = random.choice(acq_ins_id)  # 原交易的收单机构号    必填       -----------------
+        org_acq_ins_id_cd =  comm.random_num(10)  # 原交易的收单机构号    必填
         org_fwd_ins_id_cd = comm.random_num(6)  # 原交易的收单代理机构号    必填
         org_trace_id = comm.make_ticd_data()  # 原交易的联机流水号    必填
         rcv_ins_id_cd = comm.random_num(10)   # 发卡代理机构号    必填
         iss_mti_cd = comm.make_iss_mti_cd()  # 发给发卡方的交易类型标识    必填
         iss_pcode = comm.make_iss_pcode()  # 发给发卡方的持卡人交易类型    必填
-        iss_ins_id_cd = comm.random_str(12)  # 发卡行机构代码    必填     ------------------------------
+        iss_ins_id_cd = PB.get_bank_value(org_ctnm) + '1'  # 发卡行机构代码    必填     ------------------------------
         acq_msg_flag = ""  # 收单行单双标识    必填
         iss_msg_flag = ""  # 发卡行收单标识    必填
         single_dual_flag = ""  # 单双转换信息标识    必填
@@ -814,7 +816,7 @@ class RuleData():
         self.acq_ins_id_cd = ''
 
 
-    def make_stan_ptxn(self, stiftime, update_time, key_datas, take_cards):
+    def make_stan_ptxn(self, stiftime, update_time, key_datas, take_cards, ctnm):
         """"原始业务交易信息表
         """
         msg_id = comm.random_num(19)  # 消息id    必填
@@ -892,7 +894,7 @@ class RuleData():
         rcv_ins_id_cd = comm.random_num(10)   # 发卡代理机构号    必填
         iss_mti_cd = comm.make_iss_mti_cd()  # 发给发卡方的交易类型标识    必填
         iss_pcode = comm.make_iss_pcode()  # 发给发卡方的持卡人交易类型    必填
-        iss_ins_id_cd = key_datas[0]  # 发卡行机构代码    必填   -----------------------------------------
+        iss_ins_id_cd = ctnm  # 发卡行机构代码    必填   -----------------------------------------
         acq_msg_flag = ""  # 收单行单双标识    必填
         iss_msg_flag = ""  # 发卡行收单标识    必填
         single_dual_flag = ""  # 单双转换信息标识    必填
