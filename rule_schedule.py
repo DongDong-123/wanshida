@@ -16,8 +16,9 @@ comm = CommonFunction()
 savedata = SaveFile()
 # 规则数据
 ruledata = RuleData()
-from redis_data import ProcessBank
+from redis_data import ProcessBank,ProcessStif
 PB = ProcessBank()
+PS = ProcessStif()
 # 存入数据库
 
 # 临时存储生成数据
@@ -80,6 +81,9 @@ def __control_file(file_name, file_date_time, file_num,filepath, control_file_ti
     elif file_name == 'dic':
         file_full = os.path.join(filepath, 'DIC-D{}-T{}.txt'.format(
         file_date_time, control_file_time))
+    elif file_name == 'stif':
+        file_full = os.path.join(filepath, 'STIF-D{}-T{}.txt'.format(
+        file_date_time, control_file_time))
     else:
         file_full = os.path.join(filepath, 'D{}-T{}.txt'.format(
         file_date_time, control_file_time))
@@ -140,6 +144,7 @@ def main_full(beg, end, stif_time, file_date_time):
     file_path2 = os.path.join(zip_floder, 'txn', file_date_time)
     file_path3 = os.path.join(zip_floder, 'mapping', file_date_time)
     file_path4 = os.path.join(zip_floder, 'dic', file_date_time)
+    file_path5 = os.path.join(zip_floder, 'stif', file_date_time)
 
     if not os.path.exists(file_path1):
         os.makedirs(file_path1)
@@ -149,8 +154,16 @@ def main_full(beg, end, stif_time, file_date_time):
         os.makedirs(file_path3)
     if not os.path.exists(file_path4):
         os.makedirs(file_path4)
-    # 初始化插入数据
+    if not os.path.exists(file_path5):
+        os.makedirs(file_path5)
+    # 清除原有客户数据
+    PB.clear_bankname()
+    PB.delete_bank_value()
+    PS.clear_shop_data()
+    # 初始化插入客户数据
     PB.insert_bank_name()
+    PB.set_bank_value()
+    PS.save_shop_k_v()
     # 控制文件时间戳
     control_file_time = round(time.time() * 1000)
 
@@ -183,7 +196,7 @@ def main_full(beg, end, stif_time, file_date_time):
     sc_map = 0  # map保存次数
     for num in range(beg, end):
         org_ctnm = PB.get_bank_name()  # 获取客户名称
-        org_csnm = PB.get_bank_value(org_ctnm)
+        org_csnm = PB.get_bank_value(org_ctnm)  # 获取客户号
         t_stan_org = makedata.make_stan_org(org_csnm, org_ctnm)
         customer_id = org_csnm
         orgs.append(t_stan_org)
@@ -198,6 +211,9 @@ def main_full(beg, end, stif_time, file_date_time):
         survey_info3.append(t_stan_survey_info3)
         # 单独生成交易数据,根据原始交易生产标准交易
         acq_ins_id = [comm.random_num(10) for i in range(5)]  # 生成acq号码，一个客户固定5个，重复使用
+        # acq_ins_id = org_csnm
+        # mappings.extend([[customer_id, customer_id, 'l', currt_time]])
+
         for i in range(stifnum):
             t_stan_ptxn, all_dict_data = makedata.make_stan_ptxn(stif_time, acq_ins_id, org_ctnm)
 
@@ -205,10 +221,13 @@ def main_full(beg, end, stif_time, file_date_time):
             txns.append(t_stan_txn)
             mappings.extend([[customer_id, ica, 'l',currt_time] for ica in map_data])
             # ---------可疑交易数据，暂时不用---------------
-            # if num %10 == 0:
-            #     t_stan_stif = makedata.make_stan_stif(stif_time, all_dict_data)
-            #     stifs.append(t_stan_stif)
-            #     sign_stif += 1
+            if num %10 == 0:
+                ACCD_data = [comm.random_num(13) for i in range(5)]  # 生成acq号码，一个客户固定5个，重复使用
+                t_stan_stif, ica_data = makedata.make_stan_stif(stif_time, all_dict_data, ACCD_data)
+                if ica_data:
+                    mappings.append([customer_id, ica_data, 'l', currt_time])
+                stifs.append(t_stan_stif)
+                sign_stif += 1
             # -----------------------------------------------
         # 除交易外的存储
         sign_other += 1
@@ -251,22 +270,22 @@ def main_full(beg, end, stif_time, file_date_time):
             txns.clear()  # 清空已写入交易数据
 
         # #   ---------------mapping文件--------------
-        # sign_map += stifnum*2
-        # if (sign_map) % savenum == 0:  # 符合条件，多线程存储
-        #     sc_map += 1
-        #     print('{} 存储map数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),savenum, map_file_ord))
-        #
-        #     __threads(["mappings"], ["mapping"], file_date_time, map_file_ord, sign_map, 'map', control_file_time)
-        #
-        #     if sc_map == map_save_ci:
-        #         filepath = os.path.join(zip_floder, 'mapping', file_date_time)
-        #         __control_file("mapping", file_date_time, map_file_ord, filepath, control_file_time,trade_filenum*2)
-        #
-        #         map_file_ord += 1
-        #         sc_map = 0
-        #         sign_map = 0
-        #
-        #     mappings.clear()  # 清空已写入交易数据
+        sign_map = len(mappings)
+        if (sign_map) % savenum == 0:  # 符合条件，多线程存储
+            sc_map += 1
+            print('{} 存储map数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),savenum, map_file_ord))
+
+            __threads(["mappings"], ["mapping"], file_date_time, map_file_ord, sign_map, 'map', control_file_time)
+
+            if sc_map == map_save_ci:
+                filepath = os.path.join(zip_floder, 'mapping', file_date_time)
+                __control_file("mapping", file_date_time, map_file_ord, filepath, control_file_time,trade_filenum*2)
+
+                map_file_ord += 1
+                sc_map = 0
+                sign_map = 0
+
+            mappings.clear()  # 清空已写入交易数据
         # #   ---------------mapping文件--------------
 
     if sign_other > 0:
@@ -305,27 +324,15 @@ def main_full(beg, end, stif_time, file_date_time):
     __control_file('dic', file_date_time, 1, file_path4, control_file_time, 1)
 
     # -----------------可疑交易存储--------------------------------
-    # if sign_stif > 0:
-    #     print('{} 存储可疑交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_stif, 1))
-    #     __threads(["stifs"], ["stif"], file_date_time, 1, sign_stif,'')
-    #     __control_file("stif", file_date_time, sign_stif, filepath)
-    #
-    #     txns.clear()
+    if sign_stif > 0:
+        print('{} 存储可疑交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_stif, 1))
+        __threads(["stifs"], ["stif"], file_date_time, 1, sign_stif,'|', control_file_time)
+        filepath = os.path.join(zip_floder, 'stif', file_date_time)
+
+        __control_file("stif", file_date_time, sign_stif, filepath,control_file_time, sign_stif)
+
+        txns.clear()
     # -------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -336,6 +343,7 @@ def main(beg, end, stif_time, file_date_time):
     file_path2 = os.path.join(zip_floder, 'txn', file_date_time)
     file_path3 = os.path.join(zip_floder, 'mapping', file_date_time)
     file_path4 = os.path.join(zip_floder, 'dic', file_date_time)
+    file_path5 = os.path.join(zip_floder, 'stif', file_date_time)
 
     if not os.path.exists(file_path1):
         os.makedirs(file_path1)
@@ -345,6 +353,9 @@ def main(beg, end, stif_time, file_date_time):
         os.makedirs(file_path3)
     if not os.path.exists(file_path4):
         os.makedirs(file_path4)
+    if not os.path.exists(file_path5):
+        os.makedirs(file_path5)
+
     # 控制文件时间戳
     control_file_time = round(time.time() * 1000)
     # 初始化插入数据
@@ -499,12 +510,13 @@ def main(beg, end, stif_time, file_date_time):
     __control_file('dic', file_date_time, 1, file_path4, control_file_time, 1)
 
     # -----------------可疑交易存储--------------------------------
-    # if sign_stif > 0:
-    #     print('{} 存储可疑交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_stif, 1))
-    #     __threads(["stifs"], ["stif"], file_date_time, 1, sign_stif,'')
-    #     __control_file("stif", file_date_time, sign_stif, filepath)
-    #
-    #     txns.clear()
+    if sign_stif > 0:
+        print('{} 存储可疑交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_stif, 1))
+        __threads(["stifs"], ["stif"], file_date_time, 1, sign_stif,'',control_file_time)
+        filepath = os.path.join(zip_floder, 'mapping', file_date_time)
+        __control_file("stif", file_date_time, sign_stif, filepath,sign_stif,control_file_time)
+
+        txns.clear()
     # -------------------------------------------------------------
 
 

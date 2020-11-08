@@ -4,7 +4,7 @@
 # @FileName: redis_data.py
 # @Software: PyCharm
 import redis
-
+import random
 from parm import redis_host, redis_db, redis_port, redis_passwd
 
 
@@ -17,8 +17,9 @@ class RedisConnect:
         self.conn.set(k, v)
 
     def get_data(self, k):
-        res = self.conn.get(k)
-        return res
+        if k:
+            res = self.conn.get(k)
+            return res
 
     def update(self,k, v):
         res = self.conn.getset(k, v)
@@ -28,10 +29,21 @@ class RedisConnect:
         res = self.conn.keys("*")
         return res
 
+    def delete_k_v(self, k):
+        res = self.conn.delete(k)
+
     # 集合
     def insert_set(self, name, value):
         """插入集合,value"""
         res = self.conn.sadd(name, value)
+        return res
+
+    def clear_set(self, name):
+        """
+        清空集合内数据
+        :return:
+        """
+        res = self.conn.delete(name)
         return res
 
     def random_get_and_del(self,name):
@@ -248,7 +260,15 @@ class ProcessBank:
             "上海银行",
             "中国邮政储蓄银行"
         ]
-
+        # bank_list = [
+        #     "平安银行",
+        #     "恒生银行",
+        #     "浙商银行",
+        #     "广发银行",
+        #     "恒丰银行",
+        #     "渤海银行",
+        #     "浦发银行"
+        # ]
         for bank in bank_list:
             res = self.redis_connect.insert_set("all_bank", bank)
             if res:
@@ -293,8 +313,57 @@ class ProcessBank:
             ("上海银行", "100000023"),
             ("中国邮政储蓄银行", "100000024")
         ]
+        # datas = [
+        #     ("平安银行", "2571"),
+        #     ("恒生银行", "3098"),
+        #     ("浙商银行", "3980"),
+        #     ("广发银行", "6532"),
+        #     ("恒丰银行", "9788"),
+        #     ("渤海银行", "10977"),
+        #     ("浦发银行", "17868")
+        # ]
         for data in datas:
             self.redis_connect.save_k_v(data[0], data[1])
+
+    def delete_bank_value(self):
+        """删除键值对"""
+        bank_list = [
+            "民生银行",
+            "廊坊银行",
+            "邯郸银行",
+            "承德银行",
+            "张家口银行",
+            "汇丰银行",
+            "渣打银行",
+            "花旗银行",
+            "富国银行",
+            "中国工商银行",
+            "招商银行",
+            "中国农业银行",
+            "中国建设银行",
+            "中国银行",
+            "中国民生银行",
+            "中国光大银行",
+            "中信银行",
+            "交通银行",
+            "兴业银行",
+            "华夏银行",
+            "厦门国际银行",
+            "北京银行",
+            "上海银行",
+            "中国邮政储蓄银行"
+        ]
+        bank_list = [
+            "平安银行",
+            "恒生银行",
+            "浙商银行",
+            "广发银行",
+            "恒丰银行",
+            "渤海银行",
+            "浦发银行"
+        ]
+        for i in bank_list:
+            self.redis_connect.delete_k_v(i)
 
     def get_bank_value(self, name):
         res = self.redis_connect.get_data(name)
@@ -328,6 +397,69 @@ class ProcessBank:
             ("中国邮政储蓄银行", ['1701970017', '6270506444', '9961073342', '2764148652', '2467666099'])
         ]
 
+    def clear_bankname(self):
+        '''清空旧数据'''
+        res = self.redis_connect.clear_set('all_bank')
+        return res
+
+
+
+
+class ProcessStif:
+    """可疑表中，主体的商户名称、商户代码"""
+    def __init__(self):
+        self.redis_connect = RedisConnect()
+
+    def random_num(self, num):
+        ''' 接收int类型参数num，根据参数随机生成数字,返回字符串,不以0开头'''
+        res_list = []
+        while len(res_list) < num:
+            elem = random.randint(0, 9)
+            if res_list or elem:
+                res_list.append(str(elem))
+
+        return ''.join(res_list)
+    def org_name(self):  # 机构客户名称
+        name = [self.random_str(random.randint(4,7)) for i in range(random.randint(3,5))]
+        return ' '.join(name)
+    def random_str(self, num):
+        words = 'abcdefghijklmnopqrstuvwxyz'
+        strs = ''.join(random.choices(words, k=num))
+        return strs.capitalize()
+
+
+    def make_and_save_shop_data(self):
+        """生成15组数据"""
+        res = []
+        for i in range(100):
+            org_code = self.random_num(15)
+            res.append(org_code)
+            self.redis_connect.insert_set('shop_data',org_code)
+        return res
+
+    def save_shop_k_v(self):
+        codes = self.make_and_save_shop_data()
+        for code in codes:
+            name = self.org_name()
+            self.redis_connect.save_k_v(code,name)
+
+    def clear_shop_data(self):
+        """
+
+        :return:
+        """
+        '''清空旧数据'''
+        res = self.redis_connect.clear_set('shop_data')
+        return res
+
+    def pop_shop_code(self):
+        res = self.redis_connect.random_get_and_del('shop_data')
+        return res
+
+    def pop_shop_name(self, k):
+        name = self.redis_connect.get_data(k)
+        return name
+
 def main():
     set_provance()
     set_city()
@@ -346,17 +478,21 @@ def main2():
     PB.set_bank_value()
     res0 = PB.get_count()
     print(res0)
-    PB.insert_bank_name()
-    res1 = PB.get_count()
-    print(res1)
+    # PB.insert_bank_name()
+    # res1 = PB.get_count()
+    # print(res1)
     # res2 = PB.get_bank_name()
     # print(res2)
     # res3 = PB.get_count()
     # print(res3)
-    res4 = PB.get_bank_value('民生银行')
+    res4 = PB.get_bank_value('平安银行')
     print(res4)
-
-
+    # PB.clear_bankname()
+    # res1 = PB.get_count()
+    # print(res1)
+    PB.delete_bank_value()
+    res4 = PB.get_bank_value('浙商银行')
+    print(res4)
 
 if __name__ == "__main__":
     # main()

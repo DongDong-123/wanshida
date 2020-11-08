@@ -9,8 +9,9 @@ import random
 from Common import CommonFunction
 comm = CommonFunction()
 fake = Faker(locale='zh_CN')
-from redis_data import ProcessBank
+from redis_data import ProcessBank,ProcessStif
 PB = ProcessBank()
+PS = ProcessStif()
 
 class MakeData:
     def __init__(self, update_t):
@@ -711,7 +712,7 @@ class MakeData:
         insert_by = ori_ptxn.get("insert_by")  # 记录创建人
         last_update_timestamp = ori_ptxn.get("last_update_timestamp")  # 记录最后更新时间
         last_update_by = ori_ptxn.get("last_update_by")  # 记录最后更新人
-        mer_unit = "管理机构"  # 管理机构    必填  缺码表
+        mer_unit = "000000001"  # 管理机构    必填  缺码表
         data_transfer_dt = ori_ptxn.get("data_transfer_dt")  # 数据传输日期    必填
 
         all_col = [tran_kd, uuid, trace_id, card_bin, card_type, card_type_pboc, card_product, card_brand, token_pan, encrypt_pan, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_datetime, orig_local_tran_datetime, tsdr, tran_amount, sett_amount, tran_curr_cd, sett_curr_cd, sett_conv_rate, sett_date, crat_u, crat_c, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, acq_ins_id_cd, fwd_ins_id_cd, TRCD, CBIF, channel_type, TSTP, cash_back_amount, cash_back_indicator, tran_type, dspt_tran_type, org_stan, tran_buss_st, tran_advice_st, mcht_data_srv, additional_data, insert_timestamp, insert_by, last_update_timestamp, last_update_by, mer_unit, data_transfer_dt]
@@ -721,26 +722,26 @@ class MakeData:
         # return ["{}".format(x) for x in all_col]
 
 
-    def make_stan_stif(self, stiftime, ori_ptxn):
+    def make_stan_stif(self, stiftime, ori_ptxn, ACCD_data):
         """
 
         :return:
         """
-        unit_code = ''  # 成员机构代码  必填
-        warn_dt = ""  # 预警日期  必填
-        rule_id = ""  # 预警规则  必填
+        unit_code = self.csnm  # 成员机构代码  必填     -------------------------
+        warn_dt = comm.process_time(int(stiftime.replace("-",""))+1)  # 预警日期  必填
+        rule_id = "R21001"  # 预警规则  必填
         rule_type = comm.make_rule_type()  # 预警类型  必填
         warn_kd = comm.make_warn_kd()  # 预警方式
         susp_value = ""  # 可疑分数
         ctif_tp = comm.make_ctif_tp()  # 可疑主体类别  必填
         tran_kd = comm.make_tran_kd()  # 交易种类  必填
         card_type = comm.make_card_type()  # 卡类型：借贷记  必填
-        mcc = ""  # 商户类型  必填   缺码表
+        mcc = comm.make_mcc_data()  # 商户类型  必填
 
         if ctif_tp == "2":  # 商户
-            MCNO = ""  # 主体的商户代码  （商户）必填  缺码表
-            MCNM = ""  # 主体的商户名称  （商户）必填
-            ACCD = ""  # 收单机构代码  （商户）必填
+            MCNO = PS.pop_shop_code() # 主体的商户代码  （商户）必填  缺码表
+            MCNM = PS.pop_shop_name(MCNO)  # 主体的商户名称  （商户）必填
+            ACCD = random.choice(ACCD_data)  # 收单机构代码  （商户）必填
             STCT = ""  # 主体使用的银行卡类型  （持卡人）必填
             STCI = ""  # 主体使用的银行卡号码  （持卡人）必填
             IUCD = ""  # 主体开卡机构代码  （持卡人）必填
@@ -750,7 +751,7 @@ class MakeData:
             ACCD = ""  # 收单机构代码  （商户）必填
             STCT = comm.make_STCT_data()  # 主体使用的银行卡类型  （持卡人）必填
             STCI = comm.random_num(18)  # 主体使用的银行卡号码  （持卡人）必填
-            IUCD = ""  # 主体开卡机构代码  （持卡人）必填
+            IUCD = unit_code  # 主体开卡机构代码  （持卡人）必填
         fwd_ins_id_cd = ""  # 收单代理机构号
         card_product = comm.make_card_product_data()  # 卡产品  必填
         card_brand = "MCC"  # 卡品牌
@@ -764,8 +765,8 @@ class MakeData:
         TCNM = ""  # 交易对手的商户名称
         CACD = ""  # 交易对方收单机构代码
         c_fwd_ins_id_cd = ""  # 收单代理机构号
-        TCCT = ""  # 交易对手使用的银行卡类型
-        T_card_product = ""  # 交易对手卡产品  必填   缺码表
+        TCCT = comm.make_STCT_data()  # 交易对手使用的银行卡类型
+        T_card_product = comm.make_card_product_data()  # 交易对手卡产品  必填   缺码表
         T_card_brand = ""  # 交易对手卡品牌
         TCCI = ""  # 交易对手使用的银行卡号码
         TCIC = ""  # 交易对手开卡机构代码
@@ -773,31 +774,39 @@ class MakeData:
         bptc = ""  # 清算组织与成员机构之间的业务交易编码  有就填
         ticd = comm.make_ticd_data()  # 业务标识号  必填
         busi_type = comm.make_busi_type()  # 业务类型  必填
-        trans_type = ""  # 交易类型   必填
+        trans_type = comm.make_inter_tran_type()  # 交易类型   必填
         trans_stat = comm.make_trans_type()  # 交易状态  应填
         tran_advice_st = comm.make_tran_advice_st()  # 交易通知状态
 
-        acq_merch_city = ""  # 收单商户城市  必填
+        acq_merch_city = comm.make_acq_merch_city_data()  # 收单商户城市  必填
         acq_merch_state = ""  # 收单商户状态
         TRCD = ""  # 交易发生地  应填
-        CBIF = comm.make_tsdr_data()  # 境内外标识  应填  01：境内交易；02：跨境交易
+        # CBIF = comm.make_tsdr_data()  # 境内外标识  应填  01：境内交易；02：跨境交易
+        CBIF = '02'  # 境内外标识  应填  01：境内交易；02：跨境交易
         trans_channel = ""  # 交易渠道  应填
         PCTP = ""  # 清算币种  应填
         PCAT = ""  # 清算金额  应填
         crat_u = ""  # 交易金额折合美元  应填
         crat_c = ""  # 交易金额折合人民币  应填
         TSTP = comm.make_tstp_data()  # 交易方式  应填
-        pos_entry_cd = ""  # POS机输入方式码  必填  # 缺码表
+        pos_entry_cd = comm.make_pos_entry_cd_data()  # POS机输入方式码  必填  # 缺码表
         retriv_ref_num = ""  # 检索参考号
-        auth_cd = ""  # 授权码
+        auth_cd = comm.random_word_num_or_str(6)  # 授权码
         resp_cd = comm.make_resp_cd_data()  # 应答码  必填
         pos_term_id = comm.random_num(12)  # POS机终端id  必填
-        mer_unit = "管理机构"  # 管理机构  必填   缺码表
+        mer_unit = "000000001"  # 管理机构  必填
         run_dt = stiftime  # 可疑交易数据生成日期  必填
         data_transfer_dt = comm.process_time(int(stiftime.replace("-",""))+1)  # 可疑交易数据传输日期  必填
 
         all_col = [unit_code, warn_dt, rule_id, rule_type, warn_kd, susp_value, ctif_tp, tran_kd, card_type, MCNO, MCNM, ACCD, fwd_ins_id_cd, STCT, card_product, card_brand, STCI, IUCD, rcv_ins_id_cd, tstm, tsdr, TCPP, TCTP, TCAT, TCMN, TCNM, CACD, c_fwd_ins_id_cd, TCCT, T_card_product, T_card_brand, TCCI, TCIC, c_rcv_ins_id_cd, bptc, ticd, busi_type, trans_type, trans_stat, tran_advice_st, acq_merch_city, acq_merch_state, TRCD, CBIF, trans_channel, PCTP, PCAT, crat_u, crat_c, TSTP, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, mer_unit, run_dt, data_transfer_dt]
-        return ['{}'.format(x) for x in all_col]
+        if ACCD:
+            ica_data = ACCD
+        elif IUCD:
+            ica_data = IUCD
+        else:
+            ica_data = None
+        # ica_data = [ACCD, IUCD]
+        return ['{}'.format(x) for x in all_col], ica_data
         # return all_col
 
 
@@ -1119,7 +1128,7 @@ class RuleData():
         insert_by = ori_ptxn.get("insert_by")  # 记录创建人
         last_update_timestamp = ori_ptxn.get("last_update_timestamp")  # 记录最后更新时间
         last_update_by = ori_ptxn.get("last_update_by")  # 记录最后更新人
-        mer_unit = "管理机构"  # 管理机构    必填  缺码表
+        mer_unit = "000000001"  # 管理机构    必填  缺码表
         data_transfer_dt = ori_ptxn.get("data_transfer_dt")  # 数据传输日期    必填
 
         all_col = [tran_kd, uuid, trace_id, card_bin, card_type, card_type_pboc, card_product, card_brand, token_pan, encrypt_pan, crdhldr_tran_type, crdhldr_acc_tp_from, crdhldr_acc_tp_to, tran_datetime, orig_local_tran_datetime, tsdr, tran_amount, sett_amount, tran_curr_cd, sett_curr_cd, sett_conv_rate, sett_date, crat_u, crat_c, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, rcv_ins_id_cd, iss_mti_cd, iss_pcode, iss_ins_id_cd, acq_merch_id, acq_merch_name, acq_merch_city, acq_merch_state, acq_ins_id_cd, fwd_ins_id_cd, TRCD, CBIF, channel_type, TSTP, cash_back_amount, cash_back_indicator, tran_type, dspt_tran_type, org_stan, tran_buss_st, tran_advice_st, mcht_data_srv, additional_data, insert_timestamp, insert_by, last_update_timestamp, last_update_by, mer_unit, data_transfer_dt]
