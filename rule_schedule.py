@@ -329,7 +329,7 @@ def main_full(beg, end, stif_time, file_date_time):
         __threads(["stifs"], ["stif"], file_date_time, 1, sign_stif,'|', control_file_time)
         filepath = os.path.join(zip_floder, 'stif', file_date_time)
 
-        __control_file("stif", file_date_time, sign_stif, filepath,control_file_time, sign_stif)
+        __control_file("stif", file_date_time, 1, filepath,control_file_time, sign_stif)
 
         txns.clear()
     # -------------------------------------------------------------
@@ -514,7 +514,7 @@ def main(beg, end, stif_time, file_date_time):
         print('{} 存储可疑交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_stif, 1))
         __threads(["stifs"], ["stif"], file_date_time, 1, sign_stif,'',control_file_time)
         filepath = os.path.join(zip_floder, 'mapping', file_date_time)
-        __control_file("stif", file_date_time, sign_stif, filepath,sign_stif,control_file_time)
+        __control_file("stif", file_date_time, 1, filepath,control_file_time ,sign_stif)
 
         txns.clear()
     # -------------------------------------------------------------
