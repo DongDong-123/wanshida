@@ -727,21 +727,21 @@ class MakeData:
 
         :return:
         """
-        unit_code = self.csnm  # 成员机构代码  必填     -------------------------
+        unit_code = random.choice(ACCD_data)  # 成员机构代码  必填     -------------------------
         warn_dt = comm.process_time(int(stiftime.replace("-",""))+1)  # 预警日期  必填
         rule_id = "R21001"  # 预警规则  必填
         rule_type = comm.make_rule_type()  # 预警类型  必填
         warn_kd = comm.make_warn_kd()  # 预警方式
         susp_value = ""  # 可疑分数
         ctif_tp = comm.make_ctif_tp()  # 可疑主体类别  必填
-        tran_kd = comm.make_tran_kd()  # 交易种类  必填
+        tran_kd = comm.make_yes_no()  # 交易种类  必填 1：普通交易,0：差错交易
         card_type = comm.make_card_type()  # 卡类型：借贷记  必填
         mcc = comm.make_mcc_data()  # 商户类型  必填
 
         if ctif_tp == "2":  # 商户
             MCNO = PS.pop_shop_code() # 主体的商户代码  （商户）必填  缺码表
             MCNM = PS.pop_shop_name(MCNO)  # 主体的商户名称  （商户）必填
-            ACCD = random.choice(ACCD_data)  # 收单机构代码  （商户）必填
+            ACCD = unit_code  # 收单机构代码  （商户）必填
             STCT = ""  # 主体使用的银行卡类型  （持卡人）必填
             STCI = ""  # 主体使用的银行卡号码  （持卡人）必填
             IUCD = ""  # 主体开卡机构代码  （持卡人）必填
@@ -756,7 +756,7 @@ class MakeData:
         card_product = comm.make_card_product_data()  # 卡产品  必填
         card_brand = "MCC"  # 卡品牌
         rcv_ins_id_cd = ""  # 发卡代理机构号
-        tstm = "{} {}".format(stiftime, comm.make_time())  # 交易时间  必填
+        tstm = "{}{}".format(stiftime, comm.make_time())  # 交易时间  必填
         tsdr = comm.make_tsdr_data()  # 资金收付标志  必填
         TCPP = ""  # 资金用途
         TCTP = comm.make_tctp_data()  # 交易币种  必填
@@ -799,14 +799,14 @@ class MakeData:
         data_transfer_dt = comm.process_time(int(stiftime.replace("-",""))+1)  # 可疑交易数据传输日期  必填
 
         all_col = [unit_code, warn_dt, rule_id, rule_type, warn_kd, susp_value, ctif_tp, tran_kd, card_type, MCNO, MCNM, ACCD, fwd_ins_id_cd, STCT, card_product, card_brand, STCI, IUCD, rcv_ins_id_cd, tstm, tsdr, TCPP, TCTP, TCAT, TCMN, TCNM, CACD, c_fwd_ins_id_cd, TCCT, T_card_product, T_card_brand, TCCI, TCIC, c_rcv_ins_id_cd, bptc, ticd, busi_type, trans_type, trans_stat, tran_advice_st, acq_merch_city, acq_merch_state, TRCD, CBIF, trans_channel, PCTP, PCAT, crat_u, crat_c, TSTP, mcc, pos_entry_cd, retriv_ref_num, auth_cd, resp_cd, pos_term_id, mer_unit, run_dt, data_transfer_dt]
-        if ACCD:
-            ica_data = ACCD
-        elif IUCD:
-            ica_data = IUCD
-        else:
-            ica_data = None
+        # if ACCD:
+        #     ica_data = ACCD
+        # elif IUCD:
+        #     ica_data = IUCD
+        # else:
+        #     ica_data = None
         # ica_data = [ACCD, IUCD]
-        return ['{}'.format(x) for x in all_col], ica_data
+        return ['{}'.format(x) for x in all_col], unit_code
         # return all_col
 
 

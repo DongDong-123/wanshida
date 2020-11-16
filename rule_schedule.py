@@ -138,7 +138,7 @@ def __process_mapping():
     return key_datas_3, all_cards
 
 
-def main_full(beg, end, stif_time, file_date_time):
+def main_full(beg, end, stif_time_8, file_date_time):
     # 创建存储文件夹
     file_path1 = os.path.join(zip_floder, 'custom', file_date_time)
     file_path2 = os.path.join(zip_floder, 'txn', file_date_time)
@@ -168,13 +168,13 @@ def main_full(beg, end, stif_time, file_date_time):
     control_file_time = round(time.time() * 1000)
 
     currt_time = time.strftime('%Y%m%d', time.localtime())
-    update_date = comm.process_time(int(stif_time.replace("-",""))+1)
+    update_date = comm.process_time(int(stif_time_8.replace("-",""))+1)
     random_time = comm.make_time()
     update_time = update_date+random_time.replace(':',"")
 
     makedata = MakeData(update_time)
     # 日期格式转换
-    stif_time = comm.turn_date10(stif_time)
+    stif_time_10 = comm.turn_date10(stif_time_8)
 
     # 临时数据变量名
     all_data = ["orgs", "relations", "survey_info1", "survey_info2", "survey_info3"]
@@ -215,15 +215,15 @@ def main_full(beg, end, stif_time, file_date_time):
         # mappings.extend([[customer_id, customer_id, 'l', currt_time]])
 
         for i in range(stifnum):
-            t_stan_ptxn, all_dict_data = makedata.make_stan_ptxn(stif_time, acq_ins_id, org_ctnm)
+            t_stan_ptxn, all_dict_data = makedata.make_stan_ptxn(stif_time_10, acq_ins_id, org_ctnm)
 
-            t_stan_txn, map_data = makedata.make_stan_txn(stif_time, all_dict_data)
+            t_stan_txn, map_data = makedata.make_stan_txn(stif_time_10, all_dict_data)
             txns.append(t_stan_txn)
             mappings.extend([[customer_id, ica, 'l',currt_time] for ica in map_data])
             # ---------可疑交易数据，暂时不用---------------
             if num %10 == 0:
                 ACCD_data = [comm.random_num(13) for i in range(5)]  # 生成acq号码，一个客户固定5个，重复使用
-                t_stan_stif, ica_data = makedata.make_stan_stif(stif_time, all_dict_data, ACCD_data)
+                t_stan_stif, ica_data = makedata.make_stan_stif(stif_time_8, all_dict_data, ACCD_data)
                 if ica_data:
                     mappings.append([customer_id, ica_data, 'l', currt_time])
                 stifs.append(t_stan_stif)
@@ -326,18 +326,18 @@ def main_full(beg, end, stif_time, file_date_time):
     # -----------------可疑交易存储--------------------------------
     if sign_stif > 0:
         print('{} 存储可疑交易数据{}条,文件编号{}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),sign_stif, 1))
-        __threads(["stifs"], ["stif"], file_date_time, 1, sign_stif,'|', control_file_time)
+        __threads(["stifs"], ["stif"], file_date_time, 1, sign_stif,'stif', control_file_time)
         filepath = os.path.join(zip_floder, 'stif', file_date_time)
 
         __control_file("stif", file_date_time, 1, filepath,control_file_time, sign_stif)
 
-        txns.clear()
+        stifs.clear()
     # -------------------------------------------------------------
 
 
 
 
-def main(beg, end, stif_time, file_date_time):
+def main(beg, end, stif_time_8, file_date_time):
     # 创建存储文件夹
     file_path1 = os.path.join(zip_floder, 'custom', file_date_time)
     file_path2 = os.path.join(zip_floder, 'txn', file_date_time)
@@ -361,13 +361,13 @@ def main(beg, end, stif_time, file_date_time):
     # 初始化插入数据
     PB.insert_bank_name()
     currt_time = time.strftime('%Y%m%d', time.localtime())
-    update_date = comm.process_time(int(stif_time.replace("-",""))+1)
+    update_date = comm.process_time(int(stif_time_8.replace("-",""))+1)
     random_time = comm.make_time()
     update_time = update_date+random_time.replace(':',"")
 
     makedata = RuleData()
     # 日期格式转换
-    stif_time = comm.turn_date10(stif_time)
+    stif_time_10 = comm.turn_date10(stif_time_8)
 
     # 临时数据变量名
     all_data = ["orgs", "relations", "survey_info1", "survey_info2", "survey_info3"]
@@ -410,9 +410,9 @@ def main(beg, end, stif_time, file_date_time):
             random_key = random.choice(key_datas)
             cards = random.choice(take_cards)
             # t_stan_ptxn, all_dict_data = makedata.make_stan_ptxn(stif_time)
-            t_stan_ptxn, all_dict_data = ruledata.make_stan_ptxn(stif_time,update_time,random_key,cards, org_ctnm)
+            t_stan_ptxn, all_dict_data = ruledata.make_stan_ptxn(stif_time_10,update_time,random_key,cards, org_ctnm)
 
-            t_stan_txn, map_data = ruledata.make_stan_txn(stif_time, all_dict_data)
+            t_stan_txn, map_data = ruledata.make_stan_txn(stif_time_10, all_dict_data)
             txns.append(t_stan_txn)
             # mappings.extend([[customer_id, ica, 'l',currt_time] for ica in map_data])
             # ---------可疑交易数据，暂时不用---------------

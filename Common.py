@@ -549,7 +549,7 @@ class CommonFunction:
         ])
 
     def make_tran_kd(self):
-        '''交易种类, 差错交易占1%，
+        '''txn表的交易种类, 差错交易占1%，
         '00',  # 差错交易
         '01'  # 普通交易
             '''
@@ -591,7 +591,7 @@ class CommonFunction:
             '99'  # 其他方式（若选择此项，报告机构应对其交易方式做进一步说明）
         ])
 
-    def make_time(self):
+    def make_time(self,sign=6):
         '''生成随机时间，时分秒 HH:mm:ss'''
         hour = random.randint(0,23)
         minite = random.randint(0,59)
@@ -610,7 +610,10 @@ class CommonFunction:
             second = '00'
         elif second < 10:
             second = '0' + str(second)
-        return '{}:{}:{}'.format(hour, minite, second)
+        if sign==8:
+            return '{}:{}:{}'.format(hour, minite, second)
+        else:
+            return '{}{}{}'.format(hour, minite, second)
 
     def make_tsdr_data(self):
         '''

@@ -152,7 +152,7 @@ class SaveFile:
             file_full = os.path.join(file_path, '{}-D{}-T{}-00{}.csv'.format(file_name.upper(), date_time, control_file_time, num))
         # ============交易单独写入==================
         # 交易数据分割符为||，需要无法直接写入CSV，改用TXT写入
-        if delimiter == '||' or delimiter == "|":
+        if delimiter == '||':
             if not os.path.exists(file_full):
                 title = eval('self.' + 't_stan_' + file_name)
 
